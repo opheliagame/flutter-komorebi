@@ -5,8 +5,8 @@ class CollectionsNotifier extends StateNotifier<void> {
   CollectionsNotifier({required this.ref}) : super(null);
   final Ref ref;
 
-  Future<bool> createCollection(String collectionName) async {
-    return ref.watch(collectionsRepositoryProvider).createCollection(collectionName);
+  Future<bool> createCollection(String collectionName, int? collectionId) async {
+    return ref.watch(collectionsRepositoryProvider).createCollection(collectionName, collectionId);
   }
 
   Future<bool> deleteCollection(int collectionId) async {

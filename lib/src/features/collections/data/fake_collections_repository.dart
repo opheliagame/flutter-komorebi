@@ -19,13 +19,25 @@ class FakeCollectionsRepository implements CollectionsRepository {
   }
 
   @override
-  Future<bool> createCollection(String collectionName) {
+  Future<bool> createCollection(String collectionName, int? collectionId) {
     return Future(() => true);
   }
 
   @override
   Future<bool> deleteCollection(int collectionId) {
     return Future(() => true);
+  }
+
+  @override
+  Future<bool> deleteAllCollections() {
+    // TODO: implement deleteAllCollections
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<Collection>> watchSubCollections(int collectionId) {
+    // TODO: implement watchSubCollections
+    throw UnimplementedError();
   }
 }
 

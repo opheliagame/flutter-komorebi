@@ -42,6 +42,7 @@ dependencies:
   drift_flutter: ^0.2.4
   path_provider: ^2.1.5
   flutter_hooks: ^0.21.2
+  image_picker: ^1.2.0
  
 
 dev_dependencies:
