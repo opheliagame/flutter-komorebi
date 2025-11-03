@@ -9,24 +9,35 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class RelatedCollectionsRow extends ConsumerWidget {
   const RelatedCollectionsRow({super.key, required this.collection});
 
-  final Collection collection;
+  final Collection? collection;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collectionsListValue = ref.watch(collectionsListStreamProvider(collection.id));
+    final collectionsListValue = ref.watch(collectionsListStreamProvider(collection?.id));
 
     return AsyncValueWidget(
-        value: collectionsListValue,
-        data: (collections) {
-          return Row(
-            spacing: 10,
-            children: [
-              NewCollectionTile(collectionId: collection.id),
-              ...collections.map((collection) {
-                return CollectionTile(collection: collection);
-              }),
-            ],
-          );
-        });
+      value: collectionsListValue,
+      data: (collections) {
+        return Row(
+          children: [
+            NewCollectionTile(collectionId: collection?.id),
+            SizedBox(width: 8),
+            Expanded(
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: collections.length,
+                itemBuilder: (context, index) {
+                  final relatedCollection = collections[index];
+                  return CollectionTile(collection: relatedCollection);
+                },
+                separatorBuilder: (context, index) {
+                  return SizedBox(width: 10);
+                },
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
