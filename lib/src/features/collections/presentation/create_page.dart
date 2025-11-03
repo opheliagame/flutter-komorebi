@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_notifier.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
+@RoutePage()
 class CreatePage extends HookConsumerWidget {
   const CreatePage({super.key, required this.collectionId});
 
@@ -81,7 +83,7 @@ class CreatePage extends HookConsumerWidget {
                     if (result) {
                       inputTextEditingController.clear();
 
-                      Navigator.of(context).pop();
+                      context.pop();
                     }
                   });
                 } else if (dropdownValue.value == EntityType.note) {
@@ -90,7 +92,7 @@ class CreatePage extends HookConsumerWidget {
                     if (result) {
                       inputTextEditingController.clear();
 
-                      Navigator.of(context).pop();
+                      context.pop();
                     }
                   });
                 }

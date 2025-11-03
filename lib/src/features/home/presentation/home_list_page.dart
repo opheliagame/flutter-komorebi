@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/drift/database.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_komorebi/src/features/collections/presentation/collectio
 import 'package:flutter_komorebi/src/features/notes/presentation/notes_list.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+@RoutePage()
 class HomeListPage extends ConsumerWidget {
   const HomeListPage({super.key, this.collection});
 

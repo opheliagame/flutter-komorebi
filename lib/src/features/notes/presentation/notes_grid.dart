@@ -1,8 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/common_widgets/async_value_widget.dart';
-import 'package:flutter_komorebi/src/features/collections/presentation/create_page.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:flutter_komorebi/src/features/notes/presentation/note_tile.dart';
+import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NotesGrid extends ConsumerWidget {
@@ -28,13 +29,7 @@ class NotesGrid extends ConsumerWidget {
                 (note) => NoteTile(
                   note: note,
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return CreatePage(collectionId: collectionId);
-                        },
-                      ),
-                    );
+                    context.pushRoute(CreateRoute(collectionId: collectionId));
                   },
                 ),
               ),

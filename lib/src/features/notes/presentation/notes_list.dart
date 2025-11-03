@@ -1,8 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/drift/database.dart';
-import 'package:flutter_komorebi/src/features/collections/presentation/create_page.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
+import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NotesList extends ConsumerWidget {
@@ -31,13 +32,7 @@ class NotesList extends ConsumerWidget {
               return NoteListItem(
                 note: note,
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return CreatePage(collectionId: collectionId);
-                      },
-                    ),
-                  );
+                  context.pushRoute(CreateRoute(collectionId: collectionId));
                 },
               );
             },
