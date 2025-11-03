@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:flutter_komorebi/src/features/collections/domain/collection.dart';
+import 'package:flutter_komorebi/src/features/collections/domain/collection_media.dart';
 import 'package:flutter_komorebi/src/features/notes/domain/note.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -14,7 +15,7 @@ class CollectionNotes extends Table {
 }
 
 // MAIN DATABASE DEFINITION
-@DriftDatabase(tables: [Collections, Notes, CollectionNotes])
+@DriftDatabase(tables: [Collections, Notes, CollectionNotes, CollectionMedia])
 class AppDatabase extends _$AppDatabase {
   // After generating code, this class needs to define a `schemaVersion` getter
   // and a constructor telling drift where the database should be stored.

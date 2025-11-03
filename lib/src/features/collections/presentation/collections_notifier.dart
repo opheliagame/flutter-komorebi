@@ -1,12 +1,13 @@
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CollectionsNotifier extends StateNotifier<void> {
   CollectionsNotifier({required this.ref}) : super(null);
   final Ref ref;
 
-  Future<bool> createCollection(String collectionName, int? collectionId) async {
-    return ref.watch(collectionsRepositoryProvider).createCollection(collectionName, collectionId);
+  Future<bool> createCollection({String? collectionName, XFile? media, int? parentCollectionId}) async {
+    return ref.watch(collectionsRepositoryProvider).createCollection(collectionName, media, parentCollectionId);
   }
 
   Future<bool> deleteCollection(int collectionId) async {

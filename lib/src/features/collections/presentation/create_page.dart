@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_notifier.dart';
+import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
+import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreatePage extends HookConsumerWidget {
   const CreatePage({super.key, required this.collectionId});
@@ -11,33 +14,91 @@ class CreatePage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final inputTextEditingController = useTextEditingController();
+    final dropdownValue = useState<EntityType?>(EntityType.note);
+    final pickedImage = useState<XFile?>(null);
 
     return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          Text('make new item'),
+      appBar: AppBar(
+        title: Text('create connection'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            DropdownButton<EntityType>(
+              value: dropdownValue.value,
+              items: EntityType.values
+                  .map(
+                    (e) => DropdownMenuItem<EntityType>(
+                      value: e,
+                      child: Text(e.name),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                dropdownValue.value = value;
+              },
+            ),
 
-          // input area
-          _InputWidget(
-            inputTextEditingController: inputTextEditingController,
-          ),
+            if (pickedImage.value != null)
+              FutureBuilder(
+                future: pickedImage.value!.readAsBytes(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Image.memory(snapshot.data!);
+                  }
+                  return SizedBox.shrink();
+                },
+              )
+            else
 
-          TextButton(
-            onPressed: () {
-              final value = inputTextEditingController.value.text;
-              if (value.isEmpty) return;
-              ref.read(collectionsNotifierProvider.notifier).createCollection(value, collectionId).then((result) {
-                if (result) {
-                  inputTextEditingController.clear();
+              //
+              _InputImagePicker(onPickImage: (image) {
+                pickedImage.value = image;
 
-                  Navigator.of(context).pop();
+                print('selected image');
+              }),
+
+            // input area
+            _InputWidget(
+              inputTextEditingController: inputTextEditingController,
+            ),
+
+            TextButton(
+              onPressed: () {
+                final value = inputTextEditingController.value.text;
+                if (value.isEmpty && pickedImage.value == null) return;
+
+                if (dropdownValue.value == EntityType.collection) {
+                  // create collection
+                  ref
+                      .read(collectionsNotifierProvider.notifier)
+                      .createCollection(
+                        collectionName: value,
+                        media: pickedImage.value,
+                        parentCollectionId: collectionId,
+                      )
+                      .then((result) {
+                    if (result) {
+                      inputTextEditingController.clear();
+
+                      Navigator.of(context).pop();
+                    }
+                  });
+                } else if (dropdownValue.value == EntityType.note) {
+                  // create note
+                  ref.read(notesRepositoryProvider).createNote(value, pickedImage.value, collectionId).then((result) {
+                    if (result) {
+                      inputTextEditingController.clear();
+
+                      Navigator.of(context).pop();
+                    }
+                  });
                 }
-              });
-            },
-            child: Text('submit'),
-          ),
-        ],
+              },
+              child: Text('submit'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -70,6 +131,43 @@ class _InputWidget extends HookConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _InputImagePicker extends ConsumerWidget {
+  const _InputImagePicker({
+    required this.onPickImage,
+  });
+
+  final void Function(XFile) onPickImage;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    Future<void> pickSingleImage() async {
+      final ImagePicker picker = ImagePicker();
+      // Pick an image.
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+      if (image != null) {
+        // save image
+
+        onPickImage(image);
+      } else {
+        // TODO(urgent): handle error handling
+      }
+    }
+
+    return GestureDetector(
+      onTap: () {
+        pickSingleImage();
+      },
+      child: Container(
+        width: double.infinity,
+        height: 120,
+        decoration: BoxDecoration(border: Border.all()),
+        child: Center(child: Text("add media")),
       ),
     );
   }

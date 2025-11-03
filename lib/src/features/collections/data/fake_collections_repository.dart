@@ -1,6 +1,7 @@
 import 'package:flutter_komorebi/src/drift/database.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FakeCollectionsRepository implements CollectionsRepository {
   @override
@@ -19,7 +20,7 @@ class FakeCollectionsRepository implements CollectionsRepository {
   }
 
   @override
-  Future<bool> createCollection(String collectionName, int? collectionId) {
+  Future<bool> createCollection(String? collectionName, XFile? media, int? collectionId) {
     return Future(() => true);
   }
 

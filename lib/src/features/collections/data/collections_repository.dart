@@ -1,13 +1,14 @@
 import 'package:flutter_komorebi/src/drift/database.dart';
 import 'package:flutter_komorebi/src/features/collections/data/drift_collections_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 abstract class CollectionsRepository {
   Future<List<Collection>> getRootCollections();
   Stream<List<Collection>> watchRootCollections();
   Future<List<Collection>> getSubCollections(int collectionId);
   Stream<List<Collection>> watchSubCollections(int collectionId);
-  Future<bool> createCollection(String collectionName, int? collectionId);
+  Future<bool> createCollection(String? collectionName, XFile? media, int? parentCollectionId);
   Future<bool> deleteCollection(int collectionId);
   Future<bool> deleteAllCollections();
 }

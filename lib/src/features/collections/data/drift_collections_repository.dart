@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/drift/database.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
+import 'package:image_picker/image_picker.dart';
 
 class DriftCollectionsRepository implements CollectionsRepository {
   final database = AppDatabase();
@@ -32,20 +34,29 @@ class DriftCollectionsRepository implements CollectionsRepository {
   }
 
   @override
-  Future<bool> createCollection(String collectionName, int? collectionId) async {
+  Future<bool> createCollection(String? collectionName, XFile? media, int? parentCollectionId) async {
+    Uint8List? pickedMedia;
+    if (media != null) {
+      debugPrint('createCollection: saving ${media.name}');
+      pickedMedia = await media.readAsBytes();
+    }
+
     final query = database.into(database.collections).insert(
           CollectionsCompanion.insert(
-            name: collectionName,
+            name: Value.absentIfNull(collectionName),
             description: "",
-            parentId: Value.absentIfNull(collectionId),
+            media: Value.absentIfNull(pickedMedia),
+            parentId: Value.absentIfNull(parentCollectionId),
             createdAt: DateTime.now(),
             modifiedAt: DateTime.now(),
           ),
         );
+
     try {
       await query;
       return true;
     } catch (e) {
+      debugPrint(e.toString());
       return false;
     }
   }
@@ -57,6 +68,7 @@ class DriftCollectionsRepository implements CollectionsRepository {
       await query.go();
       return true;
     } catch (e) {
+      debugPrint(e.toString());
       return false;
     }
   }
@@ -71,6 +83,7 @@ class DriftCollectionsRepository implements CollectionsRepository {
       });
       return true;
     } catch (e) {
+      debugPrint(e.toString());
       return false;
     }
   }

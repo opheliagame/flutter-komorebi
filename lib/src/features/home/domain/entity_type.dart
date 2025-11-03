@@ -1,0 +1,4 @@
+enum EntityType {
+  collection,
+  note,
+}
