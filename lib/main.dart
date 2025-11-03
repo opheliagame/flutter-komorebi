@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
 import 'package:flutter_komorebi/src/router/app_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,12 +15,14 @@ class MyApp extends StatelessWidget {
     final appRouter = AppRouter();
 
     return MaterialApp.router(
-      title: 'Komorebi',
+      title: S.of(context).app_name,
       theme: ThemeData(
         // This is the theme of your application.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
+      localizationsDelegates: S.localizationsDelegates,
+      supportedLocales: S.supportedLocales,
       routerConfig: appRouter.config(),
     );
   }
