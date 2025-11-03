@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
+import 'app_localizations_ja.dart';
 
 // ignore_for_file: type=lint
 
@@ -65,8 +66,8 @@ abstract class S {
 
   final String localeName;
 
-  static S of(BuildContext context) {
-    return Localizations.of<S>(context, S)!;
+  static S? of(BuildContext context) {
+    return Localizations.of<S>(context, S);
   }
 
   static const LocalizationsDelegate<S> delegate = _SDelegate();
@@ -90,7 +91,9 @@ abstract class S {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
-    Locale('en')
+    Locale('en'),
+    Locale('ja'),
+    Locale('ja', 'JP')
   ];
 
   /// No description provided for @app_name.
@@ -109,7 +112,7 @@ class _SDelegate extends LocalizationsDelegate<S> {
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'ja'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_SDelegate old) => false;
@@ -117,10 +120,20 @@ class _SDelegate extends LocalizationsDelegate<S> {
 
 S lookupS(Locale locale) {
 
+  // Lookup logic when language+country codes are specified.
+  switch (locale.languageCode) {
+    case 'ja': {
+  switch (locale.countryCode) {
+    case 'JP': return SJaJp();
+   }
+  break;
+   }
+  }
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'en': return SEn();
+    case 'ja': return SJa();
   }
 
   throw FlutterError(

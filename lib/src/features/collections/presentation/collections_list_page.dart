@@ -16,7 +16,7 @@ class CollectionsListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(collection?.name ?? S.of(context).app_name),
+        title: Text(collection?.name ?? S.of(context)?.app_name ?? ''),
         // TODO(design): show image in app bar when collection does not have a name
         actions: [
           IconButton(

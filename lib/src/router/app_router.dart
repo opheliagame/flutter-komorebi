@@ -20,6 +20,14 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           path: '/create',
           page: CreateRoute.page,
+        ),
+        AutoRoute(
+          path: '/search',
+          page: SearchRoute.page,
+        ),
+        AutoRoute(
+          path: '/roam',
+          page: RoamRoute.page,
         )
       ];
 }

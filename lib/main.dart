@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     final appRouter = AppRouter();
 
     return MaterialApp.router(
-      title: S.of(context).app_name,
+      title: S.of(context)?.app_name,
       theme: ThemeData(
         // This is the theme of your application.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       ),
       localizationsDelegates: S.localizationsDelegates,
       supportedLocales: S.supportedLocales,
+      locale: Locale('en'),
       routerConfig: appRouter.config(),
     );
   }

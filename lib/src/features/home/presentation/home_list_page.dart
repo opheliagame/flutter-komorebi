@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_komorebi/src/common_widgets/app_bottom_navigation_bar.dart';
 import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
 import 'package:flutter_komorebi/src/drift/database.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
@@ -17,7 +18,7 @@ class HomeListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(collection?.name ?? S.of(context).app_name),
+        title: Text(collection?.name ?? S.of(context)?.app_name ?? ''),
         actions: [
           IconButton(
             icon: Icon(
@@ -48,6 +49,7 @@ class HomeListPage extends ConsumerWidget {
           ],
         ),
       ),
+      bottomNavigationBar: AppBottomNavigationBar(),
     );
   }
 }
