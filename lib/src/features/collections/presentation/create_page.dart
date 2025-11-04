@@ -88,7 +88,10 @@ class CreatePage extends HookConsumerWidget {
                   });
                 } else if (dropdownValue.value == EntityType.note) {
                   // create note
-                  ref.read(notesRepositoryProvider).createNote(value, pickedImage.value, collectionId).then((result) {
+                  ref
+                      .read(notesRepositoryProvider)
+                      .createNote(content: value, media: pickedImage.value, collectionId: collectionId)
+                      .then((result) {
                     if (result) {
                       inputTextEditingController.clear();
 
