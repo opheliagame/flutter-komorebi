@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/common_widgets/error_message_widget.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/error_message_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AsyncValueWidget<T> extends StatelessWidget {

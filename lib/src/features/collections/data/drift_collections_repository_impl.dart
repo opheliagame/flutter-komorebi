@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/drift/database.dart';
+import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -34,7 +34,8 @@ class DriftCollectionsRepository implements CollectionsRepository {
   }
 
   @override
-  Future<bool> createCollection(String? collectionName, XFile? media, int? parentCollectionId) async {
+  Future<bool> createCollection(
+      {required String? collectionName, required XFile? media, required int? parentCollectionId}) async {
     Uint8List? pickedMedia;
     if (media != null) {
       debugPrint('createCollection: saving ${media.name}');
@@ -86,5 +87,31 @@ class DriftCollectionsRepository implements CollectionsRepository {
       debugPrint(e.toString());
       return false;
     }
+  }
+
+  @override
+  Future<List<Collection>> getCollectionsOfNote(int noteId) async {
+    final query = database
+        .select(database.collections)
+        .join([innerJoin(database.collectionNotes, database.collectionNotes.noteId.equals(noteId))]).get();
+
+    final collections = (await query).map((row) {
+      return row.readTable(database.collections);
+    }).toList();
+    return collections;
+  }
+
+  @override
+  Stream<List<Collection>> watchCollectionsOfNote(int noteId) {
+    final query = database
+        .select(database.collections)
+        .join([innerJoin(database.collectionNotes, database.collectionNotes.noteId.equals(noteId))]);
+
+    final collections = query.watch().map((rows) {
+      return rows.map((row) {
+        return row.readTable(database.collections);
+      }).toList();
+    });
+    return collections;
   }
 }

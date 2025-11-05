@@ -1,4 +1,4 @@
-import 'package:flutter_komorebi/src/drift/database.dart';
+import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,7 +20,8 @@ class FakeCollectionsRepository implements CollectionsRepository {
   }
 
   @override
-  Future<bool> createCollection(String? collectionName, XFile? media, int? collectionId) {
+  Future<bool> createCollection(
+      {required String? collectionName, required XFile? media, required int? parentCollectionId}) {
     return Future(() => true);
   }
 
@@ -38,6 +39,18 @@ class FakeCollectionsRepository implements CollectionsRepository {
   @override
   Stream<List<Collection>> watchSubCollections(int collectionId) {
     // TODO: implement watchSubCollections
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Collection>> getCollectionsOfNote(int noteId) {
+    // TODO: implement getCollectionsOfNote
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<Collection>> watchCollectionsOfNote(int noteId) {
+    // TODO: implement watchCollectionsOfNote
     throw UnimplementedError();
   }
 }

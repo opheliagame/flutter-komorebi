@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/common_widgets/async_value_widget.dart';
-import 'package:flutter_komorebi/src/common_widgets/collection_tile.dart';
-import 'package:flutter_komorebi/src/common_widgets/new_collection_tile.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/collection_tile.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/new_collection_tile.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

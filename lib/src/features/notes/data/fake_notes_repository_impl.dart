@@ -1,4 +1,4 @@
-import 'package:flutter_komorebi/src/drift/database.dart';
+import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:image_picker/image_picker.dart';
 

@@ -7,7 +7,9 @@ class CollectionsNotifier extends StateNotifier<void> {
   final Ref ref;
 
   Future<bool> createCollection({String? collectionName, XFile? media, int? parentCollectionId}) async {
-    return ref.watch(collectionsRepositoryProvider).createCollection(collectionName, media, parentCollectionId);
+    return ref
+        .watch(collectionsRepositoryProvider)
+        .createCollection(collectionName: collectionName, media: media, parentCollectionId: parentCollectionId);
   }
 
   Future<bool> deleteCollection(int collectionId) async {

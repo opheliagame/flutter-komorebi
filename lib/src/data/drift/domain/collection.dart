@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:flutter_komorebi/src/features/collections/domain/collection_media.dart';
+import 'package:flutter_komorebi/src/data/drift/domain/collection_media.dart';
 
 class Collections extends Table {
   IntColumn get id => integer().autoIncrement()();

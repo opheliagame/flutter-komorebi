@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
-import 'package:flutter_komorebi/src/drift/database.dart';
+import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

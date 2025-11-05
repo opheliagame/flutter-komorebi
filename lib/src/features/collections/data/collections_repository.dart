@@ -1,16 +1,22 @@
-import 'package:flutter_komorebi/src/drift/database.dart';
-import 'package:flutter_komorebi/src/features/collections/data/drift_collections_repository.dart';
+import 'package:flutter_komorebi/src/data/drift/database.dart';
+import 'package:flutter_komorebi/src/features/collections/data/drift_collections_repository_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 abstract class CollectionsRepository {
+  // crud operations
   Future<List<Collection>> getRootCollections();
   Stream<List<Collection>> watchRootCollections();
   Future<List<Collection>> getSubCollections(int collectionId);
   Stream<List<Collection>> watchSubCollections(int collectionId);
-  Future<bool> createCollection(String? collectionName, XFile? media, int? parentCollectionId);
+  Future<bool> createCollection(
+      {required String? collectionName, required XFile? media, required int? parentCollectionId});
   Future<bool> deleteCollection(int collectionId);
   Future<bool> deleteAllCollections();
+
+  // notes related operations
+  Future<List<Collection>> getCollectionsOfNote(int noteId);
+  Stream<List<Collection>> watchCollectionsOfNote(int noteId);
 }
 
 // TODO switch this based on env variable

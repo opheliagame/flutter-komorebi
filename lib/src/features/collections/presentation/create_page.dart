@@ -56,8 +56,6 @@ class CreatePage extends HookConsumerWidget {
               //
               _InputImagePicker(onPickImage: (image) {
                 pickedImage.value = image;
-
-                print('selected image');
               }),
 
             // input area

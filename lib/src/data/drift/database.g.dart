@@ -765,6 +765,269 @@ class CollectionsCompanion extends UpdateCompanion<Collection> {
   }
 }
 
+class $NoteCitationsTable extends NoteCitations
+    with TableInfo<$NoteCitationsTable, NoteCitation> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $NoteCitationsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _modifiedAtMeta =
+      const VerificationMeta('modifiedAt');
+  @override
+  late final GeneratedColumn<DateTime> modifiedAt = GeneratedColumn<DateTime>(
+      'modified_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, title, createdAt, modifiedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'note_citations';
+  @override
+  VerificationContext validateIntegrity(Insertable<NoteCitation> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('modified_at')) {
+      context.handle(
+          _modifiedAtMeta,
+          modifiedAt.isAcceptableOrUnknown(
+              data['modified_at']!, _modifiedAtMeta));
+    } else if (isInserting) {
+      context.missing(_modifiedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  NoteCitation map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return NoteCitation(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      modifiedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}modified_at'])!,
+    );
+  }
+
+  @override
+  $NoteCitationsTable createAlias(String alias) {
+    return $NoteCitationsTable(attachedDatabase, alias);
+  }
+}
+
+class NoteCitation extends DataClass implements Insertable<NoteCitation> {
+  final int id;
+  final String title;
+  final DateTime createdAt;
+  final DateTime modifiedAt;
+  const NoteCitation(
+      {required this.id,
+      required this.title,
+      required this.createdAt,
+      required this.modifiedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['title'] = Variable<String>(title);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['modified_at'] = Variable<DateTime>(modifiedAt);
+    return map;
+  }
+
+  NoteCitationsCompanion toCompanion(bool nullToAbsent) {
+    return NoteCitationsCompanion(
+      id: Value(id),
+      title: Value(title),
+      createdAt: Value(createdAt),
+      modifiedAt: Value(modifiedAt),
+    );
+  }
+
+  factory NoteCitation.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return NoteCitation(
+      id: serializer.fromJson<int>(json['id']),
+      title: serializer.fromJson<String>(json['title']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      modifiedAt: serializer.fromJson<DateTime>(json['modifiedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'title': serializer.toJson<String>(title),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'modifiedAt': serializer.toJson<DateTime>(modifiedAt),
+    };
+  }
+
+  NoteCitation copyWith(
+          {int? id,
+          String? title,
+          DateTime? createdAt,
+          DateTime? modifiedAt}) =>
+      NoteCitation(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        createdAt: createdAt ?? this.createdAt,
+        modifiedAt: modifiedAt ?? this.modifiedAt,
+      );
+  NoteCitation copyWithCompanion(NoteCitationsCompanion data) {
+    return NoteCitation(
+      id: data.id.present ? data.id.value : this.id,
+      title: data.title.present ? data.title.value : this.title,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      modifiedAt:
+          data.modifiedAt.present ? data.modifiedAt.value : this.modifiedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NoteCitation(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('modifiedAt: $modifiedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, title, createdAt, modifiedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is NoteCitation &&
+          other.id == this.id &&
+          other.title == this.title &&
+          other.createdAt == this.createdAt &&
+          other.modifiedAt == this.modifiedAt);
+}
+
+class NoteCitationsCompanion extends UpdateCompanion<NoteCitation> {
+  final Value<int> id;
+  final Value<String> title;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> modifiedAt;
+  const NoteCitationsCompanion({
+    this.id = const Value.absent(),
+    this.title = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.modifiedAt = const Value.absent(),
+  });
+  NoteCitationsCompanion.insert({
+    this.id = const Value.absent(),
+    required String title,
+    required DateTime createdAt,
+    required DateTime modifiedAt,
+  })  : title = Value(title),
+        createdAt = Value(createdAt),
+        modifiedAt = Value(modifiedAt);
+  static Insertable<NoteCitation> custom({
+    Expression<int>? id,
+    Expression<String>? title,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? modifiedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (title != null) 'title': title,
+      if (createdAt != null) 'created_at': createdAt,
+      if (modifiedAt != null) 'modified_at': modifiedAt,
+    });
+  }
+
+  NoteCitationsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? title,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? modifiedAt}) {
+    return NoteCitationsCompanion(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      createdAt: createdAt ?? this.createdAt,
+      modifiedAt: modifiedAt ?? this.modifiedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (modifiedAt.present) {
+      map['modified_at'] = Variable<DateTime>(modifiedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NoteCitationsCompanion(')
+          ..write('id: $id, ')
+          ..write('title: $title, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('modifiedAt: $modifiedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -790,6 +1053,15 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
   late final GeneratedColumn<Uint8List> media = GeneratedColumn<Uint8List>(
       'media', aliasedName, true,
       type: DriftSqlType.blob, requiredDuringInsert: false);
+  static const VerificationMeta _citationIdMeta =
+      const VerificationMeta('citationId');
+  @override
+  late final GeneratedColumn<int> citationId = GeneratedColumn<int>(
+      'citation_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES note_citations (id)'));
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -804,7 +1076,7 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, content, media, createdAt, modifiedAt];
+      [id, content, media, citationId, createdAt, modifiedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -825,6 +1097,12 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
     if (data.containsKey('media')) {
       context.handle(
           _mediaMeta, media.isAcceptableOrUnknown(data['media']!, _mediaMeta));
+    }
+    if (data.containsKey('citation_id')) {
+      context.handle(
+          _citationIdMeta,
+          citationId.isAcceptableOrUnknown(
+              data['citation_id']!, _citationIdMeta));
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -855,6 +1133,8 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
           .read(DriftSqlType.string, data['${effectivePrefix}content']),
       media: attachedDatabase.typeMapping
           .read(DriftSqlType.blob, data['${effectivePrefix}media']),
+      citationId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}citation_id']),
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       modifiedAt: attachedDatabase.typeMapping
@@ -872,12 +1152,14 @@ class Note extends DataClass implements Insertable<Note> {
   final int id;
   final String? content;
   final Uint8List? media;
+  final int? citationId;
   final DateTime createdAt;
   final DateTime modifiedAt;
   const Note(
       {required this.id,
       this.content,
       this.media,
+      this.citationId,
       required this.createdAt,
       required this.modifiedAt});
   @override
@@ -889,6 +1171,9 @@ class Note extends DataClass implements Insertable<Note> {
     }
     if (!nullToAbsent || media != null) {
       map['media'] = Variable<Uint8List>(media);
+    }
+    if (!nullToAbsent || citationId != null) {
+      map['citation_id'] = Variable<int>(citationId);
     }
     map['created_at'] = Variable<DateTime>(createdAt);
     map['modified_at'] = Variable<DateTime>(modifiedAt);
@@ -903,6 +1188,9 @@ class Note extends DataClass implements Insertable<Note> {
           : Value(content),
       media:
           media == null && nullToAbsent ? const Value.absent() : Value(media),
+      citationId: citationId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(citationId),
       createdAt: Value(createdAt),
       modifiedAt: Value(modifiedAt),
     );
@@ -915,6 +1203,7 @@ class Note extends DataClass implements Insertable<Note> {
       id: serializer.fromJson<int>(json['id']),
       content: serializer.fromJson<String?>(json['content']),
       media: serializer.fromJson<Uint8List?>(json['media']),
+      citationId: serializer.fromJson<int?>(json['citationId']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       modifiedAt: serializer.fromJson<DateTime>(json['modifiedAt']),
     );
@@ -926,6 +1215,7 @@ class Note extends DataClass implements Insertable<Note> {
       'id': serializer.toJson<int>(id),
       'content': serializer.toJson<String?>(content),
       'media': serializer.toJson<Uint8List?>(media),
+      'citationId': serializer.toJson<int?>(citationId),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'modifiedAt': serializer.toJson<DateTime>(modifiedAt),
     };
@@ -935,12 +1225,14 @@ class Note extends DataClass implements Insertable<Note> {
           {int? id,
           Value<String?> content = const Value.absent(),
           Value<Uint8List?> media = const Value.absent(),
+          Value<int?> citationId = const Value.absent(),
           DateTime? createdAt,
           DateTime? modifiedAt}) =>
       Note(
         id: id ?? this.id,
         content: content.present ? content.value : this.content,
         media: media.present ? media.value : this.media,
+        citationId: citationId.present ? citationId.value : this.citationId,
         createdAt: createdAt ?? this.createdAt,
         modifiedAt: modifiedAt ?? this.modifiedAt,
       );
@@ -949,6 +1241,8 @@ class Note extends DataClass implements Insertable<Note> {
       id: data.id.present ? data.id.value : this.id,
       content: data.content.present ? data.content.value : this.content,
       media: data.media.present ? data.media.value : this.media,
+      citationId:
+          data.citationId.present ? data.citationId.value : this.citationId,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       modifiedAt:
           data.modifiedAt.present ? data.modifiedAt.value : this.modifiedAt,
@@ -961,6 +1255,7 @@ class Note extends DataClass implements Insertable<Note> {
           ..write('id: $id, ')
           ..write('content: $content, ')
           ..write('media: $media, ')
+          ..write('citationId: $citationId, ')
           ..write('createdAt: $createdAt, ')
           ..write('modifiedAt: $modifiedAt')
           ..write(')'))
@@ -968,8 +1263,8 @@ class Note extends DataClass implements Insertable<Note> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, content, $driftBlobEquality.hash(media), createdAt, modifiedAt);
+  int get hashCode => Object.hash(id, content, $driftBlobEquality.hash(media),
+      citationId, createdAt, modifiedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -977,6 +1272,7 @@ class Note extends DataClass implements Insertable<Note> {
           other.id == this.id &&
           other.content == this.content &&
           $driftBlobEquality.equals(other.media, this.media) &&
+          other.citationId == this.citationId &&
           other.createdAt == this.createdAt &&
           other.modifiedAt == this.modifiedAt);
 }
@@ -985,12 +1281,14 @@ class NotesCompanion extends UpdateCompanion<Note> {
   final Value<int> id;
   final Value<String?> content;
   final Value<Uint8List?> media;
+  final Value<int?> citationId;
   final Value<DateTime> createdAt;
   final Value<DateTime> modifiedAt;
   const NotesCompanion({
     this.id = const Value.absent(),
     this.content = const Value.absent(),
     this.media = const Value.absent(),
+    this.citationId = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.modifiedAt = const Value.absent(),
   });
@@ -998,6 +1296,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
     this.id = const Value.absent(),
     this.content = const Value.absent(),
     this.media = const Value.absent(),
+    this.citationId = const Value.absent(),
     required DateTime createdAt,
     required DateTime modifiedAt,
   })  : createdAt = Value(createdAt),
@@ -1006,6 +1305,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
     Expression<int>? id,
     Expression<String>? content,
     Expression<Uint8List>? media,
+    Expression<int>? citationId,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? modifiedAt,
   }) {
@@ -1013,6 +1313,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
       if (id != null) 'id': id,
       if (content != null) 'content': content,
       if (media != null) 'media': media,
+      if (citationId != null) 'citation_id': citationId,
       if (createdAt != null) 'created_at': createdAt,
       if (modifiedAt != null) 'modified_at': modifiedAt,
     });
@@ -1022,12 +1323,14 @@ class NotesCompanion extends UpdateCompanion<Note> {
       {Value<int>? id,
       Value<String?>? content,
       Value<Uint8List?>? media,
+      Value<int?>? citationId,
       Value<DateTime>? createdAt,
       Value<DateTime>? modifiedAt}) {
     return NotesCompanion(
       id: id ?? this.id,
       content: content ?? this.content,
       media: media ?? this.media,
+      citationId: citationId ?? this.citationId,
       createdAt: createdAt ?? this.createdAt,
       modifiedAt: modifiedAt ?? this.modifiedAt,
     );
@@ -1045,6 +1348,9 @@ class NotesCompanion extends UpdateCompanion<Note> {
     if (media.present) {
       map['media'] = Variable<Uint8List>(media.value);
     }
+    if (citationId.present) {
+      map['citation_id'] = Variable<int>(citationId.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -1060,6 +1366,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
           ..write('id: $id, ')
           ..write('content: $content, ')
           ..write('media: $media, ')
+          ..write('citationId: $citationId, ')
           ..write('createdAt: $createdAt, ')
           ..write('modifiedAt: $modifiedAt')
           ..write(')'))
@@ -1299,6 +1606,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CollectionMediaTable collectionMedia =
       $CollectionMediaTable(this);
   late final $CollectionsTable collections = $CollectionsTable(this);
+  late final $NoteCitationsTable noteCitations = $NoteCitationsTable(this);
   late final $NotesTable notes = $NotesTable(this);
   late final $CollectionNotesTable collectionNotes =
       $CollectionNotesTable(this);
@@ -1307,7 +1615,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [collectionMedia, collections, notes, collectionNotes];
+      [collectionMedia, collections, noteCitations, notes, collectionNotes];
 }
 
 typedef $$CollectionMediaTableCreateCompanionBuilder = CollectionMediaCompanion
@@ -2047,10 +2355,246 @@ typedef $$CollectionsTableProcessedTableManager = ProcessedTableManager<
     Collection,
     PrefetchHooks Function(
         {bool mediaId, bool parentId, bool collectionNotesRefs})>;
+typedef $$NoteCitationsTableCreateCompanionBuilder = NoteCitationsCompanion
+    Function({
+  Value<int> id,
+  required String title,
+  required DateTime createdAt,
+  required DateTime modifiedAt,
+});
+typedef $$NoteCitationsTableUpdateCompanionBuilder = NoteCitationsCompanion
+    Function({
+  Value<int> id,
+  Value<String> title,
+  Value<DateTime> createdAt,
+  Value<DateTime> modifiedAt,
+});
+
+final class $$NoteCitationsTableReferences
+    extends BaseReferences<_$AppDatabase, $NoteCitationsTable, NoteCitation> {
+  $$NoteCitationsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$NotesTable, List<Note>> _notesRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.notes,
+          aliasName:
+              $_aliasNameGenerator(db.noteCitations.id, db.notes.citationId));
+
+  $$NotesTableProcessedTableManager get notesRefs {
+    final manager = $$NotesTableTableManager($_db, $_db.notes)
+        .filter((f) => f.citationId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_notesRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$NoteCitationsTableFilterComposer
+    extends Composer<_$AppDatabase, $NoteCitationsTable> {
+  $$NoteCitationsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get modifiedAt => $composableBuilder(
+      column: $table.modifiedAt, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> notesRefs(
+      Expression<bool> Function($$NotesTableFilterComposer f) f) {
+    final $$NotesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.notes,
+        getReferencedColumn: (t) => t.citationId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$NotesTableFilterComposer(
+              $db: $db,
+              $table: $db.notes,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$NoteCitationsTableOrderingComposer
+    extends Composer<_$AppDatabase, $NoteCitationsTable> {
+  $$NoteCitationsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get modifiedAt => $composableBuilder(
+      column: $table.modifiedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$NoteCitationsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $NoteCitationsTable> {
+  $$NoteCitationsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get modifiedAt => $composableBuilder(
+      column: $table.modifiedAt, builder: (column) => column);
+
+  Expression<T> notesRefs<T extends Object>(
+      Expression<T> Function($$NotesTableAnnotationComposer a) f) {
+    final $$NotesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.notes,
+        getReferencedColumn: (t) => t.citationId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$NotesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.notes,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$NoteCitationsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $NoteCitationsTable,
+    NoteCitation,
+    $$NoteCitationsTableFilterComposer,
+    $$NoteCitationsTableOrderingComposer,
+    $$NoteCitationsTableAnnotationComposer,
+    $$NoteCitationsTableCreateCompanionBuilder,
+    $$NoteCitationsTableUpdateCompanionBuilder,
+    (NoteCitation, $$NoteCitationsTableReferences),
+    NoteCitation,
+    PrefetchHooks Function({bool notesRefs})> {
+  $$NoteCitationsTableTableManager(_$AppDatabase db, $NoteCitationsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$NoteCitationsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$NoteCitationsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$NoteCitationsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> modifiedAt = const Value.absent(),
+          }) =>
+              NoteCitationsCompanion(
+            id: id,
+            title: title,
+            createdAt: createdAt,
+            modifiedAt: modifiedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String title,
+            required DateTime createdAt,
+            required DateTime modifiedAt,
+          }) =>
+              NoteCitationsCompanion.insert(
+            id: id,
+            title: title,
+            createdAt: createdAt,
+            modifiedAt: modifiedAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$NoteCitationsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({notesRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (notesRefs) db.notes],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (notesRefs)
+                    await $_getPrefetchedData<NoteCitation, $NoteCitationsTable,
+                            Note>(
+                        currentTable: table,
+                        referencedTable:
+                            $$NoteCitationsTableReferences._notesRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$NoteCitationsTableReferences(db, table, p0)
+                                .notesRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.citationId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$NoteCitationsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $NoteCitationsTable,
+    NoteCitation,
+    $$NoteCitationsTableFilterComposer,
+    $$NoteCitationsTableOrderingComposer,
+    $$NoteCitationsTableAnnotationComposer,
+    $$NoteCitationsTableCreateCompanionBuilder,
+    $$NoteCitationsTableUpdateCompanionBuilder,
+    (NoteCitation, $$NoteCitationsTableReferences),
+    NoteCitation,
+    PrefetchHooks Function({bool notesRefs})>;
 typedef $$NotesTableCreateCompanionBuilder = NotesCompanion Function({
   Value<int> id,
   Value<String?> content,
   Value<Uint8List?> media,
+  Value<int?> citationId,
   required DateTime createdAt,
   required DateTime modifiedAt,
 });
@@ -2058,6 +2602,7 @@ typedef $$NotesTableUpdateCompanionBuilder = NotesCompanion Function({
   Value<int> id,
   Value<String?> content,
   Value<Uint8List?> media,
+  Value<int?> citationId,
   Value<DateTime> createdAt,
   Value<DateTime> modifiedAt,
 });
@@ -2065,6 +2610,21 @@ typedef $$NotesTableUpdateCompanionBuilder = NotesCompanion Function({
 final class $$NotesTableReferences
     extends BaseReferences<_$AppDatabase, $NotesTable, Note> {
   $$NotesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $NoteCitationsTable _citationIdTable(_$AppDatabase db) =>
+      db.noteCitations.createAlias(
+          $_aliasNameGenerator(db.notes.citationId, db.noteCitations.id));
+
+  $$NoteCitationsTableProcessedTableManager? get citationId {
+    final $_column = $_itemColumn<int>('citation_id');
+    if ($_column == null) return null;
+    final manager = $$NoteCitationsTableTableManager($_db, $_db.noteCitations)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_citationIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
 
   static MultiTypedResultKey<$CollectionNotesTable, List<CollectionNote>>
       _collectionNotesRefsTable(_$AppDatabase db) =>
@@ -2106,6 +2666,26 @@ class $$NotesTableFilterComposer extends Composer<_$AppDatabase, $NotesTable> {
 
   ColumnFilters<DateTime> get modifiedAt => $composableBuilder(
       column: $table.modifiedAt, builder: (column) => ColumnFilters(column));
+
+  $$NoteCitationsTableFilterComposer get citationId {
+    final $$NoteCitationsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.citationId,
+        referencedTable: $db.noteCitations,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$NoteCitationsTableFilterComposer(
+              $db: $db,
+              $table: $db.noteCitations,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 
   Expression<bool> collectionNotesRefs(
       Expression<bool> Function($$CollectionNotesTableFilterComposer f) f) {
@@ -2152,6 +2732,26 @@ class $$NotesTableOrderingComposer
 
   ColumnOrderings<DateTime> get modifiedAt => $composableBuilder(
       column: $table.modifiedAt, builder: (column) => ColumnOrderings(column));
+
+  $$NoteCitationsTableOrderingComposer get citationId {
+    final $$NoteCitationsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.citationId,
+        referencedTable: $db.noteCitations,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$NoteCitationsTableOrderingComposer(
+              $db: $db,
+              $table: $db.noteCitations,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$NotesTableAnnotationComposer
@@ -2177,6 +2777,26 @@ class $$NotesTableAnnotationComposer
 
   GeneratedColumn<DateTime> get modifiedAt => $composableBuilder(
       column: $table.modifiedAt, builder: (column) => column);
+
+  $$NoteCitationsTableAnnotationComposer get citationId {
+    final $$NoteCitationsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.citationId,
+        referencedTable: $db.noteCitations,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$NoteCitationsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.noteCitations,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 
   Expression<T> collectionNotesRefs<T extends Object>(
       Expression<T> Function($$CollectionNotesTableAnnotationComposer a) f) {
@@ -2211,7 +2831,7 @@ class $$NotesTableTableManager extends RootTableManager<
     $$NotesTableUpdateCompanionBuilder,
     (Note, $$NotesTableReferences),
     Note,
-    PrefetchHooks Function({bool collectionNotesRefs})> {
+    PrefetchHooks Function({bool citationId, bool collectionNotesRefs})> {
   $$NotesTableTableManager(_$AppDatabase db, $NotesTable table)
       : super(TableManagerState(
           db: db,
@@ -2226,6 +2846,7 @@ class $$NotesTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String?> content = const Value.absent(),
             Value<Uint8List?> media = const Value.absent(),
+            Value<int?> citationId = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> modifiedAt = const Value.absent(),
           }) =>
@@ -2233,6 +2854,7 @@ class $$NotesTableTableManager extends RootTableManager<
             id: id,
             content: content,
             media: media,
+            citationId: citationId,
             createdAt: createdAt,
             modifiedAt: modifiedAt,
           ),
@@ -2240,6 +2862,7 @@ class $$NotesTableTableManager extends RootTableManager<
             Value<int> id = const Value.absent(),
             Value<String?> content = const Value.absent(),
             Value<Uint8List?> media = const Value.absent(),
+            Value<int?> citationId = const Value.absent(),
             required DateTime createdAt,
             required DateTime modifiedAt,
           }) =>
@@ -2247,6 +2870,7 @@ class $$NotesTableTableManager extends RootTableManager<
             id: id,
             content: content,
             media: media,
+            citationId: citationId,
             createdAt: createdAt,
             modifiedAt: modifiedAt,
           ),
@@ -2254,13 +2878,39 @@ class $$NotesTableTableManager extends RootTableManager<
               .map((e) =>
                   (e.readTable(table), $$NotesTableReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback: ({collectionNotesRefs = false}) {
+          prefetchHooksCallback: (
+              {citationId = false, collectionNotesRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
                 if (collectionNotesRefs) db.collectionNotes
               ],
-              addJoins: null,
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (citationId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.citationId,
+                    referencedTable:
+                        $$NotesTableReferences._citationIdTable(db),
+                    referencedColumn:
+                        $$NotesTableReferences._citationIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (collectionNotesRefs)
@@ -2294,7 +2944,7 @@ typedef $$NotesTableProcessedTableManager = ProcessedTableManager<
     $$NotesTableUpdateCompanionBuilder,
     (Note, $$NotesTableReferences),
     Note,
-    PrefetchHooks Function({bool collectionNotesRefs})>;
+    PrefetchHooks Function({bool citationId, bool collectionNotesRefs})>;
 typedef $$CollectionNotesTableCreateCompanionBuilder = CollectionNotesCompanion
     Function({
   Value<int> id,
@@ -2620,6 +3270,8 @@ class $AppDatabaseManager {
       $$CollectionMediaTableTableManager(_db, _db.collectionMedia);
   $$CollectionsTableTableManager get collections =>
       $$CollectionsTableTableManager(_db, _db.collections);
+  $$NoteCitationsTableTableManager get noteCitations =>
+      $$NoteCitationsTableTableManager(_db, _db.noteCitations);
   $$NotesTableTableManager get notes =>
       $$NotesTableTableManager(_db, _db.notes);
   $$CollectionNotesTableTableManager get collectionNotes =>
