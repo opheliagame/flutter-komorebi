@@ -1,33 +1,14 @@
-import 'package:flutter_komorebi/src/data/drift/database.dart';
+import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FakeCollectionsRepository implements CollectionsRepository {
   @override
-  Future<List<Collection>> getRootCollections() {
-    return Future(() => []);
-  }
-
-  @override
-  Stream<List<Collection>> watchRootCollections() {
-    return Stream.empty();
-  }
-
-  @override
-  Future<List<Collection>> getSubCollections(int collectionId) {
-    return Future(() => []);
-  }
-
-  @override
   Future<bool> createCollection(
       {required String? collectionName, required XFile? media, required int? parentCollectionId}) {
-    return Future(() => true);
-  }
-
-  @override
-  Future<bool> deleteCollection(int collectionId) {
-    return Future(() => true);
+    // TODO: implement createCollection
+    throw UnimplementedError();
   }
 
   @override
@@ -37,20 +18,44 @@ class FakeCollectionsRepository implements CollectionsRepository {
   }
 
   @override
-  Stream<List<Collection>> watchSubCollections(int collectionId) {
-    // TODO: implement watchSubCollections
+  Future<bool> deleteCollection(int collectionId) {
+    // TODO: implement deleteCollection
     throw UnimplementedError();
   }
 
   @override
-  Future<List<Collection>> getCollectionsOfNote(int noteId) {
+  Future<List<CollectionEntity>> getCollectionsOfNote(int noteId) {
     // TODO: implement getCollectionsOfNote
     throw UnimplementedError();
   }
 
   @override
-  Stream<List<Collection>> watchCollectionsOfNote(int noteId) {
+  Future<List<CollectionEntity>> getRootCollections() {
+    // TODO: implement getRootCollections
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<CollectionEntity>> getSubCollections(int collectionId) {
+    // TODO: implement getSubCollections
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<CollectionEntity>> watchCollectionsOfNote(int noteId) {
     // TODO: implement watchCollectionsOfNote
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<CollectionEntity>> watchRootCollections() {
+    // TODO: implement watchRootCollections
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<CollectionEntity>> watchSubCollections(int collectionId) {
+    // TODO: implement watchSubCollections
     throw UnimplementedError();
   }
 }

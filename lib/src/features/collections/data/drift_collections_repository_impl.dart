@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
+import 'package:flutter_komorebi/src/data/drift/domain/collection_table.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -8,29 +10,29 @@ class DriftCollectionsRepository implements CollectionsRepository {
   final database = AppDatabase();
 
   @override
-  Future<List<Collection>> getRootCollections() async {
-    final query = database.select(database.collections)..where((q) => q.parentId.isNotNull());
-    List<Collection> collections = await query.get();
+  Future<List<CollectionEntity>> getRootCollections() async {
+    final query = database.select(database.collectionTable)..where((q) => q.parentId.isNotNull());
+    final collections = (await query.get()).map((e) => e.toDomain()).toList();
     return collections;
   }
 
   @override
-  Stream<List<Collection>> watchRootCollections() {
-    final query = database.select(database.collections)..where((q) => q.parentId.isNull());
-    return query.watch();
+  Stream<List<CollectionEntity>> watchRootCollections() {
+    final query = database.select(database.collectionTable)..where((q) => q.parentId.isNull());
+    return query.watch().map((e) => e.map((e1) => e1.toDomain()).toList());
   }
 
   @override
-  Future<List<Collection>> getSubCollections(int collectionId) async {
-    final query = database.select(database.collections)..where((q) => q.parentId.equals(collectionId));
-    List<Collection> collections = await query.get();
+  Future<List<CollectionEntity>> getSubCollections(int collectionId) async {
+    final query = database.select(database.collectionTable)..where((q) => q.parentId.equals(collectionId));
+    final collections = (await query.get()).map((e) => e.toDomain()).toList();
     return collections;
   }
 
   @override
-  Stream<List<Collection>> watchSubCollections(int collectionId) {
-    final query = database.select(database.collections)..where((q) => q.parentId.equals(collectionId));
-    return query.watch();
+  Stream<List<CollectionEntity>> watchSubCollections(int collectionId) {
+    final query = database.select(database.collectionTable)..where((q) => q.parentId.equals(collectionId));
+    return query.watch().map((e) => e.map((e1) => e1.toDomain()).toList());
   }
 
   @override
@@ -42,8 +44,8 @@ class DriftCollectionsRepository implements CollectionsRepository {
       pickedMedia = await media.readAsBytes();
     }
 
-    final query = database.into(database.collections).insert(
-          CollectionsCompanion.insert(
+    final query = database.into(database.collectionTable).insert(
+          CollectionTableCompanion.insert(
             name: Value.absentIfNull(collectionName),
             description: "",
             media: Value.absentIfNull(pickedMedia),
@@ -64,7 +66,7 @@ class DriftCollectionsRepository implements CollectionsRepository {
 
   @override
   Future<bool> deleteCollection(int collectionId) async {
-    final query = database.delete(database.collections)..where((q) => q.id.equals(collectionId));
+    final query = database.delete(database.collectionTable)..where((q) => q.id.equals(collectionId));
     try {
       await query.go();
       return true;
@@ -90,27 +92,33 @@ class DriftCollectionsRepository implements CollectionsRepository {
   }
 
   @override
-  Future<List<Collection>> getCollectionsOfNote(int noteId) async {
+  Future<List<CollectionEntity>> getCollectionsOfNote(int noteId) async {
     final query = database
-        .select(database.collections)
-        .join([innerJoin(database.collectionNotes, database.collectionNotes.noteId.equals(noteId))]).get();
+        .select(database.collectionTable)
+        .join([innerJoin(database.collectionNoteTable, database.collectionNoteTable.noteId.equals(noteId))]).get();
 
-    final collections = (await query).map((row) {
-      return row.readTable(database.collections);
-    }).toList();
+    final collections = (await query)
+        .map((row) {
+          return row.readTable(database.collectionTable);
+        })
+        .map((e) => e.toDomain())
+        .toList();
     return collections;
   }
 
   @override
-  Stream<List<Collection>> watchCollectionsOfNote(int noteId) {
+  Stream<List<CollectionEntity>> watchCollectionsOfNote(int noteId) {
     final query = database
-        .select(database.collections)
-        .join([innerJoin(database.collectionNotes, database.collectionNotes.noteId.equals(noteId))]);
+        .select(database.collectionTable)
+        .join([innerJoin(database.collectionNoteTable, database.collectionNoteTable.noteId.equals(noteId))]);
 
     final collections = query.watch().map((rows) {
-      return rows.map((row) {
-        return row.readTable(database.collections);
-      }).toList();
+      return rows
+          .map((row) {
+            return row.readTable(database.collectionTable);
+          })
+          .map((e) => e.toDomain())
+          .toList();
     });
     return collections;
   }

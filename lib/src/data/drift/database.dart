@@ -1,16 +1,22 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
-import 'package:flutter_komorebi/src/data/drift/domain/collection.dart';
-import 'package:flutter_komorebi/src/data/drift/domain/collection_media.dart';
+import 'package:flutter_komorebi/src/data/drift/domain/collection_media_table.dart';
+import 'package:flutter_komorebi/src/data/drift/domain/collection_table.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/join_tables.dart';
-import 'package:flutter_komorebi/src/data/drift/domain/note.dart';
-import 'package:flutter_komorebi/src/data/drift/domain/note_citation.dart';
+import 'package:flutter_komorebi/src/data/drift/domain/note_citation_table.dart';
+import 'package:flutter_komorebi/src/data/drift/domain/note_table.dart';
 import 'package:path_provider/path_provider.dart';
 
 part 'database.g.dart';
 
 // MAIN DATABASE DEFINITION
-@DriftDatabase(tables: [Collections, Notes, CollectionNotes, CollectionMedia, NoteCitations])
+@DriftDatabase(tables: [
+  CollectionTable,
+  NoteTable,
+  CollectionNoteTable,
+  CollectionMediaTable,
+  NoteCitationTable,
+])
 class AppDatabase extends _$AppDatabase {
   // After generating code, this class needs to define a `schemaVersion` getter
   // and a constructor telling drift where the database should be stored.

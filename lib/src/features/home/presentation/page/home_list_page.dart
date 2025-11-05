@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
-import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/app_bottom_navigation_bar.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_row.dart';
@@ -12,7 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class HomeListPage extends ConsumerWidget {
   const HomeListPage({super.key, this.collection});
 
-  final Collection? collection;
+  final CollectionEntity? collection;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

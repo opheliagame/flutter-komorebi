@@ -1,20 +1,8 @@
-import 'package:flutter_komorebi/src/data/drift/database.dart';
+import 'package:flutter_komorebi/src/core/domain/note_entity.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FakeNotesRepository implements NotesRepository {
-  @override
-  Future<Note> getNote(int noteId) {
-    return Future(
-      () => Note(id: 1, createdAt: DateTime(2024), modifiedAt: DateTime(2024)),
-    );
-  }
-
-  @override
-  Future<List<Note>> getNotesInCollection(int collectionId) {
-    return Future(() => []);
-  }
-
   @override
   Future<bool> addNoteToCollection({required int noteId, required int collectionId}) {
     // TODO: implement addNoteToCollection
@@ -40,13 +28,25 @@ class FakeNotesRepository implements NotesRepository {
   }
 
   @override
-  Future<List<Note>> getAllNotes() {
+  Future<List<NoteEntity>> getAllNotes() {
     // TODO: implement getAllNotes
     throw UnimplementedError();
   }
 
   @override
-  Future<List<Note>> getNotesInCollectionList(List<int> collectionIds) {
+  Future<NoteEntity> getNote(int noteId) {
+    // TODO: implement getNote
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<NoteEntity>> getNotesInCollection(int collectionId) {
+    // TODO: implement getNotesInCollection
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<NoteEntity>> getNotesInCollectionList(List<int> collectionIds) {
     // TODO: implement getNotesInCollectionList
     throw UnimplementedError();
   }
@@ -64,25 +64,25 @@ class FakeNotesRepository implements NotesRepository {
   }
 
   @override
-  Stream<List<Note>> watchAllNotes() {
+  Stream<List<NoteEntity>> watchAllNotes() {
     // TODO: implement watchAllNotes
     throw UnimplementedError();
   }
 
   @override
-  Stream<Note> watchNote(int noteId) {
+  Stream<NoteEntity> watchNote(int noteId) {
     // TODO: implement watchNote
     throw UnimplementedError();
   }
 
   @override
-  Stream<List<Note>> watchNotesInCollection(int collectionId) {
+  Stream<List<NoteEntity>> watchNotesInCollection(int collectionId) {
     // TODO: implement watchNotesInCollection
     throw UnimplementedError();
   }
 
   @override
-  Stream<List<Note>> watchNotesInCollectionList(List<int> collectionIds) {
+  Stream<List<NoteEntity>> watchNotesInCollectionList(List<int> collectionIds) {
     // TODO: implement watchNotesInCollectionList
     throw UnimplementedError();
   }

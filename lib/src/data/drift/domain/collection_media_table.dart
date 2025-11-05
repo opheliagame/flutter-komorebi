@@ -9,7 +9,10 @@ import 'package:drift/drift.dart';
 //   CollectionMedia({required this.id, required this.title, required this.picture});
 // }
 
-class CollectionMedia extends Table {
+class CollectionMediaTable extends Table {
+  @override
+  String get tableName => 'collection_media';
+
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().nullable()();
   TextColumn get caption => text().nullable()();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/data/drift/database.dart';
+import 'package:flutter_komorebi/src/core/domain/note_entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NoteTile extends ConsumerWidget {
@@ -9,7 +9,7 @@ class NoteTile extends ConsumerWidget {
     required this.onTap,
   });
 
-  final Note note;
+  final NoteEntity note;
   final Function()? onTap;
 
   @override

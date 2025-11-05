@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/data/drift/database.dart';
+import 'package:flutter_komorebi/src/core/domain/note_entity.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:flutter_komorebi/src/router/app_router.gr.dart';
@@ -50,8 +50,7 @@ class NoteListItem extends StatelessWidget {
     required this.onTap,
   });
 
-  // TODO(urgent): remove page dep on drift
-  final Note note;
+  final NoteEntity note;
   final Function()? onTap;
 
   @override

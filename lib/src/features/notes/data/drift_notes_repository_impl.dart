@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_komorebi/src/core/domain/note_entity.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
+import 'package:flutter_komorebi/src/data/drift/domain/note_table.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -8,27 +10,28 @@ class DriftNotesRepository implements NotesRepository {
   final database = AppDatabase();
 
   @override
-  Future<List<Note>> getAllNotes() {
-    final query = database.select(database.notes).get();
-    return query;
+  Future<List<NoteEntity>> getAllNotes() async {
+    final query = database.select(database.noteTable).get();
+    final notes = (await query).map((e) => e.toDomain()).toList();
+    return notes;
   }
 
   @override
-  Stream<List<Note>> watchAllNotes() {
-    final query = database.select(database.notes).watch();
-    return query;
+  Stream<List<NoteEntity>> watchAllNotes() {
+    final query = database.select(database.noteTable).watch();
+    return query.map((e) => e.map((e1) => e1.toDomain()).toList());
   }
 
   @override
-  Future<Note> getNote(int noteId) async {
-    final query = database.select(database.notes)..where((q) => q.id.equals(noteId));
-    return await query.getSingle();
+  Future<NoteEntity> getNote(int noteId) async {
+    final query = database.select(database.noteTable)..where((q) => q.id.equals(noteId));
+    return (await query.getSingle()).toDomain();
   }
 
   @override
-  Stream<Note> watchNote(int noteId) {
-    final query = database.select(database.notes)..where((q) => q.id.equals(noteId));
-    return query.watchSingle();
+  Stream<NoteEntity> watchNote(int noteId) {
+    final query = database.select(database.noteTable)..where((q) => q.id.equals(noteId));
+    return (query.watchSingle()).map((e) => e.toDomain());
   }
 
   @override
@@ -40,8 +43,8 @@ class DriftNotesRepository implements NotesRepository {
     }
 
     try {
-      final noteId = await database.into(database.notes).insert(
-            NotesCompanion.insert(
+      final noteId = await database.into(database.noteTable).insert(
+            NoteTableCompanion.insert(
               content: Value.absentIfNull(content),
               media: Value.absentIfNull(pickedMedia),
               createdAt: DateTime.now(),
@@ -50,8 +53,8 @@ class DriftNotesRepository implements NotesRepository {
           );
 
       if (collectionId != null) {
-        await database.into(database.collectionNotes).insert(
-              CollectionNotesCompanion.insert(noteId: noteId, collectionId: collectionId),
+        await database.into(database.collectionNoteTable).insert(
+              CollectionNoteTableCompanion.insert(noteId: noteId, collectionId: collectionId),
             );
       }
 
@@ -64,7 +67,7 @@ class DriftNotesRepository implements NotesRepository {
 
   @override
   Future<bool> deleteNote(int noteId) async {
-    final query = (database.delete(database.notes)..where((q) => q.id.equals(noteId))).go();
+    final query = (database.delete(database.noteTable)..where((q) => q.id.equals(noteId))).go();
     try {
       await query;
       return true;
@@ -74,68 +77,68 @@ class DriftNotesRepository implements NotesRepository {
   }
 
   @override
-  Future<List<Note>> getNotesInCollection(int collectionId) async {
-    final query = database.select(database.notes)
+  Future<List<NoteEntity>> getNotesInCollection(int collectionId) async {
+    final query = database.select(database.noteTable)
       ..join(
         [
-          innerJoin(database.collectionNotes, database.collectionNotes.noteId.equalsExp(database.notes.id)),
+          innerJoin(database.collectionNoteTable, database.collectionNoteTable.noteId.equalsExp(database.noteTable.id)),
         ],
       )
-      ..where((q) => database.collectionNotes.collectionId.equals(collectionId));
+      ..where((q) => database.collectionNoteTable.collectionId.equals(collectionId));
 
-    final notes = query.get();
+    final notes = (await query.get()).map((e) => e.toDomain()).toList();
     return notes;
   }
 
   @override
-  Stream<List<Note>> watchNotesInCollection(int collectionId) {
-    final query = database.select(database.collectionNotes).join(
+  Stream<List<NoteEntity>> watchNotesInCollection(int collectionId) {
+    final query = database.select(database.collectionNoteTable).join(
       [
-        innerJoin(database.notes, database.notes.id.equalsExp(database.collectionNotes.noteId)),
+        innerJoin(database.noteTable, database.noteTable.id.equalsExp(database.collectionNoteTable.noteId)),
       ],
-    )..where(database.collectionNotes.collectionId.equals(collectionId));
+    )..where(database.collectionNoteTable.collectionId.equals(collectionId));
 
     final notes = query.watch().map((rows) {
       return rows.map((row) {
-        return row.readTable(database.notes);
+        return row.readTable(database.noteTable).toDomain();
       }).toList();
     });
     return notes;
   }
 
   @override
-  Future<List<Note>> getNotesInCollectionList(List<int> collectionIds) {
-    final query = database.select(database.notes)
+  Future<List<NoteEntity>> getNotesInCollectionList(List<int> collectionIds) async {
+    final query = database.select(database.noteTable)
       ..join(
         [
-          innerJoin(database.collectionNotes, database.collectionNotes.noteId.equalsExp(database.notes.id)),
+          innerJoin(database.collectionNoteTable, database.collectionNoteTable.noteId.equalsExp(database.noteTable.id)),
         ],
       )
-      ..where((q) => database.collectionNotes.collectionId.isIn(collectionIds));
+      ..where((q) => database.collectionNoteTable.collectionId.isIn(collectionIds));
 
-    final notes = query.get();
+    final notes = (await query.get()).map((e) => e.toDomain()).toList();
     return notes;
   }
 
   @override
-  Stream<List<Note>> watchNotesInCollectionList(List<int> collectionIds) {
-    final query = database.select(database.notes)
+  Stream<List<NoteEntity>> watchNotesInCollectionList(List<int> collectionIds) {
+    final query = database.select(database.noteTable)
       ..join(
         [
-          innerJoin(database.collectionNotes, database.collectionNotes.noteId.equalsExp(database.notes.id)),
+          innerJoin(database.collectionNoteTable, database.collectionNoteTable.noteId.equalsExp(database.noteTable.id)),
         ],
       )
-      ..where((q) => database.collectionNotes.collectionId.isIn(collectionIds));
+      ..where((q) => database.collectionNoteTable.collectionId.isIn(collectionIds));
 
-    final notes = query.watch();
+    final notes = query.watch().map((e) => e.map((e1) => e1.toDomain()).toList());
     return notes;
   }
 
   @override
   Future<bool> addNoteToCollection({required int noteId, required int collectionId}) async {
     final query = database
-        .into(database.collectionNotes)
-        .insert(CollectionNotesCompanion.insert(noteId: noteId, collectionId: collectionId));
+        .into(database.collectionNoteTable)
+        .insert(CollectionNoteTableCompanion.insert(noteId: noteId, collectionId: collectionId));
 
     try {
       await query;
@@ -150,9 +153,9 @@ class DriftNotesRepository implements NotesRepository {
     try {
       await database.batch((batch) {
         batch.insertAll(
-          database.collectionNotes,
+          database.collectionNoteTable,
           List.from(collectionIds).map(
-            (collectionId) => CollectionNotesCompanion.insert(noteId: noteId, collectionId: collectionId),
+            (collectionId) => CollectionNoteTableCompanion.insert(noteId: noteId, collectionId: collectionId),
           ),
         );
       });
@@ -165,7 +168,7 @@ class DriftNotesRepository implements NotesRepository {
 
   @override
   Future<bool> removeNoteFromCollection({required int noteId, required int collectionId}) async {
-    final query = database.delete(database.collectionNotes)
+    final query = database.delete(database.collectionNoteTable)
       ..where((q) => q.noteId.equals(noteId) & q.collectionId.equals(collectionId));
     try {
       await query.go();
@@ -180,7 +183,7 @@ class DriftNotesRepository implements NotesRepository {
     try {
       await database.batch((batch) {
         batch.deleteWhere(
-          database.collectionNotes,
+          database.collectionNoteTable,
           (q) => q.noteId.equals(noteId) & q.collectionId.isIn(collectionIds),
         );
       });

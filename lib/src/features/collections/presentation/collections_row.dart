@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/data/drift/database.dart';
+import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/collection_tile.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/new_collection_tile.dart';
@@ -9,8 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class RelatedCollectionsRow extends ConsumerWidget {
   const RelatedCollectionsRow({super.key, required this.collection});
 
-  // TODO(urgent): presentation should not directly be dependent on drift
-  final Collection? collection;
+  final CollectionEntity? collection;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -11,7 +11,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i10;
 import 'package:flutter/material.dart' as _i11;
-import 'package:flutter_komorebi/src/data/drift/database.dart' as _i12;
+import 'package:flutter_komorebi/src/core/domain/collection_entity.dart'
+    as _i12;
 import 'package:flutter_komorebi/src/features/collections/presentation/page/collections_list_page.dart'
     as _i1;
 import 'package:flutter_komorebi/src/features/collections/presentation/page/create_page.dart'
@@ -36,7 +37,7 @@ class CollectionsListRoute
     extends _i10.PageRouteInfo<CollectionsListRouteArgs> {
   CollectionsListRoute({
     _i11.Key? key,
-    _i12.Collection? collection,
+    _i12.CollectionEntity? collection,
     List<_i10.PageRouteInfo>? children,
   }) : super(
          CollectionsListRoute.name,
@@ -65,7 +66,7 @@ class CollectionsListRouteArgs {
 
   final _i11.Key? key;
 
-  final _i12.Collection? collection;
+  final _i12.CollectionEntity? collection;
 
   @override
   String toString() {
@@ -151,7 +152,7 @@ class GridScaleTestRoute extends _i10.PageRouteInfo<void> {
 class HomeListRoute extends _i10.PageRouteInfo<HomeListRouteArgs> {
   HomeListRoute({
     _i11.Key? key,
-    _i12.Collection? collection,
+    _i12.CollectionEntity? collection,
     List<_i10.PageRouteInfo>? children,
   }) : super(
          HomeListRoute.name,
@@ -177,7 +178,7 @@ class HomeListRouteArgs {
 
   final _i11.Key? key;
 
-  final _i12.Collection? collection;
+  final _i12.CollectionEntity? collection;
 
   @override
   String toString() {
@@ -216,7 +217,7 @@ class HomeRoute extends _i10.PageRouteInfo<void> {
 class NoteListRoute extends _i10.PageRouteInfo<NoteListRouteArgs> {
   NoteListRoute({
     _i11.Key? key,
-    _i12.Collection? collection,
+    _i12.CollectionEntity? collection,
     List<_i10.PageRouteInfo>? children,
   }) : super(
          NoteListRoute.name,
@@ -242,7 +243,7 @@ class NoteListRouteArgs {
 
   final _i11.Key? key;
 
-  final _i12.Collection? collection;
+  final _i12.CollectionEntity? collection;
 
   @override
   String toString() {
