@@ -21,12 +21,7 @@ class NewCollectionTile extends StatelessWidget {
         child: AspectRatio(
           aspectRatio: 1,
           child: Container(
-            decoration: ShapeDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
+            color: Theme.of(context).buttonTheme.colorScheme?.primaryContainer,
             child: Center(
               child: Icon(Icons.add),
             ),

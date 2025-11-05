@@ -32,13 +32,7 @@ class CollectionTile extends HookConsumerWidget {
         child: AspectRatio(
           aspectRatio: 1,
           child: Container(
-            decoration: ShapeDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-            clipBehavior: Clip.hardEdge,
+            color: Theme.of(context).buttonTheme.colorScheme?.primaryContainer,
             child: !isEdit.value
                 ? Stack(
                     children: [
@@ -89,16 +83,6 @@ class CollectionTile extends HookConsumerWidget {
                           softWrap: true,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
-                        // child: Form(
-                        //   child: TextFormField(
-                        //     initialValue: collection.name,
-                        //     onFieldSubmitted: (value) {
-                        //       if (value.isEmpty) return;
-                        //       // TODO implement edit
-                        //       // ref.read(collectionsNotifierProvider.notifier).upda
-                        //     },
-                        //   ),
-                        // ),
                       )
                     ],
                   ),

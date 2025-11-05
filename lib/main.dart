@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       title: S.of(context)?.app_name,
       theme: ThemeData(
         // This is the theme of your application.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       localizationsDelegates: S.localizationsDelegates,
