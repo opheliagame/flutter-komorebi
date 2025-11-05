@@ -11,11 +11,23 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           initial: true,
           path: '/',
-          page: HomeRoute.page,
+          page: SampleRoute.page,
         ),
         AutoRoute(
           path: '/home',
+          page: HomeRoute.page,
+        ),
+        AutoRoute(
+          path: '/homelist',
           page: HomeListRoute.page,
+        ),
+        AutoRoute(
+          path: '/collectionslist',
+          page: CollectionsListRoute.page,
+        ),
+        AutoRoute(
+          path: '/noteslist',
+          page: NoteListRoute.page,
         ),
         AutoRoute(
           path: '/create',
@@ -28,6 +40,10 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           path: '/roam',
           page: RoamRoute.page,
-        )
+        ),
+        AutoRoute(
+          path: '/gridscaletest',
+          page: GridScaleTestRoute.page,
+        ),
       ];
 }
