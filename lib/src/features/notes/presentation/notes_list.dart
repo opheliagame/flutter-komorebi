@@ -59,7 +59,14 @@ class NoteListItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (note.content != null) Text(note.content!),
-        if (note.media != null) Image.memory(note.media!, fit: BoxFit.contain),
+        if (note.media != null)
+          Image.memory(
+            note.media!,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              return Text('error fetching image');
+            },
+          ),
         Text(note.modifiedAt.toString()),
         Divider(),
       ],

@@ -7,7 +7,9 @@ import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:image_picker/image_picker.dart';
 
 class DriftNotesRepository implements NotesRepository {
-  final database = AppDatabase();
+  DriftNotesRepository(this.database);
+
+  final AppDatabase database;
 
   @override
   Future<List<NoteEntity>> getAllNotes() async {

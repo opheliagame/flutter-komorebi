@@ -7,7 +7,9 @@ import 'package:flutter_komorebi/src/features/collections/data/collections_repos
 import 'package:image_picker/image_picker.dart';
 
 class DriftCollectionsRepository implements CollectionsRepository {
-  final database = AppDatabase();
+  DriftCollectionsRepository(this.database);
+
+  final AppDatabase database;
 
   @override
   Future<List<CollectionEntity>> getRootCollections() async {
@@ -79,11 +81,14 @@ class DriftCollectionsRepository implements CollectionsRepository {
   @override
   Future<bool> deleteAllCollections() async {
     try {
-      await database.transaction(() async {
-        for (final table in database.allTables) {
-          await database.delete(table).go();
-        }
+      await database.batch((batch) {
+        batch.deleteWhere(database.collectionNoteTable, (_) => const Constant(true));
+        batch.deleteWhere(database.noteTable, (_) => const Constant(true));
+        batch.deleteWhere(database.collectionTable, (_) => const Constant(true));
+        batch.deleteWhere(database.noteCitationTable, (_) => const Constant(true));
+        batch.deleteWhere(database.collectionMediaTable, (_) => const Constant(true));
       });
+
       return true;
     } catch (e) {
       debugPrint(e.toString());

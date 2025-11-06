@@ -1,4 +1,5 @@
 import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
+import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/features/collections/data/drift_collections_repository_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,7 +22,7 @@ abstract class CollectionsRepository {
 
 // TODO switch this based on env variable
 final collectionsRepositoryProvider = Provider<CollectionsRepository>((ref) {
-  return DriftCollectionsRepository();
+  return DriftCollectionsRepository(ref.read(appDatabaseProvider));
 });
 
 final collectionsListFutureProvider =

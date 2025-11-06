@@ -41,6 +41,9 @@ class CollectionTile extends HookConsumerWidget {
                           child: Image.memory(
                             collection.media!,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Text('error fetching image');
+                            },
                           ),
                         ),
                       Padding(

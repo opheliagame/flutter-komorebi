@@ -1,5 +1,6 @@
 // import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/core/domain/note_entity.dart';
+import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/features/notes/data/drift_notes_repository_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,7 +28,7 @@ abstract class NotesRepository {
 }
 
 final notesRepositoryProvider = Provider<NotesRepository>((ref) {
-  return DriftNotesRepository();
+  return DriftNotesRepository(ref.read(appDatabaseProvider));
 });
 
 final notesListStreamProvider = StreamProvider.family<List<NoteEntity>, int?>((ref, currentCollectionId) {
