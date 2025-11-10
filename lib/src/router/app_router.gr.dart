@@ -19,6 +19,8 @@ import 'package:flutter_komorebi/src/features/connection/presentation/roam_page.
     as _i9;
 import 'package:flutter_komorebi/src/features/history/presentation/page/history_list_page.dart'
     as _i4;
+import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart'
+    as _i14;
 import 'package:flutter_komorebi/src/features/home/presentation/page/home_list_page.dart'
     as _i5;
 import 'package:flutter_komorebi/src/features/home/presentation/page/home_page.dart'
@@ -91,11 +93,11 @@ class CollectionsListRouteArgs {
 class CreateRoute extends _i12.PageRouteInfo<CreateRouteArgs> {
   CreateRoute({
     _i13.Key? key,
-    required int collectionId,
+    required _i14.EntityType entityType,
     List<_i12.PageRouteInfo>? children,
   }) : super(
          CreateRoute.name,
-         args: CreateRouteArgs(key: key, collectionId: collectionId),
+         args: CreateRouteArgs(key: key, entityType: entityType),
          initialChildren: children,
        );
 
@@ -105,32 +107,32 @@ class CreateRoute extends _i12.PageRouteInfo<CreateRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<CreateRouteArgs>();
-      return _i2.CreatePage(key: args.key, collectionId: args.collectionId);
+      return _i2.CreatePage(key: args.key, entityType: args.entityType);
     },
   );
 }
 
 class CreateRouteArgs {
-  const CreateRouteArgs({this.key, required this.collectionId});
+  const CreateRouteArgs({this.key, required this.entityType});
 
   final _i13.Key? key;
 
-  final int collectionId;
+  final _i14.EntityType entityType;
 
   @override
   String toString() {
-    return 'CreateRouteArgs{key: $key, collectionId: $collectionId}';
+    return 'CreateRouteArgs{key: $key, entityType: $entityType}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! CreateRouteArgs) return false;
-    return key == other.key && collectionId == other.collectionId;
+    return key == other.key && entityType == other.entityType;
   }
 
   @override
-  int get hashCode => key.hashCode ^ collectionId.hashCode;
+  int get hashCode => key.hashCode ^ entityType.hashCode;
 }
 
 /// generated route for

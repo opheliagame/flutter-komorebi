@@ -1,6 +1,7 @@
 import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/features/collections/data/drift_collections_repository_impl.dart';
+import 'package:flutter_komorebi/src/features/connection/data/connection_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -8,13 +9,13 @@ abstract class CollectionsRepository {
   // crud operations
   Future<List<CollectionEntity>> getRootCollections();
   Stream<List<CollectionEntity>> watchRootCollections();
-  Future<List<CollectionEntity>> getSubCollections(int collectionId);
-  Stream<List<CollectionEntity>> watchSubCollections(int collectionId);
+
+  // Future<List<CollectionEntity>> getRelatedCollections(int collectionId);
+  // Stream<List<CollectionEntity>> watchRelatedCollections(int collectionId);
   Future<bool> createCollection({
     required String collectionName,
     required String? description,
     required XFile? media,
-    required int? parentCollectionId,
   });
   Future<bool> deleteCollection(int collectionId);
   Future<bool> deleteAllCollections();
@@ -30,20 +31,22 @@ final collectionsRepositoryProvider = Provider<CollectionsRepository>((ref) {
 });
 
 final collectionsListFutureProvider =
-    FutureProvider.family.autoDispose<List<CollectionEntity>, int?>((ref, currentCollectionId) async {
+    FutureProvider.family.autoDispose<List<CollectionEntity>, int>((ref, currentCollectionId) async {
   final repository = ref.watch(collectionsRepositoryProvider);
+  final connectionsRepository = ref.watch(connectionRepositoryProvider);
 
-  return currentCollectionId == null
+  return currentCollectionId == ROOT_COLLECTION_ID
       ? repository.getRootCollections()
-      : repository.getSubCollections(currentCollectionId);
+      : connectionsRepository.getRelatedCollections(currentCollectionId);
 });
 
-final collectionsListStreamProvider = StreamProvider.family<List<CollectionEntity>, int?>((ref, currentCollectionId) {
+final collectionsListStreamProvider = StreamProvider.family<List<CollectionEntity>, int>((ref, currentCollectionId) {
   final repository = ref.watch(collectionsRepositoryProvider);
+  final connectionsRepository = ref.watch(connectionRepositoryProvider);
 
-  return currentCollectionId == null
+  return currentCollectionId == ROOT_COLLECTION_ID
       ? repository.watchRootCollections()
-      : repository.watchSubCollections(currentCollectionId);
+      : connectionsRepository.watchRelatedCollections(currentCollectionId);
 });
 
 

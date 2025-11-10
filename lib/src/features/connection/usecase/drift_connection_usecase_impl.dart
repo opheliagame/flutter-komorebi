@@ -20,17 +20,19 @@ class DriftConnectionUsecaseImpl implements ConnectionUsecase {
   });
 
   @override
-  Future<bool> createNoteInCollection({
+  Future<bool> createNoteAndConnect({
     required String? content,
     required XFile? media,
-    required int collectionId,
+    required List<int> collectionIds,
   }) async {
     try {
       final noteId = await notesRepository.createNote(content: content, media: media);
       await historyRepository.createAddNoteHistoryItem(noteId: noteId, content: content);
 
-      await connectionRepository.addNoteToCollection(noteId: noteId, collectionId: collectionId);
-      await historyRepository.createAddConnectionHistoryItem(noteId: noteId, collectionId: collectionId);
+      await connectionRepository.addNoteToCollectionList(noteId: noteId, collectionIds: collectionIds);
+      for (final collectionId in collectionIds) {
+        await historyRepository.createAddConnectionHistoryItem(noteId: noteId, collectionId: collectionId);
+      }
 
       return true;
     } catch (e) {

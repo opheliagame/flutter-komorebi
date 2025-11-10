@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
+import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -49,9 +50,12 @@ class SamplePage extends HookConsumerWidget {
         },
       ),
       _SamplePageTextButton(
-        // default root note id is 0 not null
-        route: CreateRoute(collectionId: 0),
-        name: 'create page',
+        route: CreateRoute(entityType: EntityType.collection),
+        name: 'create collection page',
+      ),
+      _SamplePageTextButton(
+        route: CreateRoute(entityType: EntityType.note),
+        name: 'create note page',
       ),
       _SamplePageTextButton(
         route: SearchRoute(),

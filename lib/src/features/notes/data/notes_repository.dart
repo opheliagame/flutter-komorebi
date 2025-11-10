@@ -30,10 +30,10 @@ final notesRepositoryProvider = Provider<NotesRepository>((ref) {
   return DriftNotesRepository(ref.read(appDatabaseProvider));
 });
 
-final notesListStreamProvider = StreamProvider.family<List<NoteEntity>, int?>((ref, currentCollectionId) {
+final notesListStreamProvider = StreamProvider.family<List<NoteEntity>, int>((ref, currentCollectionId) {
   final repository = ref.read(notesRepositoryProvider);
 
-  if (currentCollectionId == null) {
+  if (currentCollectionId == ROOT_COLLECTION_ID) {
     return repository.watchAllNotes();
   } else {
     return repository.watchNotesInCollection(currentCollectionId);

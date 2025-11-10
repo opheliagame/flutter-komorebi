@@ -5,6 +5,7 @@ class NoteEntity {
   final String? content;
   final Uint8List? media;
   final int? citationId;
+
   final DateTime createdAt;
   final DateTime modifiedAt;
 

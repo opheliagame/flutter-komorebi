@@ -17,8 +17,6 @@ class CollectionMediaTable extends Table {
   TextColumn get name => text().nullable()();
   TextColumn get caption => text().nullable()();
   BlobColumn get media => blob()();
-  // gives circular id error
-  // IntColumn get collectionId => integer().nullable().references(Collections, #id)();
 
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get modifiedAt => dateTime()();

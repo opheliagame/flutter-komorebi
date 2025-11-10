@@ -20,8 +20,15 @@ class DriftNotesRepository implements NotesRepository {
 
   @override
   Stream<List<NoteEntity>> watchAllNotes() {
-    final query = database.select(database.noteTable).watch();
-    return query.map((e) => e.map((e1) => e1.toDomain()).toList());
+    final query = database.select(database.noteTable)
+      ..orderBy([(u) => OrderingTerm(expression: database.noteTable.modifiedAt, mode: OrderingMode.desc)]);
+
+    try {
+      final result = query.watch();
+      return result.map((e) => e.map((e1) => e1.toDomain()).toList());
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override
@@ -82,10 +89,15 @@ class DriftNotesRepository implements NotesRepository {
     final query = database.select(database.noteTable)
       ..join(
         [
-          innerJoin(database.collectionNoteTable, database.collectionNoteTable.noteId.equalsExp(database.noteTable.id)),
+          innerJoin(
+              database.collectionNoteTable,
+              database.collectionNoteTable.noteId.equalsExp(database.noteTable.id) &
+                  database.collectionNoteTable.collectionId.equals(collectionId)),
         ],
       )
-      ..where((q) => database.collectionNoteTable.collectionId.equals(collectionId));
+      ..orderBy([
+        (u) => OrderingTerm(expression: database.noteTable.modifiedAt, mode: OrderingMode.desc),
+      ]);
 
     final notes = (await query.get()).map((e) => e.toDomain()).toList();
     return notes;
@@ -97,7 +109,11 @@ class DriftNotesRepository implements NotesRepository {
       [
         innerJoin(database.noteTable, database.noteTable.id.equalsExp(database.collectionNoteTable.noteId)),
       ],
-    )..where(database.collectionNoteTable.collectionId.equals(collectionId));
+    )
+      ..where(database.collectionNoteTable.collectionId.equals(collectionId))
+      ..orderBy([
+        OrderingTerm(expression: database.noteTable.modifiedAt, mode: OrderingMode.desc),
+      ]);
 
     final notes = query.watch().map((rows) {
       return rows.map((row) {

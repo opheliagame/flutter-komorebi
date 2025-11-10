@@ -57,11 +57,12 @@ class DriftHistoryRepositoryImpl implements HistoryRepository {
   }) async {
     try {
       await database.into(database.historyTable).insert(
-            HistoryTableCompanion(
+            HistoryTableCompanion.insert(
               collectionId: Value.absentIfNull(collectionId),
               noteId: Value.absentIfNull(noteId),
               content: Value.absentIfNull(content),
-              historyType: Value(historyType.index),
+              historyType: historyType.index,
+              createdAt: DateTime.now(),
             ),
           );
       return true;
@@ -75,11 +76,11 @@ class DriftHistoryRepositoryImpl implements HistoryRepository {
   Future<bool> createAddConnectionHistoryItem({required int noteId, required int collectionId}) async {
     try {
       await database.into(database.historyTable).insert(
-            HistoryTableCompanion(
+            HistoryTableCompanion.insert(
               collectionId: Value(collectionId),
               noteId: Value(noteId),
-              content: Value.absent(),
-              historyType: Value(HistoryType.addConnection.index),
+              historyType: HistoryType.addConnection.index,
+              createdAt: DateTime.now(),
             ),
           );
       return true;
@@ -93,11 +94,11 @@ class DriftHistoryRepositoryImpl implements HistoryRepository {
   Future<bool> createAddNoteHistoryItem({required int noteId, required String? content}) async {
     try {
       await database.into(database.historyTable).insert(
-            HistoryTableCompanion(
-              collectionId: Value.absent(),
+            HistoryTableCompanion.insert(
               noteId: Value(noteId),
               content: Value.absentIfNull(content),
-              historyType: Value(HistoryType.addNote.index),
+              historyType: HistoryType.addNote.index,
+              createdAt: DateTime.now(),
             ),
           );
       return true;
@@ -111,11 +112,11 @@ class DriftHistoryRepositoryImpl implements HistoryRepository {
   Future<bool> createRemoveConnectionHistoryItem({required int noteId, required int collectionId}) async {
     try {
       await database.into(database.historyTable).insert(
-            HistoryTableCompanion(
+            HistoryTableCompanion.insert(
               collectionId: Value(collectionId),
               noteId: Value(noteId),
-              content: Value.absent(),
-              historyType: Value(HistoryType.removeConnection.index),
+              historyType: HistoryType.removeConnection.index,
+              createdAt: DateTime.now(),
             ),
           );
       return true;
@@ -129,11 +130,10 @@ class DriftHistoryRepositoryImpl implements HistoryRepository {
   Future<bool> createDeleteNoteHistoryItem(int noteId) async {
     try {
       await database.into(database.historyTable).insert(
-            HistoryTableCompanion(
-              collectionId: Value.absent(),
+            HistoryTableCompanion.insert(
               noteId: Value(noteId),
-              content: Value.absent(),
-              historyType: Value(HistoryType.deleteNote.index),
+              historyType: HistoryType.deleteNote.index,
+              createdAt: DateTime.now(),
             ),
           );
       return true;

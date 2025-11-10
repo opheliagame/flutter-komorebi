@@ -14,7 +14,7 @@ class HistoryItemListTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // todo(design): add on click event to navigate to specific pages
     return Container(
-      color: historyItem.tileBackgroundColor,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -24,7 +24,13 @@ class HistoryItemListTile extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('history type'),
-              Text(historyItem.historyType.name),
+              Container(
+                color: historyItem.tileBackgroundColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(historyItem.historyType.name),
+                ),
+              ),
             ],
           ),
 

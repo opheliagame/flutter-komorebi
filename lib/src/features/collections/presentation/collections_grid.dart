@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/design_system/collection/collection_tile.dart';
 import 'package:flutter_komorebi/src/design_system/collection/new_collection_tile.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
@@ -12,7 +13,7 @@ class CollectionsGrid extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collectionsListValue = ref.watch(collectionsListStreamProvider(collectionId));
+    final collectionsListValue = ref.watch(collectionsListStreamProvider(collectionId ?? ROOT_COLLECTION_ID));
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -20,12 +21,11 @@ class CollectionsGrid extends ConsumerWidget {
         value: collectionsListValue,
         data: (collections) {
           return GridView.count(
-            crossAxisCount: 2,
+            crossAxisCount: 3,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
             children: [
-              // todo(domain) make root collection id as 0 and always insert a root collection at first app startup
-              NewCollectionTile(collectionId: collectionId ?? 0),
+              NewCollectionTile(collectionId: collectionId ?? ROOT_COLLECTION_ID),
               ...collections.map(
                 (collection) => CollectionTile(collection: collection),
               ),

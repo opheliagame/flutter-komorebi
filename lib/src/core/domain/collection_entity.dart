@@ -1,12 +1,13 @@
 import 'dart:typed_data';
 
+const ROOT_COLLECTION_ID = 0;
+
 class CollectionEntity {
   final int id;
   final String name;
   final String? description;
   final Uint8List? media;
-  final int? mediaId;
-  final int? parentId;
+
   final DateTime createdAt;
   final DateTime modifiedAt;
 
@@ -15,8 +16,6 @@ class CollectionEntity {
     required this.name,
     required this.description,
     required this.media,
-    required this.mediaId,
-    required this.parentId,
     required this.createdAt,
     required this.modifiedAt,
   });

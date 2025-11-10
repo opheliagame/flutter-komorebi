@@ -9,7 +9,6 @@ class FakeCollectionsRepository implements CollectionsRepository {
     required String collectionName,
     required String? description,
     required XFile? media,
-    required int? parentCollectionId,
   }) {
     // TODO: implement createCollection
     throw UnimplementedError();
@@ -40,7 +39,7 @@ class FakeCollectionsRepository implements CollectionsRepository {
   }
 
   @override
-  Future<List<CollectionEntity>> getSubCollections(int collectionId) {
+  Future<List<CollectionEntity>> getRelatedCollections(int collectionId) {
     // TODO: implement getSubCollections
     throw UnimplementedError();
   }
@@ -58,7 +57,7 @@ class FakeCollectionsRepository implements CollectionsRepository {
   }
 
   @override
-  Stream<List<CollectionEntity>> watchSubCollections(int collectionId) {
+  Stream<List<CollectionEntity>> watchRelatedCollections(int collectionId) {
     // TODO: implement watchSubCollections
     throw UnimplementedError();
   }

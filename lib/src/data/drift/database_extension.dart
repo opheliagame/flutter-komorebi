@@ -29,10 +29,10 @@ extension MockDataSeeder on AppDatabase {
           name: 'Collection ${i + 1}',
           description: Value('This is collection number ${i + 1}'),
           media: Value(Uint8List.fromList(List.generate(5, (_) => random.nextInt(255)))), // small random blob
-          mediaId: const Value.absent(),
-          parentId: i > 0 && random.nextBool()
-              ? Value(collectionIds[random.nextInt(collectionIds.length)]) // random parent
-              : const Value.absent(),
+          // mediaId: const Value.absent(),
+          // parentId: i > 0 && random.nextBool()
+          //     ? Value(collectionIds[random.nextInt(collectionIds.length)]) // random parent
+          //     : const Value.absent(),
           createdAt: now,
           modifiedAt: now,
         ),
@@ -150,10 +150,10 @@ extension MockDataSeeder on AppDatabase {
           media: random.nextBool()
               ? Value(Uint8List.fromList(List.generate(12, (_) => random.nextInt(255))))
               : const Value.absent(),
-          mediaId: const Value.absent(),
-          parentId: random.nextInt(10) < 3 && collectionIds.isNotEmpty
-              ? Value(collectionIds[random.nextInt(collectionIds.length)]) // occasional nesting
-              : const Value.absent(),
+          // mediaId: const Value.absent(),
+          // parentId: random.nextInt(10) < 3 && collectionIds.isNotEmpty
+          //     ? Value(collectionIds[random.nextInt(collectionIds.length)]) // occasional nesting
+          //     : const Value.absent(),
           createdAt: now.subtract(Duration(days: random.nextInt(60))),
           modifiedAt: now,
         ),

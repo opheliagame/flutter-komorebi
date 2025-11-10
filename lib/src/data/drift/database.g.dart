@@ -3,349 +3,6 @@
 part of 'database.dart';
 
 // ignore_for_file: type=lint
-class $CollectionMediaTableTable extends CollectionMediaTable
-    with TableInfo<$CollectionMediaTableTable, CollectionMediaTableData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $CollectionMediaTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
-  @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _captionMeta =
-      const VerificationMeta('caption');
-  @override
-  late final GeneratedColumn<String> caption = GeneratedColumn<String>(
-      'caption', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _mediaMeta = const VerificationMeta('media');
-  @override
-  late final GeneratedColumn<Uint8List> media = GeneratedColumn<Uint8List>(
-      'media', aliasedName, false,
-      type: DriftSqlType.blob, requiredDuringInsert: true);
-  static const VerificationMeta _createdAtMeta =
-      const VerificationMeta('createdAt');
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-      'created_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _modifiedAtMeta =
-      const VerificationMeta('modifiedAt');
-  @override
-  late final GeneratedColumn<DateTime> modifiedAt = GeneratedColumn<DateTime>(
-      'modified_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns =>
-      [id, name, caption, media, createdAt, modifiedAt];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'collection_media';
-  @override
-  VerificationContext validateIntegrity(
-      Insertable<CollectionMediaTableData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
-    }
-    if (data.containsKey('caption')) {
-      context.handle(_captionMeta,
-          caption.isAcceptableOrUnknown(data['caption']!, _captionMeta));
-    }
-    if (data.containsKey('media')) {
-      context.handle(
-          _mediaMeta, media.isAcceptableOrUnknown(data['media']!, _mediaMeta));
-    } else if (isInserting) {
-      context.missing(_mediaMeta);
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(_createdAtMeta,
-          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
-    }
-    if (data.containsKey('modified_at')) {
-      context.handle(
-          _modifiedAtMeta,
-          modifiedAt.isAcceptableOrUnknown(
-              data['modified_at']!, _modifiedAtMeta));
-    } else if (isInserting) {
-      context.missing(_modifiedAtMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  CollectionMediaTableData map(Map<String, dynamic> data,
-      {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return CollectionMediaTableData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name']),
-      caption: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}caption']),
-      media: attachedDatabase.typeMapping
-          .read(DriftSqlType.blob, data['${effectivePrefix}media'])!,
-      createdAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
-      modifiedAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}modified_at'])!,
-    );
-  }
-
-  @override
-  $CollectionMediaTableTable createAlias(String alias) {
-    return $CollectionMediaTableTable(attachedDatabase, alias);
-  }
-}
-
-class CollectionMediaTableData extends DataClass
-    implements Insertable<CollectionMediaTableData> {
-  final int id;
-  final String? name;
-  final String? caption;
-  final Uint8List media;
-  final DateTime createdAt;
-  final DateTime modifiedAt;
-  const CollectionMediaTableData(
-      {required this.id,
-      this.name,
-      this.caption,
-      required this.media,
-      required this.createdAt,
-      required this.modifiedAt});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    if (!nullToAbsent || name != null) {
-      map['name'] = Variable<String>(name);
-    }
-    if (!nullToAbsent || caption != null) {
-      map['caption'] = Variable<String>(caption);
-    }
-    map['media'] = Variable<Uint8List>(media);
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['modified_at'] = Variable<DateTime>(modifiedAt);
-    return map;
-  }
-
-  CollectionMediaTableCompanion toCompanion(bool nullToAbsent) {
-    return CollectionMediaTableCompanion(
-      id: Value(id),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      caption: caption == null && nullToAbsent
-          ? const Value.absent()
-          : Value(caption),
-      media: Value(media),
-      createdAt: Value(createdAt),
-      modifiedAt: Value(modifiedAt),
-    );
-  }
-
-  factory CollectionMediaTableData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return CollectionMediaTableData(
-      id: serializer.fromJson<int>(json['id']),
-      name: serializer.fromJson<String?>(json['name']),
-      caption: serializer.fromJson<String?>(json['caption']),
-      media: serializer.fromJson<Uint8List>(json['media']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      modifiedAt: serializer.fromJson<DateTime>(json['modifiedAt']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String?>(name),
-      'caption': serializer.toJson<String?>(caption),
-      'media': serializer.toJson<Uint8List>(media),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'modifiedAt': serializer.toJson<DateTime>(modifiedAt),
-    };
-  }
-
-  CollectionMediaTableData copyWith(
-          {int? id,
-          Value<String?> name = const Value.absent(),
-          Value<String?> caption = const Value.absent(),
-          Uint8List? media,
-          DateTime? createdAt,
-          DateTime? modifiedAt}) =>
-      CollectionMediaTableData(
-        id: id ?? this.id,
-        name: name.present ? name.value : this.name,
-        caption: caption.present ? caption.value : this.caption,
-        media: media ?? this.media,
-        createdAt: createdAt ?? this.createdAt,
-        modifiedAt: modifiedAt ?? this.modifiedAt,
-      );
-  CollectionMediaTableData copyWithCompanion(
-      CollectionMediaTableCompanion data) {
-    return CollectionMediaTableData(
-      id: data.id.present ? data.id.value : this.id,
-      name: data.name.present ? data.name.value : this.name,
-      caption: data.caption.present ? data.caption.value : this.caption,
-      media: data.media.present ? data.media.value : this.media,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      modifiedAt:
-          data.modifiedAt.present ? data.modifiedAt.value : this.modifiedAt,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('CollectionMediaTableData(')
-          ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('caption: $caption, ')
-          ..write('media: $media, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('modifiedAt: $modifiedAt')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      id, name, caption, $driftBlobEquality.hash(media), createdAt, modifiedAt);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is CollectionMediaTableData &&
-          other.id == this.id &&
-          other.name == this.name &&
-          other.caption == this.caption &&
-          $driftBlobEquality.equals(other.media, this.media) &&
-          other.createdAt == this.createdAt &&
-          other.modifiedAt == this.modifiedAt);
-}
-
-class CollectionMediaTableCompanion
-    extends UpdateCompanion<CollectionMediaTableData> {
-  final Value<int> id;
-  final Value<String?> name;
-  final Value<String?> caption;
-  final Value<Uint8List> media;
-  final Value<DateTime> createdAt;
-  final Value<DateTime> modifiedAt;
-  const CollectionMediaTableCompanion({
-    this.id = const Value.absent(),
-    this.name = const Value.absent(),
-    this.caption = const Value.absent(),
-    this.media = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.modifiedAt = const Value.absent(),
-  });
-  CollectionMediaTableCompanion.insert({
-    this.id = const Value.absent(),
-    this.name = const Value.absent(),
-    this.caption = const Value.absent(),
-    required Uint8List media,
-    required DateTime createdAt,
-    required DateTime modifiedAt,
-  })  : media = Value(media),
-        createdAt = Value(createdAt),
-        modifiedAt = Value(modifiedAt);
-  static Insertable<CollectionMediaTableData> custom({
-    Expression<int>? id,
-    Expression<String>? name,
-    Expression<String>? caption,
-    Expression<Uint8List>? media,
-    Expression<DateTime>? createdAt,
-    Expression<DateTime>? modifiedAt,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (name != null) 'name': name,
-      if (caption != null) 'caption': caption,
-      if (media != null) 'media': media,
-      if (createdAt != null) 'created_at': createdAt,
-      if (modifiedAt != null) 'modified_at': modifiedAt,
-    });
-  }
-
-  CollectionMediaTableCompanion copyWith(
-      {Value<int>? id,
-      Value<String?>? name,
-      Value<String?>? caption,
-      Value<Uint8List>? media,
-      Value<DateTime>? createdAt,
-      Value<DateTime>? modifiedAt}) {
-    return CollectionMediaTableCompanion(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      caption: caption ?? this.caption,
-      media: media ?? this.media,
-      createdAt: createdAt ?? this.createdAt,
-      modifiedAt: modifiedAt ?? this.modifiedAt,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    if (caption.present) {
-      map['caption'] = Variable<String>(caption.value);
-    }
-    if (media.present) {
-      map['media'] = Variable<Uint8List>(media.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (modifiedAt.present) {
-      map['modified_at'] = Variable<DateTime>(modifiedAt.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('CollectionMediaTableCompanion(')
-          ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('caption: $caption, ')
-          ..write('media: $media, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('modifiedAt: $modifiedAt')
-          ..write(')'))
-        .toString();
-  }
-}
-
 class $CollectionTableTable extends CollectionTable
     with TableInfo<$CollectionTableTable, CollectionTableData> {
   @override
@@ -377,24 +34,6 @@ class $CollectionTableTable extends CollectionTable
   late final GeneratedColumn<Uint8List> media = GeneratedColumn<Uint8List>(
       'media', aliasedName, true,
       type: DriftSqlType.blob, requiredDuringInsert: false);
-  static const VerificationMeta _mediaIdMeta =
-      const VerificationMeta('mediaId');
-  @override
-  late final GeneratedColumn<int> mediaId = GeneratedColumn<int>(
-      'media_id', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES collection_media (id)'));
-  static const VerificationMeta _parentIdMeta =
-      const VerificationMeta('parentId');
-  @override
-  late final GeneratedColumn<int> parentId = GeneratedColumn<int>(
-      'parent_id', aliasedName, true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES collection (id)'));
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -409,7 +48,7 @@ class $CollectionTableTable extends CollectionTable
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, description, media, mediaId, parentId, createdAt, modifiedAt];
+      [id, name, description, media, createdAt, modifiedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -439,14 +78,6 @@ class $CollectionTableTable extends CollectionTable
     if (data.containsKey('media')) {
       context.handle(
           _mediaMeta, media.isAcceptableOrUnknown(data['media']!, _mediaMeta));
-    }
-    if (data.containsKey('media_id')) {
-      context.handle(_mediaIdMeta,
-          mediaId.isAcceptableOrUnknown(data['media_id']!, _mediaIdMeta));
-    }
-    if (data.containsKey('parent_id')) {
-      context.handle(_parentIdMeta,
-          parentId.isAcceptableOrUnknown(data['parent_id']!, _parentIdMeta));
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -479,10 +110,6 @@ class $CollectionTableTable extends CollectionTable
           .read(DriftSqlType.string, data['${effectivePrefix}description']),
       media: attachedDatabase.typeMapping
           .read(DriftSqlType.blob, data['${effectivePrefix}media']),
-      mediaId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}media_id']),
-      parentId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}parent_id']),
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       modifiedAt: attachedDatabase.typeMapping
@@ -502,8 +129,6 @@ class CollectionTableData extends DataClass
   final String name;
   final String? description;
   final Uint8List? media;
-  final int? mediaId;
-  final int? parentId;
   final DateTime createdAt;
   final DateTime modifiedAt;
   const CollectionTableData(
@@ -511,8 +136,6 @@ class CollectionTableData extends DataClass
       required this.name,
       this.description,
       this.media,
-      this.mediaId,
-      this.parentId,
       required this.createdAt,
       required this.modifiedAt});
   @override
@@ -525,12 +148,6 @@ class CollectionTableData extends DataClass
     }
     if (!nullToAbsent || media != null) {
       map['media'] = Variable<Uint8List>(media);
-    }
-    if (!nullToAbsent || mediaId != null) {
-      map['media_id'] = Variable<int>(mediaId);
-    }
-    if (!nullToAbsent || parentId != null) {
-      map['parent_id'] = Variable<int>(parentId);
     }
     map['created_at'] = Variable<DateTime>(createdAt);
     map['modified_at'] = Variable<DateTime>(modifiedAt);
@@ -546,12 +163,6 @@ class CollectionTableData extends DataClass
           : Value(description),
       media:
           media == null && nullToAbsent ? const Value.absent() : Value(media),
-      mediaId: mediaId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(mediaId),
-      parentId: parentId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(parentId),
       createdAt: Value(createdAt),
       modifiedAt: Value(modifiedAt),
     );
@@ -565,8 +176,6 @@ class CollectionTableData extends DataClass
       name: serializer.fromJson<String>(json['name']),
       description: serializer.fromJson<String?>(json['description']),
       media: serializer.fromJson<Uint8List?>(json['media']),
-      mediaId: serializer.fromJson<int?>(json['mediaId']),
-      parentId: serializer.fromJson<int?>(json['parentId']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       modifiedAt: serializer.fromJson<DateTime>(json['modifiedAt']),
     );
@@ -579,8 +188,6 @@ class CollectionTableData extends DataClass
       'name': serializer.toJson<String>(name),
       'description': serializer.toJson<String?>(description),
       'media': serializer.toJson<Uint8List?>(media),
-      'mediaId': serializer.toJson<int?>(mediaId),
-      'parentId': serializer.toJson<int?>(parentId),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'modifiedAt': serializer.toJson<DateTime>(modifiedAt),
     };
@@ -591,8 +198,6 @@ class CollectionTableData extends DataClass
           String? name,
           Value<String?> description = const Value.absent(),
           Value<Uint8List?> media = const Value.absent(),
-          Value<int?> mediaId = const Value.absent(),
-          Value<int?> parentId = const Value.absent(),
           DateTime? createdAt,
           DateTime? modifiedAt}) =>
       CollectionTableData(
@@ -600,8 +205,6 @@ class CollectionTableData extends DataClass
         name: name ?? this.name,
         description: description.present ? description.value : this.description,
         media: media.present ? media.value : this.media,
-        mediaId: mediaId.present ? mediaId.value : this.mediaId,
-        parentId: parentId.present ? parentId.value : this.parentId,
         createdAt: createdAt ?? this.createdAt,
         modifiedAt: modifiedAt ?? this.modifiedAt,
       );
@@ -612,8 +215,6 @@ class CollectionTableData extends DataClass
       description:
           data.description.present ? data.description.value : this.description,
       media: data.media.present ? data.media.value : this.media,
-      mediaId: data.mediaId.present ? data.mediaId.value : this.mediaId,
-      parentId: data.parentId.present ? data.parentId.value : this.parentId,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       modifiedAt:
           data.modifiedAt.present ? data.modifiedAt.value : this.modifiedAt,
@@ -627,8 +228,6 @@ class CollectionTableData extends DataClass
           ..write('name: $name, ')
           ..write('description: $description, ')
           ..write('media: $media, ')
-          ..write('mediaId: $mediaId, ')
-          ..write('parentId: $parentId, ')
           ..write('createdAt: $createdAt, ')
           ..write('modifiedAt: $modifiedAt')
           ..write(')'))
@@ -637,7 +236,7 @@ class CollectionTableData extends DataClass
 
   @override
   int get hashCode => Object.hash(id, name, description,
-      $driftBlobEquality.hash(media), mediaId, parentId, createdAt, modifiedAt);
+      $driftBlobEquality.hash(media), createdAt, modifiedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -646,8 +245,6 @@ class CollectionTableData extends DataClass
           other.name == this.name &&
           other.description == this.description &&
           $driftBlobEquality.equals(other.media, this.media) &&
-          other.mediaId == this.mediaId &&
-          other.parentId == this.parentId &&
           other.createdAt == this.createdAt &&
           other.modifiedAt == this.modifiedAt);
 }
@@ -657,8 +254,6 @@ class CollectionTableCompanion extends UpdateCompanion<CollectionTableData> {
   final Value<String> name;
   final Value<String?> description;
   final Value<Uint8List?> media;
-  final Value<int?> mediaId;
-  final Value<int?> parentId;
   final Value<DateTime> createdAt;
   final Value<DateTime> modifiedAt;
   const CollectionTableCompanion({
@@ -666,8 +261,6 @@ class CollectionTableCompanion extends UpdateCompanion<CollectionTableData> {
     this.name = const Value.absent(),
     this.description = const Value.absent(),
     this.media = const Value.absent(),
-    this.mediaId = const Value.absent(),
-    this.parentId = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.modifiedAt = const Value.absent(),
   });
@@ -676,8 +269,6 @@ class CollectionTableCompanion extends UpdateCompanion<CollectionTableData> {
     required String name,
     this.description = const Value.absent(),
     this.media = const Value.absent(),
-    this.mediaId = const Value.absent(),
-    this.parentId = const Value.absent(),
     required DateTime createdAt,
     required DateTime modifiedAt,
   })  : name = Value(name),
@@ -688,8 +279,6 @@ class CollectionTableCompanion extends UpdateCompanion<CollectionTableData> {
     Expression<String>? name,
     Expression<String>? description,
     Expression<Uint8List>? media,
-    Expression<int>? mediaId,
-    Expression<int>? parentId,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? modifiedAt,
   }) {
@@ -698,8 +287,6 @@ class CollectionTableCompanion extends UpdateCompanion<CollectionTableData> {
       if (name != null) 'name': name,
       if (description != null) 'description': description,
       if (media != null) 'media': media,
-      if (mediaId != null) 'media_id': mediaId,
-      if (parentId != null) 'parent_id': parentId,
       if (createdAt != null) 'created_at': createdAt,
       if (modifiedAt != null) 'modified_at': modifiedAt,
     });
@@ -710,8 +297,6 @@ class CollectionTableCompanion extends UpdateCompanion<CollectionTableData> {
       Value<String>? name,
       Value<String?>? description,
       Value<Uint8List?>? media,
-      Value<int?>? mediaId,
-      Value<int?>? parentId,
       Value<DateTime>? createdAt,
       Value<DateTime>? modifiedAt}) {
     return CollectionTableCompanion(
@@ -719,8 +304,6 @@ class CollectionTableCompanion extends UpdateCompanion<CollectionTableData> {
       name: name ?? this.name,
       description: description ?? this.description,
       media: media ?? this.media,
-      mediaId: mediaId ?? this.mediaId,
-      parentId: parentId ?? this.parentId,
       createdAt: createdAt ?? this.createdAt,
       modifiedAt: modifiedAt ?? this.modifiedAt,
     );
@@ -741,12 +324,6 @@ class CollectionTableCompanion extends UpdateCompanion<CollectionTableData> {
     if (media.present) {
       map['media'] = Variable<Uint8List>(media.value);
     }
-    if (mediaId.present) {
-      map['media_id'] = Variable<int>(mediaId.value);
-    }
-    if (parentId.present) {
-      map['parent_id'] = Variable<int>(parentId.value);
-    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -763,8 +340,6 @@ class CollectionTableCompanion extends UpdateCompanion<CollectionTableData> {
           ..write('name: $name, ')
           ..write('description: $description, ')
           ..write('media: $media, ')
-          ..write('mediaId: $mediaId, ')
-          ..write('parentId: $parentId, ')
           ..write('createdAt: $createdAt, ')
           ..write('modifiedAt: $modifiedAt')
           ..write(')'))
@@ -1615,6 +1190,349 @@ class CollectionNoteTableCompanion
   }
 }
 
+class $CollectionMediaTableTable extends CollectionMediaTable
+    with TableInfo<$CollectionMediaTableTable, CollectionMediaTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CollectionMediaTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _captionMeta =
+      const VerificationMeta('caption');
+  @override
+  late final GeneratedColumn<String> caption = GeneratedColumn<String>(
+      'caption', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _mediaMeta = const VerificationMeta('media');
+  @override
+  late final GeneratedColumn<Uint8List> media = GeneratedColumn<Uint8List>(
+      'media', aliasedName, false,
+      type: DriftSqlType.blob, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _modifiedAtMeta =
+      const VerificationMeta('modifiedAt');
+  @override
+  late final GeneratedColumn<DateTime> modifiedAt = GeneratedColumn<DateTime>(
+      'modified_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, name, caption, media, createdAt, modifiedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'collection_media';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<CollectionMediaTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    }
+    if (data.containsKey('caption')) {
+      context.handle(_captionMeta,
+          caption.isAcceptableOrUnknown(data['caption']!, _captionMeta));
+    }
+    if (data.containsKey('media')) {
+      context.handle(
+          _mediaMeta, media.isAcceptableOrUnknown(data['media']!, _mediaMeta));
+    } else if (isInserting) {
+      context.missing(_mediaMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('modified_at')) {
+      context.handle(
+          _modifiedAtMeta,
+          modifiedAt.isAcceptableOrUnknown(
+              data['modified_at']!, _modifiedAtMeta));
+    } else if (isInserting) {
+      context.missing(_modifiedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CollectionMediaTableData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CollectionMediaTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name']),
+      caption: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}caption']),
+      media: attachedDatabase.typeMapping
+          .read(DriftSqlType.blob, data['${effectivePrefix}media'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      modifiedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}modified_at'])!,
+    );
+  }
+
+  @override
+  $CollectionMediaTableTable createAlias(String alias) {
+    return $CollectionMediaTableTable(attachedDatabase, alias);
+  }
+}
+
+class CollectionMediaTableData extends DataClass
+    implements Insertable<CollectionMediaTableData> {
+  final int id;
+  final String? name;
+  final String? caption;
+  final Uint8List media;
+  final DateTime createdAt;
+  final DateTime modifiedAt;
+  const CollectionMediaTableData(
+      {required this.id,
+      this.name,
+      this.caption,
+      required this.media,
+      required this.createdAt,
+      required this.modifiedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    if (!nullToAbsent || caption != null) {
+      map['caption'] = Variable<String>(caption);
+    }
+    map['media'] = Variable<Uint8List>(media);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['modified_at'] = Variable<DateTime>(modifiedAt);
+    return map;
+  }
+
+  CollectionMediaTableCompanion toCompanion(bool nullToAbsent) {
+    return CollectionMediaTableCompanion(
+      id: Value(id),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      caption: caption == null && nullToAbsent
+          ? const Value.absent()
+          : Value(caption),
+      media: Value(media),
+      createdAt: Value(createdAt),
+      modifiedAt: Value(modifiedAt),
+    );
+  }
+
+  factory CollectionMediaTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CollectionMediaTableData(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String?>(json['name']),
+      caption: serializer.fromJson<String?>(json['caption']),
+      media: serializer.fromJson<Uint8List>(json['media']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      modifiedAt: serializer.fromJson<DateTime>(json['modifiedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String?>(name),
+      'caption': serializer.toJson<String?>(caption),
+      'media': serializer.toJson<Uint8List>(media),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'modifiedAt': serializer.toJson<DateTime>(modifiedAt),
+    };
+  }
+
+  CollectionMediaTableData copyWith(
+          {int? id,
+          Value<String?> name = const Value.absent(),
+          Value<String?> caption = const Value.absent(),
+          Uint8List? media,
+          DateTime? createdAt,
+          DateTime? modifiedAt}) =>
+      CollectionMediaTableData(
+        id: id ?? this.id,
+        name: name.present ? name.value : this.name,
+        caption: caption.present ? caption.value : this.caption,
+        media: media ?? this.media,
+        createdAt: createdAt ?? this.createdAt,
+        modifiedAt: modifiedAt ?? this.modifiedAt,
+      );
+  CollectionMediaTableData copyWithCompanion(
+      CollectionMediaTableCompanion data) {
+    return CollectionMediaTableData(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      caption: data.caption.present ? data.caption.value : this.caption,
+      media: data.media.present ? data.media.value : this.media,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      modifiedAt:
+          data.modifiedAt.present ? data.modifiedAt.value : this.modifiedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CollectionMediaTableData(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('caption: $caption, ')
+          ..write('media: $media, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('modifiedAt: $modifiedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id, name, caption, $driftBlobEquality.hash(media), createdAt, modifiedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CollectionMediaTableData &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.caption == this.caption &&
+          $driftBlobEquality.equals(other.media, this.media) &&
+          other.createdAt == this.createdAt &&
+          other.modifiedAt == this.modifiedAt);
+}
+
+class CollectionMediaTableCompanion
+    extends UpdateCompanion<CollectionMediaTableData> {
+  final Value<int> id;
+  final Value<String?> name;
+  final Value<String?> caption;
+  final Value<Uint8List> media;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> modifiedAt;
+  const CollectionMediaTableCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.caption = const Value.absent(),
+    this.media = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.modifiedAt = const Value.absent(),
+  });
+  CollectionMediaTableCompanion.insert({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.caption = const Value.absent(),
+    required Uint8List media,
+    required DateTime createdAt,
+    required DateTime modifiedAt,
+  })  : media = Value(media),
+        createdAt = Value(createdAt),
+        modifiedAt = Value(modifiedAt);
+  static Insertable<CollectionMediaTableData> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? caption,
+    Expression<Uint8List>? media,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? modifiedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (caption != null) 'caption': caption,
+      if (media != null) 'media': media,
+      if (createdAt != null) 'created_at': createdAt,
+      if (modifiedAt != null) 'modified_at': modifiedAt,
+    });
+  }
+
+  CollectionMediaTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String?>? name,
+      Value<String?>? caption,
+      Value<Uint8List>? media,
+      Value<DateTime>? createdAt,
+      Value<DateTime>? modifiedAt}) {
+    return CollectionMediaTableCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      caption: caption ?? this.caption,
+      media: media ?? this.media,
+      createdAt: createdAt ?? this.createdAt,
+      modifiedAt: modifiedAt ?? this.modifiedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (caption.present) {
+      map['caption'] = Variable<String>(caption.value);
+    }
+    if (media.present) {
+      map['media'] = Variable<Uint8List>(media.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (modifiedAt.present) {
+      map['modified_at'] = Variable<DateTime>(modifiedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CollectionMediaTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('caption: $caption, ')
+          ..write('media: $media, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('modifiedAt: $modifiedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $HistoryTableTable extends HistoryTable
     with TableInfo<$HistoryTableTable, HistoryTableData> {
   @override
@@ -1968,11 +1886,97 @@ class HistoryTableCompanion extends UpdateCompanion<HistoryTableData> {
   }
 }
 
+class RelatedCollectionData extends DataClass {
+  final int id;
+  const RelatedCollectionData({required this.id});
+  factory RelatedCollectionData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RelatedCollectionData(
+      id: serializer.fromJson<int>(json['id']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+    };
+  }
+
+  RelatedCollectionData copyWith({int? id}) => RelatedCollectionData(
+        id: id ?? this.id,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('RelatedCollectionData(')
+          ..write('id: $id')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => id.hashCode;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RelatedCollectionData && other.id == this.id);
+}
+
+class $RelatedCollectionView
+    extends ViewInfo<$RelatedCollectionView, RelatedCollectionData>
+    implements HasResultSet {
+  final String? _alias;
+  @override
+  final _$AppDatabase attachedDatabase;
+  $RelatedCollectionView(this.attachedDatabase, [this._alias]);
+  $NoteTableTable get notes => attachedDatabase.noteTable.createAlias('t0');
+  $CollectionTableTable get collections =>
+      attachedDatabase.collectionTable.createAlias('t1');
+  $CollectionNoteTableTable get collectionNotes =>
+      attachedDatabase.collectionNoteTable.createAlias('t2');
+  @override
+  List<GeneratedColumn> get $columns => [id];
+  @override
+  String get aliasedName => _alias ?? entityName;
+  @override
+  String get entityName => 'related_collection';
+  @override
+  Map<SqlDialect, String>? get createViewStatements => null;
+  @override
+  $RelatedCollectionView get asDslTable => this;
+  @override
+  RelatedCollectionData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RelatedCollectionData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+    );
+  }
+
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      generatedAs: GeneratedAs(collections.id, false), type: DriftSqlType.int);
+  @override
+  $RelatedCollectionView createAlias(String alias) {
+    return $RelatedCollectionView(attachedDatabase, alias);
+  }
+
+  @override
+  Query? get query =>
+      (attachedDatabase.selectOnly(collections)..addColumns($columns)).join([
+        innerJoin(collectionNotes,
+            collectionNotes.collectionId.equalsExp(collections.id)),
+        innerJoin(notes, notes.id.equalsExp(collectionNotes.noteId))
+      ])
+        ..distinct;
+  @override
+  Set<String> get readTables => const {'note', 'collection', 'collection_note'};
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
-  late final $CollectionMediaTableTable collectionMediaTable =
-      $CollectionMediaTableTable(this);
   late final $CollectionTableTable collectionTable =
       $CollectionTableTable(this);
   late final $NoteCitationTableTable noteCitationTable =
@@ -1980,302 +1984,32 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $NoteTableTable noteTable = $NoteTableTable(this);
   late final $CollectionNoteTableTable collectionNoteTable =
       $CollectionNoteTableTable(this);
+  late final $CollectionMediaTableTable collectionMediaTable =
+      $CollectionMediaTableTable(this);
   late final $HistoryTableTable historyTable = $HistoryTableTable(this);
+  late final $RelatedCollectionView relatedCollection =
+      $RelatedCollectionView(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
-        collectionMediaTable,
         collectionTable,
         noteCitationTable,
         noteTable,
         collectionNoteTable,
-        historyTable
+        collectionMediaTable,
+        historyTable,
+        relatedCollection
       ];
 }
 
-typedef $$CollectionMediaTableTableCreateCompanionBuilder
-    = CollectionMediaTableCompanion Function({
-  Value<int> id,
-  Value<String?> name,
-  Value<String?> caption,
-  required Uint8List media,
-  required DateTime createdAt,
-  required DateTime modifiedAt,
-});
-typedef $$CollectionMediaTableTableUpdateCompanionBuilder
-    = CollectionMediaTableCompanion Function({
-  Value<int> id,
-  Value<String?> name,
-  Value<String?> caption,
-  Value<Uint8List> media,
-  Value<DateTime> createdAt,
-  Value<DateTime> modifiedAt,
-});
-
-final class $$CollectionMediaTableTableReferences extends BaseReferences<
-    _$AppDatabase, $CollectionMediaTableTable, CollectionMediaTableData> {
-  $$CollectionMediaTableTableReferences(
-      super.$_db, super.$_table, super.$_typedResult);
-
-  static MultiTypedResultKey<$CollectionTableTable, List<CollectionTableData>>
-      _collectionTableRefsTable(_$AppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.collectionTable,
-              aliasName: $_aliasNameGenerator(
-                  db.collectionMediaTable.id, db.collectionTable.mediaId));
-
-  $$CollectionTableTableProcessedTableManager get collectionTableRefs {
-    final manager =
-        $$CollectionTableTableTableManager($_db, $_db.collectionTable)
-            .filter((f) => f.mediaId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache =
-        $_typedResult.readTableOrNull(_collectionTableRefsTable($_db));
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: cache));
-  }
-}
-
-class $$CollectionMediaTableTableFilterComposer
-    extends Composer<_$AppDatabase, $CollectionMediaTableTable> {
-  $$CollectionMediaTableTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get caption => $composableBuilder(
-      column: $table.caption, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<Uint8List> get media => $composableBuilder(
-      column: $table.media, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<DateTime> get modifiedAt => $composableBuilder(
-      column: $table.modifiedAt, builder: (column) => ColumnFilters(column));
-
-  Expression<bool> collectionTableRefs(
-      Expression<bool> Function($$CollectionTableTableFilterComposer f) f) {
-    final $$CollectionTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.collectionTable,
-        getReferencedColumn: (t) => t.mediaId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$CollectionTableTableFilterComposer(
-              $db: $db,
-              $table: $db.collectionTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return f(composer);
-  }
-}
-
-class $$CollectionMediaTableTableOrderingComposer
-    extends Composer<_$AppDatabase, $CollectionMediaTableTable> {
-  $$CollectionMediaTableTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<int> get id => $composableBuilder(
-      column: $table.id, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get name => $composableBuilder(
-      column: $table.name, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get caption => $composableBuilder(
-      column: $table.caption, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<Uint8List> get media => $composableBuilder(
-      column: $table.media, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<DateTime> get modifiedAt => $composableBuilder(
-      column: $table.modifiedAt, builder: (column) => ColumnOrderings(column));
-}
-
-class $$CollectionMediaTableTableAnnotationComposer
-    extends Composer<_$AppDatabase, $CollectionMediaTableTable> {
-  $$CollectionMediaTableTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<String> get name =>
-      $composableBuilder(column: $table.name, builder: (column) => column);
-
-  GeneratedColumn<String> get caption =>
-      $composableBuilder(column: $table.caption, builder: (column) => column);
-
-  GeneratedColumn<Uint8List> get media =>
-      $composableBuilder(column: $table.media, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get modifiedAt => $composableBuilder(
-      column: $table.modifiedAt, builder: (column) => column);
-
-  Expression<T> collectionTableRefs<T extends Object>(
-      Expression<T> Function($$CollectionTableTableAnnotationComposer a) f) {
-    final $$CollectionTableTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.id,
-        referencedTable: $db.collectionTable,
-        getReferencedColumn: (t) => t.mediaId,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$CollectionTableTableAnnotationComposer(
-              $db: $db,
-              $table: $db.collectionTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return f(composer);
-  }
-}
-
-class $$CollectionMediaTableTableTableManager extends RootTableManager<
-    _$AppDatabase,
-    $CollectionMediaTableTable,
-    CollectionMediaTableData,
-    $$CollectionMediaTableTableFilterComposer,
-    $$CollectionMediaTableTableOrderingComposer,
-    $$CollectionMediaTableTableAnnotationComposer,
-    $$CollectionMediaTableTableCreateCompanionBuilder,
-    $$CollectionMediaTableTableUpdateCompanionBuilder,
-    (CollectionMediaTableData, $$CollectionMediaTableTableReferences),
-    CollectionMediaTableData,
-    PrefetchHooks Function({bool collectionTableRefs})> {
-  $$CollectionMediaTableTableTableManager(
-      _$AppDatabase db, $CollectionMediaTableTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$CollectionMediaTableTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$CollectionMediaTableTableOrderingComposer(
-                  $db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$CollectionMediaTableTableAnnotationComposer(
-                  $db: db, $table: table),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String?> name = const Value.absent(),
-            Value<String?> caption = const Value.absent(),
-            Value<Uint8List> media = const Value.absent(),
-            Value<DateTime> createdAt = const Value.absent(),
-            Value<DateTime> modifiedAt = const Value.absent(),
-          }) =>
-              CollectionMediaTableCompanion(
-            id: id,
-            name: name,
-            caption: caption,
-            media: media,
-            createdAt: createdAt,
-            modifiedAt: modifiedAt,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String?> name = const Value.absent(),
-            Value<String?> caption = const Value.absent(),
-            required Uint8List media,
-            required DateTime createdAt,
-            required DateTime modifiedAt,
-          }) =>
-              CollectionMediaTableCompanion.insert(
-            id: id,
-            name: name,
-            caption: caption,
-            media: media,
-            createdAt: createdAt,
-            modifiedAt: modifiedAt,
-          ),
-          withReferenceMapper: (p0) => p0
-              .map((e) => (
-                    e.readTable(table),
-                    $$CollectionMediaTableTableReferences(db, table, e)
-                  ))
-              .toList(),
-          prefetchHooksCallback: ({collectionTableRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (collectionTableRefs) db.collectionTable
-              ],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (collectionTableRefs)
-                    await $_getPrefetchedData<CollectionMediaTableData,
-                            $CollectionMediaTableTable, CollectionTableData>(
-                        currentTable: table,
-                        referencedTable: $$CollectionMediaTableTableReferences
-                            ._collectionTableRefsTable(db),
-                        managerFromTypedResult: (p0) =>
-                            $$CollectionMediaTableTableReferences(db, table, p0)
-                                .collectionTableRefs,
-                        referencedItemsForCurrentItem: (item,
-                                referencedItems) =>
-                            referencedItems.where((e) => e.mediaId == item.id),
-                        typedResults: items)
-                ];
-              },
-            );
-          },
-        ));
-}
-
-typedef $$CollectionMediaTableTableProcessedTableManager
-    = ProcessedTableManager<
-        _$AppDatabase,
-        $CollectionMediaTableTable,
-        CollectionMediaTableData,
-        $$CollectionMediaTableTableFilterComposer,
-        $$CollectionMediaTableTableOrderingComposer,
-        $$CollectionMediaTableTableAnnotationComposer,
-        $$CollectionMediaTableTableCreateCompanionBuilder,
-        $$CollectionMediaTableTableUpdateCompanionBuilder,
-        (CollectionMediaTableData, $$CollectionMediaTableTableReferences),
-        CollectionMediaTableData,
-        PrefetchHooks Function({bool collectionTableRefs})>;
 typedef $$CollectionTableTableCreateCompanionBuilder = CollectionTableCompanion
     Function({
   Value<int> id,
   required String name,
   Value<String?> description,
   Value<Uint8List?> media,
-  Value<int?> mediaId,
-  Value<int?> parentId,
   required DateTime createdAt,
   required DateTime modifiedAt,
 });
@@ -2285,8 +2019,6 @@ typedef $$CollectionTableTableUpdateCompanionBuilder = CollectionTableCompanion
   Value<String> name,
   Value<String?> description,
   Value<Uint8List?> media,
-  Value<int?> mediaId,
-  Value<int?> parentId,
   Value<DateTime> createdAt,
   Value<DateTime> modifiedAt,
 });
@@ -2295,38 +2027,6 @@ final class $$CollectionTableTableReferences extends BaseReferences<
     _$AppDatabase, $CollectionTableTable, CollectionTableData> {
   $$CollectionTableTableReferences(
       super.$_db, super.$_table, super.$_typedResult);
-
-  static $CollectionMediaTableTable _mediaIdTable(_$AppDatabase db) =>
-      db.collectionMediaTable.createAlias($_aliasNameGenerator(
-          db.collectionTable.mediaId, db.collectionMediaTable.id));
-
-  $$CollectionMediaTableTableProcessedTableManager? get mediaId {
-    final $_column = $_itemColumn<int>('media_id');
-    if ($_column == null) return null;
-    final manager =
-        $$CollectionMediaTableTableTableManager($_db, $_db.collectionMediaTable)
-            .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_mediaIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
-
-  static $CollectionTableTable _parentIdTable(_$AppDatabase db) =>
-      db.collectionTable.createAlias($_aliasNameGenerator(
-          db.collectionTable.parentId, db.collectionTable.id));
-
-  $$CollectionTableTableProcessedTableManager? get parentId {
-    final $_column = $_itemColumn<int>('parent_id');
-    if ($_column == null) return null;
-    final manager =
-        $$CollectionTableTableTableManager($_db, $_db.collectionTable)
-            .filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_parentIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-        manager.$state.copyWith(prefetchedData: [item]));
-  }
 
   static MultiTypedResultKey<$CollectionNoteTableTable,
       List<CollectionNoteTableData>> _collectionNoteTableRefsTable(
@@ -2388,46 +2088,6 @@ class $$CollectionTableTableFilterComposer
 
   ColumnFilters<DateTime> get modifiedAt => $composableBuilder(
       column: $table.modifiedAt, builder: (column) => ColumnFilters(column));
-
-  $$CollectionMediaTableTableFilterComposer get mediaId {
-    final $$CollectionMediaTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.mediaId,
-        referencedTable: $db.collectionMediaTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$CollectionMediaTableTableFilterComposer(
-              $db: $db,
-              $table: $db.collectionMediaTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
-
-  $$CollectionTableTableFilterComposer get parentId {
-    final $$CollectionTableTableFilterComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.parentId,
-        referencedTable: $db.collectionTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$CollectionTableTableFilterComposer(
-              $db: $db,
-              $table: $db.collectionTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
 
   Expression<bool> collectionNoteTableRefs(
       Expression<bool> Function($$CollectionNoteTableTableFilterComposer f) f) {
@@ -2498,47 +2158,6 @@ class $$CollectionTableTableOrderingComposer
 
   ColumnOrderings<DateTime> get modifiedAt => $composableBuilder(
       column: $table.modifiedAt, builder: (column) => ColumnOrderings(column));
-
-  $$CollectionMediaTableTableOrderingComposer get mediaId {
-    final $$CollectionMediaTableTableOrderingComposer composer =
-        $composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.mediaId,
-            referencedTable: $db.collectionMediaTable,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder,
-                    {$addJoinBuilderToRootComposer,
-                    $removeJoinBuilderFromRootComposer}) =>
-                $$CollectionMediaTableTableOrderingComposer(
-                  $db: $db,
-                  $table: $db.collectionMediaTable,
-                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                  joinBuilder: joinBuilder,
-                  $removeJoinBuilderFromRootComposer:
-                      $removeJoinBuilderFromRootComposer,
-                ));
-    return composer;
-  }
-
-  $$CollectionTableTableOrderingComposer get parentId {
-    final $$CollectionTableTableOrderingComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.parentId,
-        referencedTable: $db.collectionTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$CollectionTableTableOrderingComposer(
-              $db: $db,
-              $table: $db.collectionTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
 }
 
 class $$CollectionTableTableAnnotationComposer
@@ -2567,47 +2186,6 @@ class $$CollectionTableTableAnnotationComposer
 
   GeneratedColumn<DateTime> get modifiedAt => $composableBuilder(
       column: $table.modifiedAt, builder: (column) => column);
-
-  $$CollectionMediaTableTableAnnotationComposer get mediaId {
-    final $$CollectionMediaTableTableAnnotationComposer composer =
-        $composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.mediaId,
-            referencedTable: $db.collectionMediaTable,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder,
-                    {$addJoinBuilderToRootComposer,
-                    $removeJoinBuilderFromRootComposer}) =>
-                $$CollectionMediaTableTableAnnotationComposer(
-                  $db: $db,
-                  $table: $db.collectionMediaTable,
-                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                  joinBuilder: joinBuilder,
-                  $removeJoinBuilderFromRootComposer:
-                      $removeJoinBuilderFromRootComposer,
-                ));
-    return composer;
-  }
-
-  $$CollectionTableTableAnnotationComposer get parentId {
-    final $$CollectionTableTableAnnotationComposer composer = $composerBuilder(
-        composer: this,
-        getCurrentColumn: (t) => t.parentId,
-        referencedTable: $db.collectionTable,
-        getReferencedColumn: (t) => t.id,
-        builder: (joinBuilder,
-                {$addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer}) =>
-            $$CollectionTableTableAnnotationComposer(
-              $db: $db,
-              $table: $db.collectionTable,
-              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-              joinBuilder: joinBuilder,
-              $removeJoinBuilderFromRootComposer:
-                  $removeJoinBuilderFromRootComposer,
-            ));
-    return composer;
-  }
 
   Expression<T> collectionNoteTableRefs<T extends Object>(
       Expression<T> Function($$CollectionNoteTableTableAnnotationComposer a)
@@ -2666,10 +2244,7 @@ class $$CollectionTableTableTableManager extends RootTableManager<
     (CollectionTableData, $$CollectionTableTableReferences),
     CollectionTableData,
     PrefetchHooks Function(
-        {bool mediaId,
-        bool parentId,
-        bool collectionNoteTableRefs,
-        bool historyTableRefs})> {
+        {bool collectionNoteTableRefs, bool historyTableRefs})> {
   $$CollectionTableTableTableManager(
       _$AppDatabase db, $CollectionTableTable table)
       : super(TableManagerState(
@@ -2686,8 +2261,6 @@ class $$CollectionTableTableTableManager extends RootTableManager<
             Value<String> name = const Value.absent(),
             Value<String?> description = const Value.absent(),
             Value<Uint8List?> media = const Value.absent(),
-            Value<int?> mediaId = const Value.absent(),
-            Value<int?> parentId = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> modifiedAt = const Value.absent(),
           }) =>
@@ -2696,8 +2269,6 @@ class $$CollectionTableTableTableManager extends RootTableManager<
             name: name,
             description: description,
             media: media,
-            mediaId: mediaId,
-            parentId: parentId,
             createdAt: createdAt,
             modifiedAt: modifiedAt,
           ),
@@ -2706,8 +2277,6 @@ class $$CollectionTableTableTableManager extends RootTableManager<
             required String name,
             Value<String?> description = const Value.absent(),
             Value<Uint8List?> media = const Value.absent(),
-            Value<int?> mediaId = const Value.absent(),
-            Value<int?> parentId = const Value.absent(),
             required DateTime createdAt,
             required DateTime modifiedAt,
           }) =>
@@ -2716,8 +2285,6 @@ class $$CollectionTableTableTableManager extends RootTableManager<
             name: name,
             description: description,
             media: media,
-            mediaId: mediaId,
-            parentId: parentId,
             createdAt: createdAt,
             modifiedAt: modifiedAt,
           ),
@@ -2728,52 +2295,14 @@ class $$CollectionTableTableTableManager extends RootTableManager<
                   ))
               .toList(),
           prefetchHooksCallback: (
-              {mediaId = false,
-              parentId = false,
-              collectionNoteTableRefs = false,
-              historyTableRefs = false}) {
+              {collectionNoteTableRefs = false, historyTableRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
                 if (collectionNoteTableRefs) db.collectionNoteTable,
                 if (historyTableRefs) db.historyTable
               ],
-              addJoins: <
-                  T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic>>(state) {
-                if (mediaId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.mediaId,
-                    referencedTable:
-                        $$CollectionTableTableReferences._mediaIdTable(db),
-                    referencedColumn:
-                        $$CollectionTableTableReferences._mediaIdTable(db).id,
-                  ) as T;
-                }
-                if (parentId) {
-                  state = state.withJoin(
-                    currentTable: table,
-                    currentColumn: table.parentId,
-                    referencedTable:
-                        $$CollectionTableTableReferences._parentIdTable(db),
-                    referencedColumn:
-                        $$CollectionTableTableReferences._parentIdTable(db).id,
-                  ) as T;
-                }
-
-                return state;
-              },
+              addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (collectionNoteTableRefs)
@@ -2821,10 +2350,7 @@ typedef $$CollectionTableTableProcessedTableManager = ProcessedTableManager<
     (CollectionTableData, $$CollectionTableTableReferences),
     CollectionTableData,
     PrefetchHooks Function(
-        {bool mediaId,
-        bool parentId,
-        bool collectionNoteTableRefs,
-        bool historyTableRefs})>;
+        {bool collectionNoteTableRefs, bool historyTableRefs})>;
 typedef $$NoteCitationTableTableCreateCompanionBuilder
     = NoteCitationTableCompanion Function({
   Value<int> id,
@@ -3826,6 +3352,194 @@ typedef $$CollectionNoteTableTableProcessedTableManager = ProcessedTableManager<
     (CollectionNoteTableData, $$CollectionNoteTableTableReferences),
     CollectionNoteTableData,
     PrefetchHooks Function({bool noteId, bool collectionId})>;
+typedef $$CollectionMediaTableTableCreateCompanionBuilder
+    = CollectionMediaTableCompanion Function({
+  Value<int> id,
+  Value<String?> name,
+  Value<String?> caption,
+  required Uint8List media,
+  required DateTime createdAt,
+  required DateTime modifiedAt,
+});
+typedef $$CollectionMediaTableTableUpdateCompanionBuilder
+    = CollectionMediaTableCompanion Function({
+  Value<int> id,
+  Value<String?> name,
+  Value<String?> caption,
+  Value<Uint8List> media,
+  Value<DateTime> createdAt,
+  Value<DateTime> modifiedAt,
+});
+
+class $$CollectionMediaTableTableFilterComposer
+    extends Composer<_$AppDatabase, $CollectionMediaTableTable> {
+  $$CollectionMediaTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get caption => $composableBuilder(
+      column: $table.caption, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<Uint8List> get media => $composableBuilder(
+      column: $table.media, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get modifiedAt => $composableBuilder(
+      column: $table.modifiedAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$CollectionMediaTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $CollectionMediaTableTable> {
+  $$CollectionMediaTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get caption => $composableBuilder(
+      column: $table.caption, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<Uint8List> get media => $composableBuilder(
+      column: $table.media, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get modifiedAt => $composableBuilder(
+      column: $table.modifiedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$CollectionMediaTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CollectionMediaTableTable> {
+  $$CollectionMediaTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get caption =>
+      $composableBuilder(column: $table.caption, builder: (column) => column);
+
+  GeneratedColumn<Uint8List> get media =>
+      $composableBuilder(column: $table.media, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get modifiedAt => $composableBuilder(
+      column: $table.modifiedAt, builder: (column) => column);
+}
+
+class $$CollectionMediaTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CollectionMediaTableTable,
+    CollectionMediaTableData,
+    $$CollectionMediaTableTableFilterComposer,
+    $$CollectionMediaTableTableOrderingComposer,
+    $$CollectionMediaTableTableAnnotationComposer,
+    $$CollectionMediaTableTableCreateCompanionBuilder,
+    $$CollectionMediaTableTableUpdateCompanionBuilder,
+    (
+      CollectionMediaTableData,
+      BaseReferences<_$AppDatabase, $CollectionMediaTableTable,
+          CollectionMediaTableData>
+    ),
+    CollectionMediaTableData,
+    PrefetchHooks Function()> {
+  $$CollectionMediaTableTableTableManager(
+      _$AppDatabase db, $CollectionMediaTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CollectionMediaTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CollectionMediaTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CollectionMediaTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String?> name = const Value.absent(),
+            Value<String?> caption = const Value.absent(),
+            Value<Uint8List> media = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime> modifiedAt = const Value.absent(),
+          }) =>
+              CollectionMediaTableCompanion(
+            id: id,
+            name: name,
+            caption: caption,
+            media: media,
+            createdAt: createdAt,
+            modifiedAt: modifiedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String?> name = const Value.absent(),
+            Value<String?> caption = const Value.absent(),
+            required Uint8List media,
+            required DateTime createdAt,
+            required DateTime modifiedAt,
+          }) =>
+              CollectionMediaTableCompanion.insert(
+            id: id,
+            name: name,
+            caption: caption,
+            media: media,
+            createdAt: createdAt,
+            modifiedAt: modifiedAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$CollectionMediaTableTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $CollectionMediaTableTable,
+        CollectionMediaTableData,
+        $$CollectionMediaTableTableFilterComposer,
+        $$CollectionMediaTableTableOrderingComposer,
+        $$CollectionMediaTableTableAnnotationComposer,
+        $$CollectionMediaTableTableCreateCompanionBuilder,
+        $$CollectionMediaTableTableUpdateCompanionBuilder,
+        (
+          CollectionMediaTableData,
+          BaseReferences<_$AppDatabase, $CollectionMediaTableTable,
+              CollectionMediaTableData>
+        ),
+        CollectionMediaTableData,
+        PrefetchHooks Function()>;
 typedef $$HistoryTableTableCreateCompanionBuilder = HistoryTableCompanion
     Function({
   Value<int> id,
@@ -4191,8 +3905,6 @@ typedef $$HistoryTableTableProcessedTableManager = ProcessedTableManager<
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
-  $$CollectionMediaTableTableTableManager get collectionMediaTable =>
-      $$CollectionMediaTableTableTableManager(_db, _db.collectionMediaTable);
   $$CollectionTableTableTableManager get collectionTable =>
       $$CollectionTableTableTableManager(_db, _db.collectionTable);
   $$NoteCitationTableTableTableManager get noteCitationTable =>
@@ -4201,6 +3913,8 @@ class $AppDatabaseManager {
       $$NoteTableTableTableManager(_db, _db.noteTable);
   $$CollectionNoteTableTableTableManager get collectionNoteTable =>
       $$CollectionNoteTableTableTableManager(_db, _db.collectionNoteTable);
+  $$CollectionMediaTableTableTableManager get collectionMediaTable =>
+      $$CollectionMediaTableTableTableManager(_db, _db.collectionMediaTable);
   $$HistoryTableTableTableManager get historyTable =>
       $$HistoryTableTableTableManager(_db, _db.historyTable);
 }

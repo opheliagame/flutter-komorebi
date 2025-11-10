@@ -10,10 +10,10 @@ class CollectionsNotifier extends StateNotifier<void> {
     required String collectionName,
     String? description,
     XFile? media,
-    int? parentCollectionId,
   }) async {
-    return ref.watch(collectionsRepositoryProvider).createCollection(
-        collectionName: collectionName, description: description, media: media, parentCollectionId: parentCollectionId);
+    return ref
+        .watch(collectionsRepositoryProvider)
+        .createCollection(collectionName: collectionName, description: description, media: media);
   }
 
   Future<bool> deleteCollection(int collectionId) async {

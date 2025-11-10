@@ -1,5 +1,7 @@
 import 'package:drift/drift.dart';
+import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
+import 'package:flutter_komorebi/src/data/drift/domain/collection_table.dart';
 import 'package:flutter_komorebi/src/features/connection/data/connection_repository.dart';
 
 class DriftConnectionRepositoryImpl implements ConnectionRepository {
@@ -65,5 +67,56 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
     } catch (e) {
       return false;
     }
+  }
+
+  @override
+  Future<List<CollectionEntity>> getRelatedCollections(int collectionId) async {
+    final query = database.select(database.collectionTable)
+      ..distinct
+      ..join([
+        innerJoin(database.relatedCollection, database.relatedCollection.id.equals(collectionId)),
+      ]);
+
+    try {
+      final result = await query.get();
+      return result.map((rows) => rows.toDomain()).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Stream<List<CollectionEntity>> watchRelatedCollections(int collectionId) {
+    // id = collection id
+
+    final cnAlias = database.collectionNoteTable.createAlias('cn1');
+
+    final query = database.select(database.collectionTable).join([
+      innerJoin(
+        database.collectionNoteTable,
+        database.collectionNoteTable.collectionId.equalsExp(database.collectionTable.id),
+      ),
+      innerJoin(
+        database.collectionNoteTable.createAlias('cn2'),
+        database.collectionNoteTable.createAlias('cn2').noteId.equalsExp(database.collectionNoteTable.noteId),
+      ),
+    ])
+      ..where(database.collectionNoteTable.createAlias('cn2').collectionId.equals(collectionId))
+      ..distinct;
+
+    final list = query.watch().map(
+          (rows) => rows.map((row) => row.readTable(database.collectionTable).toDomain()).toSet().toList(),
+        );
+
+    return list;
+
+    // try {
+    //   return query.watch().map(
+    //         (rows) => rows.map((row) => row.toDomain()).toList(),
+    //       );
+    // } catch (e) {
+    //   debugPrint(e.toString());
+    //   rethrow;
+    // }
   }
 }

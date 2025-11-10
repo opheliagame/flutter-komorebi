@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
+import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_notifier.dart';
 import 'package:flutter_komorebi/src/features/connection/usecase/connection_usecase.dart';
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
@@ -9,15 +12,19 @@ import 'package:image_picker/image_picker.dart';
 
 @RoutePage()
 class CreatePage extends HookConsumerWidget {
-  const CreatePage({super.key, required this.collectionId});
+  const CreatePage({super.key, required this.entityType});
 
-  final int collectionId;
+  final EntityType entityType;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final collectionListStream = ref.watch(collectionsListStreamProvider(ROOT_COLLECTION_ID));
+    final connectedCollections = useState<List<CollectionEntity>>([]);
+
     final inputTextEditingController = useTextEditingController();
-    final dropdownValue = useState<EntityType?>(EntityType.note);
+    final dropdownValue = useState<EntityType?>(entityType);
     final pickedImage = useState<XFile?>(null);
+    final dropdownButtonCollection = useState<CollectionEntity?>(null);
 
     return Scaffold(
       appBar: AppBar(
@@ -26,19 +33,52 @@ class CreatePage extends HookConsumerWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            DropdownButton<EntityType>(
-              value: dropdownValue.value,
-              items: EntityType.values
-                  .map(
-                    (e) => DropdownMenuItem<EntityType>(
-                      value: e,
-                      child: Text(e.name),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) {
-                dropdownValue.value = value;
-              },
+            if (entityType == EntityType.note)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: AsyncValueWidget(
+                  value: collectionListStream,
+                  data: (collections) {
+                    return DropdownButton(
+                      value: dropdownButtonCollection.value,
+                      items: collections
+                          .map(
+                            (c) => DropdownMenuItem(
+                              value: c,
+                              child: Text(c.name),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        if (value == null) return;
+                        dropdownButtonCollection.value = value;
+                        connectedCollections.value.add(value);
+                      },
+                    );
+                  },
+                ),
+              ),
+
+            if (connectedCollections.value.isNotEmpty)
+              Wrap(
+                runSpacing: 10,
+                spacing: 10,
+                children: connectedCollections.value
+                    .map(
+                      (c) => InputChip(
+                        label: Text(c.name),
+                        selected: connectedCollections.value.contains(c),
+                        onDeleted: () {
+                          connectedCollections.value.remove(c);
+                        },
+                      ),
+                    )
+                    .toList(),
+              ),
+
+            // input area
+            _InputWidget(
+              inputTextEditingController: inputTextEditingController,
             ),
 
             if (pickedImage.value != null)
@@ -52,16 +92,10 @@ class CreatePage extends HookConsumerWidget {
                 },
               )
             else
-
               //
               _InputImagePicker(onPickImage: (image) {
                 pickedImage.value = image;
               }),
-
-            // input area
-            _InputWidget(
-              inputTextEditingController: inputTextEditingController,
-            ),
 
             TextButton(
               onPressed: () {
@@ -75,7 +109,6 @@ class CreatePage extends HookConsumerWidget {
                       .createCollection(
                         collectionName: value,
                         media: pickedImage.value,
-                        parentCollectionId: collectionId,
                       )
                       .then((result) {
                     if (result) {
@@ -88,7 +121,10 @@ class CreatePage extends HookConsumerWidget {
                   // create note in collection
                   ref
                       .read(connectionUsecaseProvider)
-                      .createNoteInCollection(content: value, media: pickedImage.value, collectionId: collectionId)
+                      .createNoteAndConnect(
+                          content: value,
+                          media: pickedImage.value,
+                          collectionIds: connectedCollections.value.map((c) => c.id).toList())
                       .then((result) {
                     if (result) {
                       inputTextEditingController.clear();
@@ -100,6 +136,8 @@ class CreatePage extends HookConsumerWidget {
               },
               child: Text('submit'),
             ),
+
+            const SizedBox(height: 120),
           ],
         ),
       ),
@@ -169,6 +207,7 @@ class _InputImagePicker extends ConsumerWidget {
       child: Container(
         width: double.infinity,
         height: 120,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(border: Border.all()),
         child: Center(child: Text("add media")),
       ),

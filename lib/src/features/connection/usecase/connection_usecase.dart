@@ -7,10 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 abstract class ConnectionUsecase {
-  Future<bool> createNoteInCollection({
+  Future<bool> createNoteAndConnect({
     required String? content,
     required XFile? media,
-    required int collectionId,
+    required List<int> collectionIds,
   });
   Future<bool> addNoteToCollection({required int noteId, required int collectionId});
   Future<bool> addNoteToCollectionList({required int noteId, required List<int> collectionIds});

@@ -12,8 +12,6 @@ class CollectionsListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final collection = ref.watch()
-
     return Scaffold(
       appBar: AppBar(
         title: Text('collection list page'),

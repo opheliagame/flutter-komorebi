@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 
 class NewCollectionTile extends StatelessWidget {
@@ -16,7 +17,7 @@ class NewCollectionTile extends StatelessWidget {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          context.pushRoute(CreateRoute(collectionId: collectionId));
+          context.pushRoute(CreateRoute(entityType: EntityType.collection));
         },
         child: AspectRatio(
           aspectRatio: 1,
