@@ -49,6 +49,42 @@ class DriftHistoryRepositoryImpl implements HistoryRepository {
   }
 
   @override
+  Future<List<HistoryEntity>> getNoteHistory(int noteId) async {
+    final query = database.select(database.historyTable)..where((q) => q.noteId.equals(noteId));
+    final histories = (await query.get()).map((e) => e.toDomain()).toList();
+    return histories;
+  }
+
+  @override
+  Stream<List<HistoryExpandedEntity>> watchNoteHistory(int noteId) {
+    final query = (database.select(database.historyTable)..where((q) => q.noteId.equals(noteId))).join([
+      leftOuterJoin(database.noteTable, database.noteTable.id.equalsExp(database.historyTable.noteId)),
+      leftOuterJoin(
+          database.collectionTable, database.collectionTable.id.equalsExp(database.historyTable.collectionId)),
+    ]).watch();
+    final histories = query.map(
+      (e) => e.map<HistoryExpandedEntity>((e1) {
+        final historyEntity = e1.readTable(database.historyTable).toDomain();
+        final noteEntity = e1.readTableOrNull(database.noteTable)?.toDomain();
+        final collectionEntity = e1.readTableOrNull(database.collectionTable)?.toDomain();
+        final result = HistoryExpandedEntity(
+          id: historyEntity.id,
+          noteId: historyEntity.noteId,
+          collectionId: historyEntity.collectionId,
+          historyType: historyEntity.historyType,
+          content: historyEntity.content,
+          createdAt: historyEntity.createdAt,
+          noteEntity: noteEntity,
+          collectionEntity: collectionEntity,
+        );
+
+        return result;
+      }).toList(),
+    );
+    return histories;
+  }
+
+  @override
   Future<bool> saveHistoryItem({
     required int? noteId,
     required int? collectionId,

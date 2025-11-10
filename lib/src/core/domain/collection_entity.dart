@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-const ROOT_COLLECTION_ID = 0;
+const ROOT_COLLECTION_ID = 1;
 
 class CollectionEntity {
   final int id;

@@ -13,7 +13,7 @@ class HistoryListPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final historyItemsStream = ref.watch(historyListStreamProvider);
+    final historyItemsStream = ref.watch(historyListStreamProvider(null));
     final filteredHistoryItems = useState<List<HistoryExpandedEntity>>(List.empty());
     final filterDropdownValue = useState<HistoryType?>(null);
 

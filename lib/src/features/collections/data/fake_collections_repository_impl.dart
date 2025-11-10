@@ -39,12 +39,6 @@ class FakeCollectionsRepository implements CollectionsRepository {
   }
 
   @override
-  Future<List<CollectionEntity>> getRelatedCollections(int collectionId) {
-    // TODO: implement getSubCollections
-    throw UnimplementedError();
-  }
-
-  @override
   Stream<List<CollectionEntity>> watchCollectionsOfNote(int noteId) {
     // TODO: implement watchCollectionsOfNote
     throw UnimplementedError();
@@ -57,8 +51,8 @@ class FakeCollectionsRepository implements CollectionsRepository {
   }
 
   @override
-  Stream<List<CollectionEntity>> watchRelatedCollections(int collectionId) {
-    // TODO: implement watchSubCollections
+  Future<CollectionEntity> getCollection(int collectionId) {
+    // TODO: implement getCollection
     throw UnimplementedError();
   }
 }

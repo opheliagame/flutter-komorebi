@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/app_bottom_navigation_bar.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_row.dart';
@@ -14,9 +15,11 @@ class HomeListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final collectionFutureValue = ref.watch(collectionSingleFutureProvider(collectionId ?? ROOT_COLLECTION_ID));
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('home list page'),
+        title: Text(collectionFutureValue.valueOrNull?.name ?? 'home list page'),
         actions: [
           IconButton(
             icon: Icon(

@@ -9,9 +9,8 @@ abstract class CollectionsRepository {
   // crud operations
   Future<List<CollectionEntity>> getRootCollections();
   Stream<List<CollectionEntity>> watchRootCollections();
+  Future<CollectionEntity> getCollection(int collectionId);
 
-  // Future<List<CollectionEntity>> getRelatedCollections(int collectionId);
-  // Stream<List<CollectionEntity>> watchRelatedCollections(int collectionId);
   Future<bool> createCollection({
     required String collectionName,
     required String? description,
@@ -49,9 +48,8 @@ final collectionsListStreamProvider = StreamProvider.family<List<CollectionEntit
       : connectionsRepository.watchRelatedCollections(currentCollectionId);
 });
 
+final collectionSingleFutureProvider = FutureProvider.family.autoDispose<CollectionEntity, int>((ref, id) {
+  final repository = ref.watch(collectionsRepositoryProvider);
 
-// final collectionSingleStreamProvider = StreamProvider.family.autoDispose<CollectionEntity, int>((ref, id) {
-//    final repository = ref.watch(collectionsRepositoryProvider);
-
-//   return repository
-// });
+  return repository.getCollection(id);
+});

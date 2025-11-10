@@ -44,4 +44,16 @@ class FakeHistoryRepositoryImpl implements HistoryRepository {
     // TODO: implement createRemoveConnectionHistoryItem
     throw UnimplementedError();
   }
+
+  @override
+  Future<List<HistoryEntity>> getNoteHistory(int noteId) {
+    // TODO: implement getNoteHistory
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<HistoryExpandedEntity>> watchNoteHistory(int noteId) {
+    // TODO: implement watchNoteHistory
+    throw UnimplementedError();
+  }
 }

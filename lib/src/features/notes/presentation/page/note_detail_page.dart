@@ -2,7 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/design_system/collection/collection_text_button.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
+import 'package:flutter_komorebi/src/features/history/data/history_repository.dart';
+import 'package:flutter_komorebi/src/features/history/presentation/widget/history_item_list_tile.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
+import 'package:flutter_komorebi/src/features/notes/presentation/notes_list.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @RoutePage()
@@ -14,43 +17,63 @@ class NoteDetailPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final noteStreamValue = ref.watch(noteStreamProvider(noteId));
+    final historyListStreamValue = ref.watch(historyListStreamProvider(noteId));
 
     return Scaffold(
       appBar: AppBar(
         title: Text('note detail page'),
       ),
       body: SingleChildScrollView(
-        // child: Text('kjka'),
         child: AsyncValueWidget(
           value: noteStreamValue,
           data: (note) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('note content'),
-                Text(note.content.toString()),
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  NoteListItem(note: note, onTap: () {}),
 
-                // connected collections area
-                SizedBox(height: 8),
-                AsyncValueWidget(
-                  value: ref.watch(collectionsOfSingleNoteStreamProvider(noteId)),
-                  data: (collections) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('found in ${collections.length.toString()} collections'),
-                        Wrap(
-                          runSpacing: 10,
-                          spacing: 10,
-                          children: collections
-                              .map((e) => CollectionTextButton(collectionId: e.id, collectionName: e.name))
-                              .toList(),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ],
+                  // connected collections area
+                  SizedBox(height: 8),
+                  AsyncValueWidget(
+                    value: ref.watch(collectionsOfSingleNoteStreamProvider(noteId)),
+                    data: (collections) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('found in ${collections.length.toString()} collections'),
+                          Wrap(
+                            runSpacing: 10,
+                            spacing: 10,
+                            children: collections
+                                .map((e) => CollectionTextButton(collectionId: e.id, collectionName: e.name))
+                                .toList(),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+
+                  // history
+                  SizedBox(height: 8),
+                  Flexible(
+                    child: AsyncValueWidget(
+                      value: historyListStreamValue,
+                      data: (historyItems) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: historyItems.map((historyItem) {
+                            return HistoryItemListTile(historyItem: historyItem);
+                          }).toList(),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             );
           },
         ),

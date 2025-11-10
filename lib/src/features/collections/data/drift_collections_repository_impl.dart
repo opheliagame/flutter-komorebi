@@ -30,18 +30,12 @@ class DriftCollectionsRepository implements CollectionsRepository {
     return query.watch().map((e) => e.map((e1) => e1.toDomain()).toList());
   }
 
-  // @override
-  // Future<List<CollectionEntity>> getSubCollections(int collectionId) async {
-  //   final query = database.select(database.collectionTable);
-  //   final collections = (await query.get()).map((e) => e.toDomain()).toList();
-  //   return collections;
-  // }
+  @override
+  Future<CollectionEntity> getCollection(int collectionId) async {
+    final query = database.select(database.collectionTable)..where((q) => q.id.equals(collectionId));
 
-  // @override
-  // Stream<List<CollectionEntity>> watchSubCollections(int collectionId) {
-  //   final query = database.select(database.collectionTable)..where((q) => q.parentId.equals(collectionId));
-  //   return query.watch().map((e) => e.map((e1) => e1.toDomain()).toList());
-  // }
+    return (await query.getSingle()).toDomain();
+  }
 
   @override
   Future<bool> createCollection({
