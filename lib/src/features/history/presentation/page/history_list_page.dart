@@ -2,10 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_komorebi/src/core/domain/history_entity.dart';
-import 'package:flutter_komorebi/src/design_system/collection/collection_text_button.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/features/history/data/history_repository.dart';
-import 'package:flutter_komorebi/src/features/notes/presentation/notes_list.dart';
+import 'package:flutter_komorebi/src/features/history/presentation/widget/history_item_list_tile.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @RoutePage()
@@ -64,28 +63,7 @@ class HistoryListPage extends HookConsumerWidget {
                   itemBuilder: (context, index) {
                     final historyItem = filteredHistoryItems.value[index];
 
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // history type
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('history type'),
-                            Text(historyItem.historyType.name),
-                          ],
-                        ),
-
-                        // history contents
-                        if (historyItem.hasCollection)
-                          CollectionTextButton(
-                            collectionId: historyItem.collectionEntity!.id,
-                            collectionName: historyItem.collectionEntity!.name,
-                          ),
-                        if (historyItem.hasNote) NoteListItem(note: historyItem.noteEntity!, onTap: () {}),
-                      ],
-                    );
+                    return HistoryItemListTile(historyItem: historyItem);
                   },
                   separatorBuilder: (_, index) {
                     return SizedBox(height: 4);
