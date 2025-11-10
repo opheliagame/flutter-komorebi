@@ -29,7 +29,7 @@ class NotesGrid extends ConsumerWidget {
                 (note) => NoteTile(
                   note: note,
                   onTap: () {
-                    context.pushRoute(CreateRoute(collectionId: collectionId));
+                    context.pushRoute(CreateRoute(collectionId: collectionId ?? 0));
                   },
                 ),
               ),

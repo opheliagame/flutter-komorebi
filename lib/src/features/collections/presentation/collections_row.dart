@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
+import 'package:flutter_komorebi/src/design_system/collection/collection_tile.dart';
+import 'package:flutter_komorebi/src/design_system/collection/new_collection_tile.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
-import 'package:flutter_komorebi/src/design_system/common_widgets/collection_tile.dart';
-import 'package:flutter_komorebi/src/design_system/common_widgets/new_collection_tile.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RelatedCollectionsRow extends ConsumerWidget {
-  const RelatedCollectionsRow({super.key, required this.collection});
+  const RelatedCollectionsRow({super.key, required this.collectionId});
 
-  final CollectionEntity? collection;
+  final int? collectionId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collectionsListValue = ref.watch(collectionsListStreamProvider(collection?.id));
+    final collectionsListValue = ref.watch(collectionsListStreamProvider(collectionId));
 
     return AsyncValueWidget(
       value: collectionsListValue,
       data: (collections) {
         return Row(
           children: [
-            NewCollectionTile(collectionId: collection?.id),
+            NewCollectionTile(collectionId: collectionId ?? 0),
             SizedBox(width: 8),
             Expanded(
               child: ListView.separated(

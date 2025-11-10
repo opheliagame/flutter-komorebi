@@ -364,14 +364,14 @@ class $CollectionTableTable extends CollectionTable
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+      'name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _descriptionMeta =
       const VerificationMeta('description');
   @override
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
-      'description', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'description', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _mediaMeta = const VerificationMeta('media');
   @override
   late final GeneratedColumn<Uint8List> media = GeneratedColumn<Uint8List>(
@@ -427,14 +427,14 @@ class $CollectionTableTable extends CollectionTable
     if (data.containsKey('name')) {
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
     }
     if (data.containsKey('description')) {
       context.handle(
           _descriptionMeta,
           description.isAcceptableOrUnknown(
               data['description']!, _descriptionMeta));
-    } else if (isInserting) {
-      context.missing(_descriptionMeta);
     }
     if (data.containsKey('media')) {
       context.handle(
@@ -474,9 +474,9 @@ class $CollectionTableTable extends CollectionTable
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name']),
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       description: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}description']),
       media: attachedDatabase.typeMapping
           .read(DriftSqlType.blob, data['${effectivePrefix}media']),
       mediaId: attachedDatabase.typeMapping
@@ -499,8 +499,8 @@ class $CollectionTableTable extends CollectionTable
 class CollectionTableData extends DataClass
     implements Insertable<CollectionTableData> {
   final int id;
-  final String? name;
-  final String description;
+  final String name;
+  final String? description;
   final Uint8List? media;
   final int? mediaId;
   final int? parentId;
@@ -508,8 +508,8 @@ class CollectionTableData extends DataClass
   final DateTime modifiedAt;
   const CollectionTableData(
       {required this.id,
-      this.name,
-      required this.description,
+      required this.name,
+      this.description,
       this.media,
       this.mediaId,
       this.parentId,
@@ -519,10 +519,10 @@ class CollectionTableData extends DataClass
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    if (!nullToAbsent || name != null) {
-      map['name'] = Variable<String>(name);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
     }
-    map['description'] = Variable<String>(description);
     if (!nullToAbsent || media != null) {
       map['media'] = Variable<Uint8List>(media);
     }
@@ -540,8 +540,10 @@ class CollectionTableData extends DataClass
   CollectionTableCompanion toCompanion(bool nullToAbsent) {
     return CollectionTableCompanion(
       id: Value(id),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      description: Value(description),
+      name: Value(name),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
       media:
           media == null && nullToAbsent ? const Value.absent() : Value(media),
       mediaId: mediaId == null && nullToAbsent
@@ -560,8 +562,8 @@ class CollectionTableData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return CollectionTableData(
       id: serializer.fromJson<int>(json['id']),
-      name: serializer.fromJson<String?>(json['name']),
-      description: serializer.fromJson<String>(json['description']),
+      name: serializer.fromJson<String>(json['name']),
+      description: serializer.fromJson<String?>(json['description']),
       media: serializer.fromJson<Uint8List?>(json['media']),
       mediaId: serializer.fromJson<int?>(json['mediaId']),
       parentId: serializer.fromJson<int?>(json['parentId']),
@@ -574,8 +576,8 @@ class CollectionTableData extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String?>(name),
-      'description': serializer.toJson<String>(description),
+      'name': serializer.toJson<String>(name),
+      'description': serializer.toJson<String?>(description),
       'media': serializer.toJson<Uint8List?>(media),
       'mediaId': serializer.toJson<int?>(mediaId),
       'parentId': serializer.toJson<int?>(parentId),
@@ -586,8 +588,8 @@ class CollectionTableData extends DataClass
 
   CollectionTableData copyWith(
           {int? id,
-          Value<String?> name = const Value.absent(),
-          String? description,
+          String? name,
+          Value<String?> description = const Value.absent(),
           Value<Uint8List?> media = const Value.absent(),
           Value<int?> mediaId = const Value.absent(),
           Value<int?> parentId = const Value.absent(),
@@ -595,8 +597,8 @@ class CollectionTableData extends DataClass
           DateTime? modifiedAt}) =>
       CollectionTableData(
         id: id ?? this.id,
-        name: name.present ? name.value : this.name,
-        description: description ?? this.description,
+        name: name ?? this.name,
+        description: description.present ? description.value : this.description,
         media: media.present ? media.value : this.media,
         mediaId: mediaId.present ? mediaId.value : this.mediaId,
         parentId: parentId.present ? parentId.value : this.parentId,
@@ -652,8 +654,8 @@ class CollectionTableData extends DataClass
 
 class CollectionTableCompanion extends UpdateCompanion<CollectionTableData> {
   final Value<int> id;
-  final Value<String?> name;
-  final Value<String> description;
+  final Value<String> name;
+  final Value<String?> description;
   final Value<Uint8List?> media;
   final Value<int?> mediaId;
   final Value<int?> parentId;
@@ -671,14 +673,14 @@ class CollectionTableCompanion extends UpdateCompanion<CollectionTableData> {
   });
   CollectionTableCompanion.insert({
     this.id = const Value.absent(),
-    this.name = const Value.absent(),
-    required String description,
+    required String name,
+    this.description = const Value.absent(),
     this.media = const Value.absent(),
     this.mediaId = const Value.absent(),
     this.parentId = const Value.absent(),
     required DateTime createdAt,
     required DateTime modifiedAt,
-  })  : description = Value(description),
+  })  : name = Value(name),
         createdAt = Value(createdAt),
         modifiedAt = Value(modifiedAt);
   static Insertable<CollectionTableData> custom({
@@ -705,8 +707,8 @@ class CollectionTableCompanion extends UpdateCompanion<CollectionTableData> {
 
   CollectionTableCompanion copyWith(
       {Value<int>? id,
-      Value<String?>? name,
-      Value<String>? description,
+      Value<String>? name,
+      Value<String?>? description,
       Value<Uint8List?>? media,
       Value<int?>? mediaId,
       Value<int?>? parentId,
@@ -1613,6 +1615,359 @@ class CollectionNoteTableCompanion
   }
 }
 
+class $HistoryTableTable extends HistoryTable
+    with TableInfo<$HistoryTableTable, HistoryTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HistoryTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _noteIdMeta = const VerificationMeta('noteId');
+  @override
+  late final GeneratedColumn<int> noteId = GeneratedColumn<int>(
+      'note_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES note (id)'));
+  static const VerificationMeta _collectionIdMeta =
+      const VerificationMeta('collectionId');
+  @override
+  late final GeneratedColumn<int> collectionId = GeneratedColumn<int>(
+      'collection_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES collection (id)'));
+  static const VerificationMeta _historyTypeMeta =
+      const VerificationMeta('historyType');
+  @override
+  late final GeneratedColumn<int> historyType = GeneratedColumn<int>(
+      'history_type', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _contentMeta =
+      const VerificationMeta('content');
+  @override
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+      'content', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, noteId, collectionId, historyType, content, createdAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'history';
+  @override
+  VerificationContext validateIntegrity(Insertable<HistoryTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('note_id')) {
+      context.handle(_noteIdMeta,
+          noteId.isAcceptableOrUnknown(data['note_id']!, _noteIdMeta));
+    }
+    if (data.containsKey('collection_id')) {
+      context.handle(
+          _collectionIdMeta,
+          collectionId.isAcceptableOrUnknown(
+              data['collection_id']!, _collectionIdMeta));
+    }
+    if (data.containsKey('history_type')) {
+      context.handle(
+          _historyTypeMeta,
+          historyType.isAcceptableOrUnknown(
+              data['history_type']!, _historyTypeMeta));
+    } else if (isInserting) {
+      context.missing(_historyTypeMeta);
+    }
+    if (data.containsKey('content')) {
+      context.handle(_contentMeta,
+          content.isAcceptableOrUnknown(data['content']!, _contentMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  HistoryTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HistoryTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      noteId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}note_id']),
+      collectionId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}collection_id']),
+      historyType: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}history_type'])!,
+      content: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}content']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $HistoryTableTable createAlias(String alias) {
+    return $HistoryTableTable(attachedDatabase, alias);
+  }
+}
+
+class HistoryTableData extends DataClass
+    implements Insertable<HistoryTableData> {
+  final int id;
+  final int? noteId;
+  final int? collectionId;
+  final int historyType;
+  final String? content;
+  final DateTime createdAt;
+  const HistoryTableData(
+      {required this.id,
+      this.noteId,
+      this.collectionId,
+      required this.historyType,
+      this.content,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    if (!nullToAbsent || noteId != null) {
+      map['note_id'] = Variable<int>(noteId);
+    }
+    if (!nullToAbsent || collectionId != null) {
+      map['collection_id'] = Variable<int>(collectionId);
+    }
+    map['history_type'] = Variable<int>(historyType);
+    if (!nullToAbsent || content != null) {
+      map['content'] = Variable<String>(content);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  HistoryTableCompanion toCompanion(bool nullToAbsent) {
+    return HistoryTableCompanion(
+      id: Value(id),
+      noteId:
+          noteId == null && nullToAbsent ? const Value.absent() : Value(noteId),
+      collectionId: collectionId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(collectionId),
+      historyType: Value(historyType),
+      content: content == null && nullToAbsent
+          ? const Value.absent()
+          : Value(content),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory HistoryTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HistoryTableData(
+      id: serializer.fromJson<int>(json['id']),
+      noteId: serializer.fromJson<int?>(json['noteId']),
+      collectionId: serializer.fromJson<int?>(json['collectionId']),
+      historyType: serializer.fromJson<int>(json['historyType']),
+      content: serializer.fromJson<String?>(json['content']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'noteId': serializer.toJson<int?>(noteId),
+      'collectionId': serializer.toJson<int?>(collectionId),
+      'historyType': serializer.toJson<int>(historyType),
+      'content': serializer.toJson<String?>(content),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  HistoryTableData copyWith(
+          {int? id,
+          Value<int?> noteId = const Value.absent(),
+          Value<int?> collectionId = const Value.absent(),
+          int? historyType,
+          Value<String?> content = const Value.absent(),
+          DateTime? createdAt}) =>
+      HistoryTableData(
+        id: id ?? this.id,
+        noteId: noteId.present ? noteId.value : this.noteId,
+        collectionId:
+            collectionId.present ? collectionId.value : this.collectionId,
+        historyType: historyType ?? this.historyType,
+        content: content.present ? content.value : this.content,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  HistoryTableData copyWithCompanion(HistoryTableCompanion data) {
+    return HistoryTableData(
+      id: data.id.present ? data.id.value : this.id,
+      noteId: data.noteId.present ? data.noteId.value : this.noteId,
+      collectionId: data.collectionId.present
+          ? data.collectionId.value
+          : this.collectionId,
+      historyType:
+          data.historyType.present ? data.historyType.value : this.historyType,
+      content: data.content.present ? data.content.value : this.content,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HistoryTableData(')
+          ..write('id: $id, ')
+          ..write('noteId: $noteId, ')
+          ..write('collectionId: $collectionId, ')
+          ..write('historyType: $historyType, ')
+          ..write('content: $content, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, noteId, collectionId, historyType, content, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HistoryTableData &&
+          other.id == this.id &&
+          other.noteId == this.noteId &&
+          other.collectionId == this.collectionId &&
+          other.historyType == this.historyType &&
+          other.content == this.content &&
+          other.createdAt == this.createdAt);
+}
+
+class HistoryTableCompanion extends UpdateCompanion<HistoryTableData> {
+  final Value<int> id;
+  final Value<int?> noteId;
+  final Value<int?> collectionId;
+  final Value<int> historyType;
+  final Value<String?> content;
+  final Value<DateTime> createdAt;
+  const HistoryTableCompanion({
+    this.id = const Value.absent(),
+    this.noteId = const Value.absent(),
+    this.collectionId = const Value.absent(),
+    this.historyType = const Value.absent(),
+    this.content = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  HistoryTableCompanion.insert({
+    this.id = const Value.absent(),
+    this.noteId = const Value.absent(),
+    this.collectionId = const Value.absent(),
+    required int historyType,
+    this.content = const Value.absent(),
+    required DateTime createdAt,
+  })  : historyType = Value(historyType),
+        createdAt = Value(createdAt);
+  static Insertable<HistoryTableData> custom({
+    Expression<int>? id,
+    Expression<int>? noteId,
+    Expression<int>? collectionId,
+    Expression<int>? historyType,
+    Expression<String>? content,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (noteId != null) 'note_id': noteId,
+      if (collectionId != null) 'collection_id': collectionId,
+      if (historyType != null) 'history_type': historyType,
+      if (content != null) 'content': content,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  HistoryTableCompanion copyWith(
+      {Value<int>? id,
+      Value<int?>? noteId,
+      Value<int?>? collectionId,
+      Value<int>? historyType,
+      Value<String?>? content,
+      Value<DateTime>? createdAt}) {
+    return HistoryTableCompanion(
+      id: id ?? this.id,
+      noteId: noteId ?? this.noteId,
+      collectionId: collectionId ?? this.collectionId,
+      historyType: historyType ?? this.historyType,
+      content: content ?? this.content,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (noteId.present) {
+      map['note_id'] = Variable<int>(noteId.value);
+    }
+    if (collectionId.present) {
+      map['collection_id'] = Variable<int>(collectionId.value);
+    }
+    if (historyType.present) {
+      map['history_type'] = Variable<int>(historyType.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HistoryTableCompanion(')
+          ..write('id: $id, ')
+          ..write('noteId: $noteId, ')
+          ..write('collectionId: $collectionId, ')
+          ..write('historyType: $historyType, ')
+          ..write('content: $content, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1625,6 +1980,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $NoteTableTable noteTable = $NoteTableTable(this);
   late final $CollectionNoteTableTable collectionNoteTable =
       $CollectionNoteTableTable(this);
+  late final $HistoryTableTable historyTable = $HistoryTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1634,7 +1990,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         collectionTable,
         noteCitationTable,
         noteTable,
-        collectionNoteTable
+        collectionNoteTable,
+        historyTable
       ];
 }
 
@@ -1914,8 +2271,8 @@ typedef $$CollectionMediaTableTableProcessedTableManager
 typedef $$CollectionTableTableCreateCompanionBuilder = CollectionTableCompanion
     Function({
   Value<int> id,
-  Value<String?> name,
-  required String description,
+  required String name,
+  Value<String?> description,
   Value<Uint8List?> media,
   Value<int?> mediaId,
   Value<int?> parentId,
@@ -1925,8 +2282,8 @@ typedef $$CollectionTableTableCreateCompanionBuilder = CollectionTableCompanion
 typedef $$CollectionTableTableUpdateCompanionBuilder = CollectionTableCompanion
     Function({
   Value<int> id,
-  Value<String?> name,
-  Value<String> description,
+  Value<String> name,
+  Value<String?> description,
   Value<Uint8List?> media,
   Value<int?> mediaId,
   Value<int?> parentId,
@@ -1985,6 +2342,21 @@ final class $$CollectionTableTableReferences extends BaseReferences<
 
     final cache =
         $_typedResult.readTableOrNull(_collectionNoteTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$HistoryTableTable, List<HistoryTableData>>
+      _historyTableRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.historyTable,
+              aliasName: $_aliasNameGenerator(
+                  db.collectionTable.id, db.historyTable.collectionId));
+
+  $$HistoryTableTableProcessedTableManager get historyTableRefs {
+    final manager = $$HistoryTableTableTableManager($_db, $_db.historyTable)
+        .filter((f) => f.collectionId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_historyTableRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
@@ -2070,6 +2442,27 @@ class $$CollectionTableTableFilterComposer
             $$CollectionNoteTableTableFilterComposer(
               $db: $db,
               $table: $db.collectionNoteTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> historyTableRefs(
+      Expression<bool> Function($$HistoryTableTableFilterComposer f) f) {
+    final $$HistoryTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.historyTable,
+        getReferencedColumn: (t) => t.collectionId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$HistoryTableTableFilterComposer(
+              $db: $db,
+              $table: $db.historyTable,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -2238,6 +2631,27 @@ class $$CollectionTableTableAnnotationComposer
                 ));
     return f(composer);
   }
+
+  Expression<T> historyTableRefs<T extends Object>(
+      Expression<T> Function($$HistoryTableTableAnnotationComposer a) f) {
+    final $$HistoryTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.historyTable,
+        getReferencedColumn: (t) => t.collectionId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$HistoryTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.historyTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$CollectionTableTableTableManager extends RootTableManager<
@@ -2252,7 +2666,10 @@ class $$CollectionTableTableTableManager extends RootTableManager<
     (CollectionTableData, $$CollectionTableTableReferences),
     CollectionTableData,
     PrefetchHooks Function(
-        {bool mediaId, bool parentId, bool collectionNoteTableRefs})> {
+        {bool mediaId,
+        bool parentId,
+        bool collectionNoteTableRefs,
+        bool historyTableRefs})> {
   $$CollectionTableTableTableManager(
       _$AppDatabase db, $CollectionTableTable table)
       : super(TableManagerState(
@@ -2266,8 +2683,8 @@ class $$CollectionTableTableTableManager extends RootTableManager<
               $$CollectionTableTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<String?> name = const Value.absent(),
-            Value<String> description = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String?> description = const Value.absent(),
             Value<Uint8List?> media = const Value.absent(),
             Value<int?> mediaId = const Value.absent(),
             Value<int?> parentId = const Value.absent(),
@@ -2286,8 +2703,8 @@ class $$CollectionTableTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<String?> name = const Value.absent(),
-            required String description,
+            required String name,
+            Value<String?> description = const Value.absent(),
             Value<Uint8List?> media = const Value.absent(),
             Value<int?> mediaId = const Value.absent(),
             Value<int?> parentId = const Value.absent(),
@@ -2313,11 +2730,13 @@ class $$CollectionTableTableTableManager extends RootTableManager<
           prefetchHooksCallback: (
               {mediaId = false,
               parentId = false,
-              collectionNoteTableRefs = false}) {
+              collectionNoteTableRefs = false,
+              historyTableRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
-                if (collectionNoteTableRefs) db.collectionNoteTable
+                if (collectionNoteTableRefs) db.collectionNoteTable,
+                if (historyTableRefs) db.historyTable
               ],
               addJoins: <
                   T extends TableManagerState<
@@ -2369,6 +2788,19 @@ class $$CollectionTableTableTableManager extends RootTableManager<
                         referencedItemsForCurrentItem:
                             (item, referencedItems) => referencedItems
                                 .where((e) => e.collectionId == item.id),
+                        typedResults: items),
+                  if (historyTableRefs)
+                    await $_getPrefetchedData<CollectionTableData,
+                            $CollectionTableTable, HistoryTableData>(
+                        currentTable: table,
+                        referencedTable: $$CollectionTableTableReferences
+                            ._historyTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$CollectionTableTableReferences(db, table, p0)
+                                .historyTableRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.collectionId == item.id),
                         typedResults: items)
                 ];
               },
@@ -2389,7 +2821,10 @@ typedef $$CollectionTableTableProcessedTableManager = ProcessedTableManager<
     (CollectionTableData, $$CollectionTableTableReferences),
     CollectionTableData,
     PrefetchHooks Function(
-        {bool mediaId, bool parentId, bool collectionNoteTableRefs})>;
+        {bool mediaId,
+        bool parentId,
+        bool collectionNoteTableRefs,
+        bool historyTableRefs})>;
 typedef $$NoteCitationTableTableCreateCompanionBuilder
     = NoteCitationTableCompanion Function({
   Value<int> id,
@@ -2681,6 +3116,21 @@ final class $$NoteTableTableReferences
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
+
+  static MultiTypedResultKey<$HistoryTableTable, List<HistoryTableData>>
+      _historyTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+          db.historyTable,
+          aliasName:
+              $_aliasNameGenerator(db.noteTable.id, db.historyTable.noteId));
+
+  $$HistoryTableTableProcessedTableManager get historyTableRefs {
+    final manager = $$HistoryTableTableTableManager($_db, $_db.historyTable)
+        .filter((f) => f.noteId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_historyTableRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$NoteTableTableFilterComposer
@@ -2740,6 +3190,27 @@ class $$NoteTableTableFilterComposer
             $$CollectionNoteTableTableFilterComposer(
               $db: $db,
               $table: $db.collectionNoteTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> historyTableRefs(
+      Expression<bool> Function($$HistoryTableTableFilterComposer f) f) {
+    final $$HistoryTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.historyTable,
+        getReferencedColumn: (t) => t.noteId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$HistoryTableTableFilterComposer(
+              $db: $db,
+              $table: $db.historyTable,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -2861,6 +3332,27 @@ class $$NoteTableTableAnnotationComposer
                 ));
     return f(composer);
   }
+
+  Expression<T> historyTableRefs<T extends Object>(
+      Expression<T> Function($$HistoryTableTableAnnotationComposer a) f) {
+    final $$HistoryTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.historyTable,
+        getReferencedColumn: (t) => t.noteId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$HistoryTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.historyTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$NoteTableTableTableManager extends RootTableManager<
@@ -2874,7 +3366,10 @@ class $$NoteTableTableTableManager extends RootTableManager<
     $$NoteTableTableUpdateCompanionBuilder,
     (NoteTableData, $$NoteTableTableReferences),
     NoteTableData,
-    PrefetchHooks Function({bool citationId, bool collectionNoteTableRefs})> {
+    PrefetchHooks Function(
+        {bool citationId,
+        bool collectionNoteTableRefs,
+        bool historyTableRefs})> {
   $$NoteTableTableTableManager(_$AppDatabase db, $NoteTableTable table)
       : super(TableManagerState(
           db: db,
@@ -2924,11 +3419,14 @@ class $$NoteTableTableTableManager extends RootTableManager<
                   ))
               .toList(),
           prefetchHooksCallback: (
-              {citationId = false, collectionNoteTableRefs = false}) {
+              {citationId = false,
+              collectionNoteTableRefs = false,
+              historyTableRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
-                if (collectionNoteTableRefs) db.collectionNoteTable
+                if (collectionNoteTableRefs) db.collectionNoteTable,
+                if (historyTableRefs) db.historyTable
               ],
               addJoins: <
                   T extends TableManagerState<
@@ -2970,6 +3468,19 @@ class $$NoteTableTableTableManager extends RootTableManager<
                         referencedItemsForCurrentItem: (item,
                                 referencedItems) =>
                             referencedItems.where((e) => e.noteId == item.id),
+                        typedResults: items),
+                  if (historyTableRefs)
+                    await $_getPrefetchedData<NoteTableData, $NoteTableTable,
+                            HistoryTableData>(
+                        currentTable: table,
+                        referencedTable: $$NoteTableTableReferences
+                            ._historyTableRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$NoteTableTableReferences(db, table, p0)
+                                .historyTableRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.noteId == item.id),
                         typedResults: items)
                 ];
               },
@@ -2989,7 +3500,10 @@ typedef $$NoteTableTableProcessedTableManager = ProcessedTableManager<
     $$NoteTableTableUpdateCompanionBuilder,
     (NoteTableData, $$NoteTableTableReferences),
     NoteTableData,
-    PrefetchHooks Function({bool citationId, bool collectionNoteTableRefs})>;
+    PrefetchHooks Function(
+        {bool citationId,
+        bool collectionNoteTableRefs,
+        bool historyTableRefs})>;
 typedef $$CollectionNoteTableTableCreateCompanionBuilder
     = CollectionNoteTableCompanion Function({
   Value<int> id,
@@ -3312,6 +3826,367 @@ typedef $$CollectionNoteTableTableProcessedTableManager = ProcessedTableManager<
     (CollectionNoteTableData, $$CollectionNoteTableTableReferences),
     CollectionNoteTableData,
     PrefetchHooks Function({bool noteId, bool collectionId})>;
+typedef $$HistoryTableTableCreateCompanionBuilder = HistoryTableCompanion
+    Function({
+  Value<int> id,
+  Value<int?> noteId,
+  Value<int?> collectionId,
+  required int historyType,
+  Value<String?> content,
+  required DateTime createdAt,
+});
+typedef $$HistoryTableTableUpdateCompanionBuilder = HistoryTableCompanion
+    Function({
+  Value<int> id,
+  Value<int?> noteId,
+  Value<int?> collectionId,
+  Value<int> historyType,
+  Value<String?> content,
+  Value<DateTime> createdAt,
+});
+
+final class $$HistoryTableTableReferences extends BaseReferences<_$AppDatabase,
+    $HistoryTableTable, HistoryTableData> {
+  $$HistoryTableTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $NoteTableTable _noteIdTable(_$AppDatabase db) =>
+      db.noteTable.createAlias(
+          $_aliasNameGenerator(db.historyTable.noteId, db.noteTable.id));
+
+  $$NoteTableTableProcessedTableManager? get noteId {
+    final $_column = $_itemColumn<int>('note_id');
+    if ($_column == null) return null;
+    final manager = $$NoteTableTableTableManager($_db, $_db.noteTable)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_noteIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $CollectionTableTable _collectionIdTable(_$AppDatabase db) =>
+      db.collectionTable.createAlias($_aliasNameGenerator(
+          db.historyTable.collectionId, db.collectionTable.id));
+
+  $$CollectionTableTableProcessedTableManager? get collectionId {
+    final $_column = $_itemColumn<int>('collection_id');
+    if ($_column == null) return null;
+    final manager =
+        $$CollectionTableTableTableManager($_db, $_db.collectionTable)
+            .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_collectionIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$HistoryTableTableFilterComposer
+    extends Composer<_$AppDatabase, $HistoryTableTable> {
+  $$HistoryTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get historyType => $composableBuilder(
+      column: $table.historyType, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  $$NoteTableTableFilterComposer get noteId {
+    final $$NoteTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.noteId,
+        referencedTable: $db.noteTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$NoteTableTableFilterComposer(
+              $db: $db,
+              $table: $db.noteTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CollectionTableTableFilterComposer get collectionId {
+    final $$CollectionTableTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.collectionId,
+        referencedTable: $db.collectionTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CollectionTableTableFilterComposer(
+              $db: $db,
+              $table: $db.collectionTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$HistoryTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $HistoryTableTable> {
+  $$HistoryTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get historyType => $composableBuilder(
+      column: $table.historyType, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  $$NoteTableTableOrderingComposer get noteId {
+    final $$NoteTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.noteId,
+        referencedTable: $db.noteTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$NoteTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.noteTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CollectionTableTableOrderingComposer get collectionId {
+    final $$CollectionTableTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.collectionId,
+        referencedTable: $db.collectionTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CollectionTableTableOrderingComposer(
+              $db: $db,
+              $table: $db.collectionTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$HistoryTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HistoryTableTable> {
+  $$HistoryTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get historyType => $composableBuilder(
+      column: $table.historyType, builder: (column) => column);
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$NoteTableTableAnnotationComposer get noteId {
+    final $$NoteTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.noteId,
+        referencedTable: $db.noteTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$NoteTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.noteTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CollectionTableTableAnnotationComposer get collectionId {
+    final $$CollectionTableTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.collectionId,
+        referencedTable: $db.collectionTable,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CollectionTableTableAnnotationComposer(
+              $db: $db,
+              $table: $db.collectionTable,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$HistoryTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $HistoryTableTable,
+    HistoryTableData,
+    $$HistoryTableTableFilterComposer,
+    $$HistoryTableTableOrderingComposer,
+    $$HistoryTableTableAnnotationComposer,
+    $$HistoryTableTableCreateCompanionBuilder,
+    $$HistoryTableTableUpdateCompanionBuilder,
+    (HistoryTableData, $$HistoryTableTableReferences),
+    HistoryTableData,
+    PrefetchHooks Function({bool noteId, bool collectionId})> {
+  $$HistoryTableTableTableManager(_$AppDatabase db, $HistoryTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HistoryTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HistoryTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$HistoryTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int?> noteId = const Value.absent(),
+            Value<int?> collectionId = const Value.absent(),
+            Value<int> historyType = const Value.absent(),
+            Value<String?> content = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              HistoryTableCompanion(
+            id: id,
+            noteId: noteId,
+            collectionId: collectionId,
+            historyType: historyType,
+            content: content,
+            createdAt: createdAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int?> noteId = const Value.absent(),
+            Value<int?> collectionId = const Value.absent(),
+            required int historyType,
+            Value<String?> content = const Value.absent(),
+            required DateTime createdAt,
+          }) =>
+              HistoryTableCompanion.insert(
+            id: id,
+            noteId: noteId,
+            collectionId: collectionId,
+            historyType: historyType,
+            content: content,
+            createdAt: createdAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$HistoryTableTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({noteId = false, collectionId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (noteId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.noteId,
+                    referencedTable:
+                        $$HistoryTableTableReferences._noteIdTable(db),
+                    referencedColumn:
+                        $$HistoryTableTableReferences._noteIdTable(db).id,
+                  ) as T;
+                }
+                if (collectionId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.collectionId,
+                    referencedTable:
+                        $$HistoryTableTableReferences._collectionIdTable(db),
+                    referencedColumn:
+                        $$HistoryTableTableReferences._collectionIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$HistoryTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $HistoryTableTable,
+    HistoryTableData,
+    $$HistoryTableTableFilterComposer,
+    $$HistoryTableTableOrderingComposer,
+    $$HistoryTableTableAnnotationComposer,
+    $$HistoryTableTableCreateCompanionBuilder,
+    $$HistoryTableTableUpdateCompanionBuilder,
+    (HistoryTableData, $$HistoryTableTableReferences),
+    HistoryTableData,
+    PrefetchHooks Function({bool noteId, bool collectionId})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3326,4 +4201,6 @@ class $AppDatabaseManager {
       $$NoteTableTableTableManager(_db, _db.noteTable);
   $$CollectionNoteTableTableTableManager get collectionNoteTable =>
       $$CollectionNoteTableTableTableManager(_db, _db.collectionNoteTable);
+  $$HistoryTableTableTableManager get historyTable =>
+      $$HistoryTableTableTableManager(_db, _db.historyTable);
 }

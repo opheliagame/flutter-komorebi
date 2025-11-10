@@ -32,12 +32,17 @@ class DriftNotesRepository implements NotesRepository {
 
   @override
   Stream<NoteEntity> watchNote(int noteId) {
-    final query = database.select(database.noteTable)..where((q) => q.id.equals(noteId));
-    return (query.watchSingle()).map((e) => e.toDomain());
+    try {
+      final query = database.select(database.noteTable)..where((q) => q.id.equals(noteId));
+      return (query.watchSingle()).map((e) => e.toDomain());
+    } catch (e) {
+      debugPrint(e.toString());
+      return Stream.error(e);
+    }
   }
 
   @override
-  Future<bool> createNote({required String? content, required XFile? media, required int? collectionId}) async {
+  Future<int> createNote({required String? content, required XFile? media}) async {
     Uint8List? pickedMedia;
     if (media != null) {
       debugPrint('createCollection: saving ${media.name}');
@@ -54,16 +59,10 @@ class DriftNotesRepository implements NotesRepository {
             ),
           );
 
-      if (collectionId != null) {
-        await database.into(database.collectionNoteTable).insert(
-              CollectionNoteTableCompanion.insert(noteId: noteId, collectionId: collectionId),
-            );
-      }
-
-      return true;
+      return noteId;
     } catch (e) {
       debugPrint(e.toString());
-      return false;
+      rethrow;
     }
   }
 
@@ -134,65 +133,5 @@ class DriftNotesRepository implements NotesRepository {
 
     final notes = query.watch().map((e) => e.map((e1) => e1.toDomain()).toList());
     return notes;
-  }
-
-  @override
-  Future<bool> addNoteToCollection({required int noteId, required int collectionId}) async {
-    final query = database
-        .into(database.collectionNoteTable)
-        .insert(CollectionNoteTableCompanion.insert(noteId: noteId, collectionId: collectionId));
-
-    try {
-      await query;
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  @override
-  Future<bool> addNoteToCollectionList({required int noteId, required List<int> collectionIds}) async {
-    try {
-      await database.batch((batch) {
-        batch.insertAll(
-          database.collectionNoteTable,
-          List.from(collectionIds).map(
-            (collectionId) => CollectionNoteTableCompanion.insert(noteId: noteId, collectionId: collectionId),
-          ),
-        );
-      });
-
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  @override
-  Future<bool> removeNoteFromCollection({required int noteId, required int collectionId}) async {
-    final query = database.delete(database.collectionNoteTable)
-      ..where((q) => q.noteId.equals(noteId) & q.collectionId.equals(collectionId));
-    try {
-      await query.go();
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  @override
-  Future<bool> removeNoteFromCollectionList({required int noteId, required List<int> collectionIds}) async {
-    try {
-      await database.batch((batch) {
-        batch.deleteWhere(
-          database.collectionNoteTable,
-          (q) => q.noteId.equals(noteId) & q.collectionId.isIn(collectionIds),
-        );
-      });
-
-      return true;
-    } catch (e) {
-      return false;
-    }
   }
 }

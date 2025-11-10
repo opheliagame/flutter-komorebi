@@ -8,7 +8,7 @@ class NewCollectionTile extends StatelessWidget {
     required this.collectionId,
   });
 
-  final int? collectionId;
+  final int collectionId;
 
   @override
   Widget build(BuildContext context) {

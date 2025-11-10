@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
+import 'package:flutter_komorebi/src/data/drift/database.dart';
+import 'package:flutter_komorebi/src/data/drift/database_extension.dart';
 import 'package:flutter_komorebi/src/router/app_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final database = AppDatabase();
+  await database.insertMeaningfulMockData();
+
   runApp(ProviderScope(child: const MyApp()));
 }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_komorebi/src/design_system/collection/collection_tile.dart';
+import 'package:flutter_komorebi/src/design_system/collection/new_collection_tile.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
-import 'package:flutter_komorebi/src/design_system/common_widgets/collection_tile.dart';
-import 'package:flutter_komorebi/src/design_system/common_widgets/new_collection_tile.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -24,7 +24,8 @@ class CollectionsGrid extends ConsumerWidget {
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
             children: [
-              NewCollectionTile(collectionId: collectionId),
+              // todo(domain) make root collection id as 0 and always insert a root collection at first app startup
+              NewCollectionTile(collectionId: collectionId ?? 0),
               ...collections.map(
                 (collection) => CollectionTile(collection: collection),
               ),

@@ -8,8 +8,8 @@ class CollectionTable extends Table {
   String get tableName => 'collection';
 
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get name => text().nullable()();
-  TextColumn get description => text()();
+  TextColumn get name => text()();
+  TextColumn get description => text().nullable()();
   BlobColumn get media => blob().nullable()();
 
   IntColumn get mediaId => integer().nullable().references(CollectionMediaTable, #id)();

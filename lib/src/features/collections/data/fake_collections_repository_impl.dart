@@ -5,8 +5,12 @@ import 'package:image_picker/image_picker.dart';
 
 class FakeCollectionsRepository implements CollectionsRepository {
   @override
-  Future<bool> createCollection(
-      {required String? collectionName, required XFile? media, required int? parentCollectionId}) {
+  Future<bool> createCollection({
+    required String collectionName,
+    required String? description,
+    required XFile? media,
+    required int? parentCollectionId,
+  }) {
     // TODO: implement createCollection
     throw UnimplementedError();
   }

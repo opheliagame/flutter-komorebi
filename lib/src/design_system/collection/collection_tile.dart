@@ -13,7 +13,6 @@ class CollectionTile extends HookConsumerWidget {
     required this.collection,
   });
 
-  // TODO remove widget dep on drift
   final CollectionEntity collection;
 
   @override
@@ -24,7 +23,7 @@ class CollectionTile extends HookConsumerWidget {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          context.pushRoute(HomeListRoute(collection: collection));
+          context.pushRoute(HomeListRoute(collectionId: collection.id));
         },
         onLongPress: () {
           isEdit.value = true;
@@ -50,7 +49,7 @@ class CollectionTile extends HookConsumerWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Center(
                           child: Text(
-                            collection.name ?? '',
+                            collection.name,
                             softWrap: true,
                             overflow: TextOverflow.fade,
                             style: Theme.of(context).textTheme.bodyMedium,
@@ -82,7 +81,7 @@ class CollectionTile extends HookConsumerWidget {
                       ),
                       Center(
                         child: Text(
-                          collection.name ?? '',
+                          collection.name,
                           softWrap: true,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),

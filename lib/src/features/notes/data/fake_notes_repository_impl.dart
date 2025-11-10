@@ -4,24 +4,6 @@ import 'package:image_picker/image_picker.dart';
 
 class FakeNotesRepository implements NotesRepository {
   @override
-  Future<bool> addNoteToCollection({required int noteId, required int collectionId}) {
-    // TODO: implement addNoteToCollection
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool> addNoteToCollectionList({required int noteId, required List<int> collectionIds}) {
-    // TODO: implement addNoteToCollectionList
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool> createNote({required String? content, required XFile? media, required int? collectionId}) {
-    // TODO: implement createNote
-    throw UnimplementedError();
-  }
-
-  @override
   Future<bool> deleteNote(int noteId) {
     // TODO: implement deleteNote
     throw UnimplementedError();
@@ -52,18 +34,6 @@ class FakeNotesRepository implements NotesRepository {
   }
 
   @override
-  Future<bool> removeNoteFromCollection({required int noteId, required int collectionId}) {
-    // TODO: implement removeNoteFromCollection
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool> removeNoteFromCollectionList({required int noteId, required List<int> collectionIds}) {
-    // TODO: implement removeNoteFromCollectionList
-    throw UnimplementedError();
-  }
-
-  @override
   Stream<List<NoteEntity>> watchAllNotes() {
     // TODO: implement watchAllNotes
     throw UnimplementedError();
@@ -84,6 +54,12 @@ class FakeNotesRepository implements NotesRepository {
   @override
   Stream<List<NoteEntity>> watchNotesInCollectionList(List<int> collectionIds) {
     // TODO: implement watchNotesInCollectionList
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<int> createNote({required String? content, required XFile? media}) {
+    // TODO: implement createNote
     throw UnimplementedError();
   }
 }

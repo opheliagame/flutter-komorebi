@@ -30,6 +30,10 @@ class AppRouter extends RootStackRouter {
           page: NoteListRoute.page,
         ),
         AutoRoute(
+          path: '/note-detail',
+          page: NoteDetailRoute.page,
+        ),
+        AutoRoute(
           path: '/create',
           page: CreateRoute.page,
         ),
@@ -40,6 +44,10 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           path: '/roam',
           page: RoamRoute.page,
+        ),
+        AutoRoute(
+          path: '/history-list',
+          page: HistoryListRoute.page,
         ),
         AutoRoute(
           path: '/gridscaletest',

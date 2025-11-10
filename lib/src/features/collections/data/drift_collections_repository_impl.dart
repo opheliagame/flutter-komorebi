@@ -38,8 +38,12 @@ class DriftCollectionsRepository implements CollectionsRepository {
   }
 
   @override
-  Future<bool> createCollection(
-      {required String? collectionName, required XFile? media, required int? parentCollectionId}) async {
+  Future<bool> createCollection({
+    required String collectionName,
+    required String? description,
+    required XFile? media,
+    required int? parentCollectionId,
+  }) async {
     Uint8List? pickedMedia;
     if (media != null) {
       debugPrint('createCollection: saving ${media.name}');
@@ -48,8 +52,8 @@ class DriftCollectionsRepository implements CollectionsRepository {
 
     final query = database.into(database.collectionTable).insert(
           CollectionTableCompanion.insert(
-            name: Value.absentIfNull(collectionName),
-            description: "",
+            name: collectionName,
+            description: Value.absentIfNull(description),
             media: Value.absentIfNull(pickedMedia),
             parentId: Value.absentIfNull(parentCollectionId),
             createdAt: DateTime.now(),
@@ -96,6 +100,7 @@ class DriftCollectionsRepository implements CollectionsRepository {
     }
   }
 
+  // TODO make the response distinct
   @override
   Future<List<CollectionEntity>> getCollectionsOfNote(int noteId) async {
     final query = database
@@ -115,7 +120,8 @@ class DriftCollectionsRepository implements CollectionsRepository {
   Stream<List<CollectionEntity>> watchCollectionsOfNote(int noteId) {
     final query = database
         .select(database.collectionTable)
-        .join([innerJoin(database.collectionNoteTable, database.collectionNoteTable.noteId.equals(noteId))]);
+        .join([innerJoin(database.collectionNoteTable, database.collectionNoteTable.noteId.equals(noteId))])
+      ..distinct;
 
     final collections = query.watch().map((rows) {
       return rows

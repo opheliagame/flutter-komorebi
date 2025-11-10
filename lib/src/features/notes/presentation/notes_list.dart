@@ -32,7 +32,7 @@ class NotesList extends ConsumerWidget {
               return NoteListItem(
                 note: note,
                 onTap: () {
-                  context.pushRoute(CreateRoute(collectionId: collectionId));
+                  context.pushRoute(NoteDetailRoute(noteId: note.id));
                 },
               );
             },
@@ -55,21 +55,24 @@ class NoteListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (note.content != null) Text(note.content!),
-        if (note.media != null)
-          Image.memory(
-            note.media!,
-            fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) {
-              return Text('error fetching image');
-            },
-          ),
-        Text(note.modifiedAt.toString()),
-        Divider(),
-      ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (note.content != null) Text(note.content!),
+          if (note.media != null)
+            Image.memory(
+              note.media!,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return Text('error fetching image');
+              },
+            ),
+          Text(note.modifiedAt.toString()),
+          Divider(),
+        ],
+      ),
     );
   }
 }

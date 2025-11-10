@@ -10,8 +10,12 @@ abstract class CollectionsRepository {
   Stream<List<CollectionEntity>> watchRootCollections();
   Future<List<CollectionEntity>> getSubCollections(int collectionId);
   Stream<List<CollectionEntity>> watchSubCollections(int collectionId);
-  Future<bool> createCollection(
-      {required String? collectionName, required XFile? media, required int? parentCollectionId});
+  Future<bool> createCollection({
+    required String collectionName,
+    required String? description,
+    required XFile? media,
+    required int? parentCollectionId,
+  });
   Future<bool> deleteCollection(int collectionId);
   Future<bool> deleteAllCollections();
 
@@ -41,3 +45,10 @@ final collectionsListStreamProvider = StreamProvider.family<List<CollectionEntit
       ? repository.watchRootCollections()
       : repository.watchSubCollections(currentCollectionId);
 });
+
+
+// final collectionSingleStreamProvider = StreamProvider.family.autoDispose<CollectionEntity, int>((ref, id) {
+//    final repository = ref.watch(collectionsRepositoryProvider);
+
+//   return repository
+// });

@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_notifier.dart';
+import 'package:flutter_komorebi/src/features/connection/usecase/connection_usecase.dart';
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
-import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -11,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 class CreatePage extends HookConsumerWidget {
   const CreatePage({super.key, required this.collectionId});
 
-  final int? collectionId;
+  final int collectionId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -85,10 +85,10 @@ class CreatePage extends HookConsumerWidget {
                     }
                   });
                 } else if (dropdownValue.value == EntityType.note) {
-                  // create note
+                  // create note in collection
                   ref
-                      .read(notesRepositoryProvider)
-                      .createNote(content: value, media: pickedImage.value, collectionId: collectionId)
+                      .read(connectionUsecaseProvider)
+                      .createNoteInCollection(content: value, media: pickedImage.value, collectionId: collectionId)
                       .then((result) {
                     if (result) {
                       inputTextEditingController.clear();

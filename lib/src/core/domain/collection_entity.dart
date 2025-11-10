@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 class CollectionEntity {
   final int id;
-  final String? name;
-  final String description;
+  final String name;
+  final String? description;
   final Uint8List? media;
   final int? mediaId;
   final int? parentId;

@@ -1,22 +1,22 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
-import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @RoutePage()
 class CollectionsListPage extends ConsumerWidget {
-  const CollectionsListPage({super.key, this.collection});
+  const CollectionsListPage({super.key, this.collectionId});
 
-  final CollectionEntity? collection;
+  final int? collectionId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // final collection = ref.watch()
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(collection?.name ?? S.of(context)?.app_name ?? ''),
+        title: Text('collection list page'),
         // TODO(design): show image in app bar when collection does not have a name
         actions: [
           IconButton(
@@ -37,7 +37,7 @@ class CollectionsListPage extends ConsumerWidget {
           children: [
             Expanded(
               child: CollectionsGrid(
-                collectionId: collection?.id,
+                collectionId: collectionId,
               ),
             ),
           ],
