@@ -1,10 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/connection/data/connection_repository.dart';
 import 'package:flutter_komorebi/src/features/connection/usecase/connection_usecase.dart';
 import 'package:flutter_komorebi/src/features/history/data/history_repository.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
-import 'package:image_picker/image_picker.dart';
 
 class DriftConnectionUsecaseImpl implements ConnectionUsecase {
   final NotesRepository notesRepository;
@@ -22,7 +23,7 @@ class DriftConnectionUsecaseImpl implements ConnectionUsecase {
   @override
   Future<bool> createNoteAndConnect({
     required String? content,
-    required XFile? media,
+    required Uint8List? media,
     required List<int> collectionIds,
   }) async {
     try {

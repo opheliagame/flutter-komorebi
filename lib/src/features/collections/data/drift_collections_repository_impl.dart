@@ -4,7 +4,6 @@ import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/collection_table.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
-import 'package:image_picker/image_picker.dart';
 
 class DriftCollectionsRepository implements CollectionsRepository {
   DriftCollectionsRepository(this.database);
@@ -41,23 +40,42 @@ class DriftCollectionsRepository implements CollectionsRepository {
   Future<bool> createCollection({
     required String collectionName,
     required String? description,
-    required XFile? media,
+    required Uint8List? media,
   }) async {
-    Uint8List? pickedMedia;
-    if (media != null) {
-      debugPrint('createCollection: saving ${media.name}');
-      pickedMedia = await media.readAsBytes();
-    }
-
     final query = database.into(database.collectionTable).insert(
           CollectionTableCompanion.insert(
             name: collectionName,
             description: Value.absentIfNull(description),
-            media: Value.absentIfNull(pickedMedia),
+            media: Value.absentIfNull(media),
             createdAt: DateTime.now(),
             modifiedAt: DateTime.now(),
           ),
         );
+
+    try {
+      await query;
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  @override
+  Future<bool> updateCollection({
+    required int collectionId,
+    required String collectionName,
+    required String? description,
+    required Uint8List? media,
+  }) async {
+    final query = (database.update(database.collectionTable)..where((q) => q.id.equals(collectionId))).write(
+      CollectionTableCompanion(
+        name: Value(collectionName),
+        description: Value.absentIfNull(description),
+        media: Value.absentIfNull(media),
+        modifiedAt: Value(DateTime.now()),
+      ),
+    );
 
     try {
       await query;

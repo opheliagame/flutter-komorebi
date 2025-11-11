@@ -1,6 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter_komorebi/src/core/domain/note_entity.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
-import 'package:image_picker/image_picker.dart';
 
 class FakeNotesRepository implements NotesRepository {
   @override
@@ -58,8 +59,14 @@ class FakeNotesRepository implements NotesRepository {
   }
 
   @override
-  Future<int> createNote({required String? content, required XFile? media}) {
+  Future<int> createNote({required String? content, required Uint8List? media}) {
     // TODO: implement createNote
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<int> updateNote({required int noteId, required String? content, required Uint8List? media}) {
+    // TODO: implement updateNote
     throw UnimplementedError();
   }
 }

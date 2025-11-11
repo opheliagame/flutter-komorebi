@@ -37,12 +37,15 @@ class CollectionTile extends HookConsumerWidget {
                     children: [
                       if (collection.media != null)
                         Positioned.fill(
-                          child: Image.memory(
-                            collection.media!,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Text('error fetching image');
-                            },
+                          child: Opacity(
+                            opacity: 0.3,
+                            child: Image.memory(
+                              collection.media!,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Text('error fetching image');
+                              },
+                            ),
                           ),
                         ),
                       Padding(

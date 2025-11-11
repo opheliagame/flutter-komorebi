@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
+import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:flutter_komorebi/src/router/app_router.gr.dart';
@@ -14,59 +15,65 @@ class SamplePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // temp checking if this works
-    // final collectionId = useState(null);
-    // final noteIds = ref.watch(notesListStreamProvider(null)).map<Iterable<int>>(
-    //       data: (d) => d.value.map((e) => e.id),
-    //       error: (_) => Iterable<int>.empty(),
-    //       loading: (_) => Iterable<int>.empty(),
-    //     );
-    final noteId = useState(0);
+    final collectionIds = ref.watch(allCollectionIdsProvider);
+    final noteIds = ref.watch(allNoteIdsProvider);
 
     final buttonData = [
       _SamplePageTextButton(
-        route: HomeRoute(),
+        route: (_) => HomeRoute(),
         name: 'Home Page',
       ),
       _SamplePageTextButton(
-        route: HomeListRoute(),
+        route: (_) => HomeListRoute(),
         name: 'Home list page',
       ),
       _SamplePageTextButton(
-        route: CollectionsListRoute(),
+        route: (_) => CollectionsListRoute(),
         name: 'collections list page',
       ),
       _SamplePageTextButton(
-        route: NoteListRoute(),
+        route: (_) => NoteListRoute(),
         name: 'notes list page',
       ),
       _SamplePageTextButton(
-        route: NoteDetailRoute(noteId: noteId.value),
-        name: 'note detail page',
-        options: ref.watch(allNoteIdsProvider),
-        onSelectOption: (selectedNoteId) {
-          noteId.value = selectedNoteId;
-          debugPrint('setting current note detail note id to ${noteId.value}');
-        },
-      ),
-      _SamplePageTextButton(
-        route: CreateRoute(entityType: EntityType.collection),
-        name: 'create collection page',
-      ),
-      _SamplePageTextButton(
-        route: CreateRoute(entityType: EntityType.note),
+        route: (_) => CreateRoute(entityType: EntityType.note),
         name: 'create note page',
       ),
+      _SamplePageTextButton<int>(
+        route: (id) => NoteDetailRoute(noteId: id ?? 0),
+        name: 'note detail page',
+        options: noteIds,
+      ),
+      _SamplePageTextButton<int>(
+        route: (value) => CreateRoute(
+          entityType: EntityType.note,
+          noteId: value,
+        ),
+        name: 'update note page',
+        options: noteIds,
+      ),
       _SamplePageTextButton(
-        route: SearchRoute(),
+        route: (_) => CreateRoute(entityType: EntityType.collection),
+        name: 'create collection page',
+      ),
+      _SamplePageTextButton<int>(
+        route: (value) => CreateRoute(
+          entityType: EntityType.collection,
+          collectionId: value,
+        ),
+        name: 'update collection page',
+        options: collectionIds,
+      ),
+      _SamplePageTextButton(
+        route: (_) => SearchRoute(),
         name: 'search page',
       ),
       _SamplePageTextButton(
-        route: RoamRoute(),
+        route: (_) => RoamRoute(),
         name: 'roam page',
       ),
       _SamplePageTextButton(
-        route: HistoryListRoute(),
+        route: (_) => HistoryListRoute(),
         name: 'history list page',
       ),
     ];
@@ -110,7 +117,7 @@ class SamplePage extends HookConsumerWidget {
   }
 }
 
-class _SamplePageTextButton<T extends Object> extends StatelessWidget {
+class _SamplePageTextButton<T extends Object> extends HookWidget {
   const _SamplePageTextButton({
     required this.route,
     required this.name,
@@ -118,19 +125,23 @@ class _SamplePageTextButton<T extends Object> extends StatelessWidget {
     this.onSelectOption,
   });
 
-  final PageRouteInfo<Object?> route;
+  final PageRouteInfo<Object?> Function(T?) route;
   final String name;
   final AsyncValue<Iterable<T>>? options;
+  // TODO(refactor): deprecated?
   final Function(T)? onSelectOption;
 
   @override
   Widget build(BuildContext context) {
+    final selection = useState<T?>(null);
+    print('debug: current options length ${options?.value?.length}');
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TextButton(
           onPressed: () {
-            context.pushRoute(route);
+            context.pushRoute(route(selection.value));
           },
           child: Text(name),
         ),
@@ -142,19 +153,14 @@ class _SamplePageTextButton<T extends Object> extends StatelessWidget {
             child: AsyncValueWidget(
               value: options!,
               data: (options) {
-                print(options);
-
                 return Autocomplete<T>(
                   optionsBuilder: (TextEditingValue textEditingValue) {
-                    // if (textEditingValue.text.isEmpty) {
-                    //   return const Iterable.empty();
-                    // }
-
                     return options.where(
                       (e) => e.toString().toLowerCase().contains(textEditingValue.text.toLowerCase()),
                     );
                   },
                   onSelected: (T option) {
+                    selection.value = option;
                     onSelectOption?.call(option);
                   },
                 );

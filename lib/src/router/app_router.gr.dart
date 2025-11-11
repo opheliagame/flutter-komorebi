@@ -94,10 +94,17 @@ class CreateRoute extends _i12.PageRouteInfo<CreateRouteArgs> {
   CreateRoute({
     _i13.Key? key,
     required _i14.EntityType entityType,
+    int? collectionId,
+    int? noteId,
     List<_i12.PageRouteInfo>? children,
   }) : super(
          CreateRoute.name,
-         args: CreateRouteArgs(key: key, entityType: entityType),
+         args: CreateRouteArgs(
+           key: key,
+           entityType: entityType,
+           collectionId: collectionId,
+           noteId: noteId,
+         ),
          initialChildren: children,
        );
 
@@ -107,32 +114,53 @@ class CreateRoute extends _i12.PageRouteInfo<CreateRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<CreateRouteArgs>();
-      return _i2.CreatePage(key: args.key, entityType: args.entityType);
+      return _i2.CreatePage(
+        key: args.key,
+        entityType: args.entityType,
+        collectionId: args.collectionId,
+        noteId: args.noteId,
+      );
     },
   );
 }
 
 class CreateRouteArgs {
-  const CreateRouteArgs({this.key, required this.entityType});
+  const CreateRouteArgs({
+    this.key,
+    required this.entityType,
+    this.collectionId,
+    this.noteId,
+  });
 
   final _i13.Key? key;
 
   final _i14.EntityType entityType;
 
+  final int? collectionId;
+
+  final int? noteId;
+
   @override
   String toString() {
-    return 'CreateRouteArgs{key: $key, entityType: $entityType}';
+    return 'CreateRouteArgs{key: $key, entityType: $entityType, collectionId: $collectionId, noteId: $noteId}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! CreateRouteArgs) return false;
-    return key == other.key && entityType == other.entityType;
+    return key == other.key &&
+        entityType == other.entityType &&
+        collectionId == other.collectionId &&
+        noteId == other.noteId;
   }
 
   @override
-  int get hashCode => key.hashCode ^ entityType.hashCode;
+  int get hashCode =>
+      key.hashCode ^
+      entityType.hashCode ^
+      collectionId.hashCode ^
+      noteId.hashCode;
 }
 
 /// generated route for

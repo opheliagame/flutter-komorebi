@@ -1,9 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/features/collections/data/drift_collections_repository_impl.dart';
 import 'package:flutter_komorebi/src/features/connection/data/connection_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 abstract class CollectionsRepository {
   // crud operations
@@ -14,7 +15,13 @@ abstract class CollectionsRepository {
   Future<bool> createCollection({
     required String collectionName,
     required String? description,
-    required XFile? media,
+    required Uint8List? media,
+  });
+  Future<bool> updateCollection({
+    required int collectionId,
+    required String collectionName,
+    required String? description,
+    required Uint8List? media,
   });
   Future<bool> deleteCollection(int collectionId);
   Future<bool> deleteAllCollections();
@@ -52,4 +59,11 @@ final collectionSingleFutureProvider = FutureProvider.family.autoDispose<Collect
   final repository = ref.watch(collectionsRepositoryProvider);
 
   return repository.getCollection(id);
+});
+
+final allCollectionIdsProvider = StreamProvider<Iterable<int>>((ref) {
+  final repository = ref.read(collectionsRepositoryProvider);
+
+  final notes = repository.watchRootCollections();
+  return notes.map((e) => e.map((e1) => e1.id));
 });

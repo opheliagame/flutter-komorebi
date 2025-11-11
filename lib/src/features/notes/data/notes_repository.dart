@@ -1,11 +1,12 @@
 // import 'package:flutter_komorebi/src/data/drift/database.dart';
+import 'dart:typed_data';
+
 import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/core/domain/note_entity.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/notes/data/drift_notes_repository_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 abstract class NotesRepository {
   // crud operations
@@ -15,7 +16,12 @@ abstract class NotesRepository {
   Stream<NoteEntity> watchNote(int noteId);
   Future<int> createNote({
     required String? content,
-    required XFile? media,
+    required Uint8List? media,
+  });
+  Future<int> updateNote({
+    required int noteId,
+    required String? content,
+    required Uint8List? media,
   });
   Future<bool> deleteNote(int noteId);
 
@@ -45,11 +51,11 @@ final noteStreamProvider = StreamProvider.family<NoteEntity, int>((ref, noteId) 
   return repository.watchNote(noteId);
 });
 
-final allNoteIdsProvider = FutureProvider<Iterable<int>>((ref) async {
+final allNoteIdsProvider = StreamProvider<Iterable<int>>((ref) {
   final repository = ref.read(notesRepositoryProvider);
 
-  final notes = await repository.getAllNotes();
-  return notes.map((e) => e.id);
+  final notes = repository.watchAllNotes();
+  return notes.map((e) => e.map((e1) => e1.id));
 });
 
 final collectionsOfSingleNoteStreamProvider =

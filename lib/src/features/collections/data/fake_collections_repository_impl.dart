@@ -1,19 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 class FakeCollectionsRepository implements CollectionsRepository {
-  @override
-  Future<bool> createCollection({
-    required String collectionName,
-    required String? description,
-    required XFile? media,
-  }) {
-    // TODO: implement createCollection
-    throw UnimplementedError();
-  }
-
   @override
   Future<bool> deleteAllCollections() {
     // TODO: implement deleteAllCollections
@@ -53,6 +44,23 @@ class FakeCollectionsRepository implements CollectionsRepository {
   @override
   Future<CollectionEntity> getCollection(int collectionId) {
     // TODO: implement getCollection
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> createCollection(
+      {required String collectionName, required String? description, required Uint8List? media}) {
+    // TODO: implement createCollection
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> updateCollection(
+      {required int collectionId,
+      required String collectionName,
+      required String? description,
+      required Uint8List? media}) {
+    // TODO: implement updateCollection
     throw UnimplementedError();
   }
 }

@@ -4,7 +4,6 @@ import 'package:flutter_komorebi/src/core/domain/note_entity.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/note_table.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
-import 'package:image_picker/image_picker.dart';
 
 class DriftNotesRepository implements NotesRepository {
   DriftNotesRepository(this.database);
@@ -49,24 +48,40 @@ class DriftNotesRepository implements NotesRepository {
   }
 
   @override
-  Future<int> createNote({required String? content, required XFile? media}) async {
-    Uint8List? pickedMedia;
-    if (media != null) {
-      debugPrint('createCollection: saving ${media.name}');
-      pickedMedia = await media.readAsBytes();
-    }
-
+  Future<int> createNote({required String? content, required Uint8List? media}) async {
     try {
       final noteId = await database.into(database.noteTable).insert(
             NoteTableCompanion.insert(
               content: Value.absentIfNull(content),
-              media: Value.absentIfNull(pickedMedia),
+              media: Value.absentIfNull(media),
               createdAt: DateTime.now(),
               modifiedAt: DateTime.now(),
             ),
           );
 
       return noteId;
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<int> updateNote({
+    required int noteId,
+    required String? content,
+    required Uint8List? media,
+  }) async {
+    try {
+      final newNoteId = await (database.update(database.noteTable)..where((q) => q.id.equals(noteId))).write(
+        NoteTableCompanion(
+          content: Value.absentIfNull(content),
+          media: Value.absentIfNull(media),
+          modifiedAt: Value(DateTime.now()),
+        ),
+      );
+
+      return newNoteId;
     } catch (e) {
       debugPrint(e.toString());
       rethrow;

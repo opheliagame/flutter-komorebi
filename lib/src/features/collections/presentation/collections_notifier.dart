@@ -1,6 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 class CollectionsNotifier extends StateNotifier<void> {
   CollectionsNotifier({required this.ref}) : super(null);
@@ -9,7 +10,7 @@ class CollectionsNotifier extends StateNotifier<void> {
   Future<bool> createCollection({
     required String collectionName,
     String? description,
-    XFile? media,
+    Uint8List? media,
   }) async {
     return ref
         .watch(collectionsRepositoryProvider)
