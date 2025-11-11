@@ -8,7 +8,7 @@ class NoteTable extends Table {
   String get tableName => 'note';
 
   IntColumn get id => integer().autoIncrement()();
-  // TODO make content note and media note so that only one of them is nullable at a time
+  // TODO(domain): make content note and media note so that only one of them is nullable at a time
   TextColumn get content => text().nullable()();
   BlobColumn get media => blob().nullable()();
 

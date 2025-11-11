@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
-import 'package:flutter_komorebi/src/data/drift/database_extension.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/collection_media_table.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/collection_table.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/history_table.dart';
@@ -10,8 +9,6 @@ import 'package:flutter_komorebi/src/data/drift/domain/note_table.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/related_collection_view.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
-
-import 'database.steps.dart';
 
 part 'database.g.dart';
 
@@ -36,7 +33,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 1;
 
   static QueryExecutor _openConnection() {
     return driftDatabase(
@@ -50,31 +47,32 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  @override
-  MigrationStrategy get migration {
-    return MigrationStrategy(
-      onUpgrade: _schemaUpgrade,
-      onCreate: (m) async {
-        await m.createAll();
-        await insertMeaningfulMockData();
-      },
-    );
-  }
+  // @override
+  // MigrationStrategy get migration {
+  //   return MigrationStrategy(
+  //     onUpgrade: _schemaUpgrade,
+  //     onCreate: (m) async {
+  //       await m.createAll();
+  //       await insertMeaningfulMockData();
+  //     },
+  //   );
+  // }
 }
 
-extension Migrations on GeneratedDatabase {
-  // Extracting the `stepByStep` call into a static field or method ensures that you're not
-  // accidentally referring to the current database schema (via a getter on the database class).
-  // This ensures that each step brings the database into the correct snapshot.
-  OnUpgrade get _schemaUpgrade => stepByStep(
-        from1To2: (m, schema) async {
-          await m.dropColumn(schema.collection, schema.collection.name.name);
-          await m.addColumn(schema.collection, schema.collection.name);
-          await m.dropColumn(schema.collection, schema.collection.description.name);
-          await m.addColumn(schema.collection, schema.collection.description);
-        },
-      );
-}
+// TODO(db): insert extension after a final initial release
+// extension Migrations on GeneratedDatabase {
+//   // Extracting the `stepByStep` call into a static field or method ensures that you're not
+//   // accidentally referring to the current database schema (via a getter on the database class).
+//   // This ensures that each step brings the database into the correct snapshot.
+//   OnUpgrade get _schemaUpgrade => stepByStep(
+//         from1To2: (m, schema) async {
+//           await m.dropColumn(schema.collection, schema.collection.name.name);
+//           await m.addColumn(schema.collection, schema.collection.name);
+//           await m.dropColumn(schema.collection, schema.collection.description.name);
+//           await m.addColumn(schema.collection, schema.collection.description);
+//         },
+//       );
+// }
 
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
   final database = AppDatabase();

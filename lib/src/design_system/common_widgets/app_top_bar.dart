@@ -27,6 +27,5 @@ class AppTopBar extends ConsumerWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(40);
 }

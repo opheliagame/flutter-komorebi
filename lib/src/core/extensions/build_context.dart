@@ -1,4 +1,4 @@
-// TODO(sometime) make extensions for easily using app strings
+// TODO(sometime): make extensions for easily using app strings
 // import 'package:aves/l10n/l10n.dart';
 // import 'package:flutter/foundation.dart';
 // import 'package:flutter/widgets.dart';
