@@ -16,10 +16,20 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           path: '/home',
           page: HomeRoute.page,
-        ),
-        AutoRoute(
-          path: '/homelist',
-          page: HomeListRoute.page,
+          children: [
+            AutoRoute(
+              path: 'home',
+              page: HomeListRoute.page,
+            ),
+            AutoRoute(
+              path: 'search',
+              page: SearchRoute.page,
+            ),
+            AutoRoute(
+              path: 'roam',
+              page: RoamRoute.page,
+            ),
+          ],
         ),
         AutoRoute(
           path: '/collectionslist',
@@ -36,14 +46,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           path: '/create',
           page: CreateRoute.page,
-        ),
-        AutoRoute(
-          path: '/search',
-          page: SearchRoute.page,
-        ),
-        AutoRoute(
-          path: '/roam',
-          page: RoamRoute.page,
         ),
         AutoRoute(
           path: '/history-list',
