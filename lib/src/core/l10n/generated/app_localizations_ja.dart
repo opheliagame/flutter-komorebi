@@ -1,3 +1,5 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -12,7 +14,7 @@ class SJa extends S {
 
 /// The translations for Japanese, as used in Japan (`ja_JP`).
 class SJaJp extends SJa {
-  SJaJp(): super('ja_JP');
+  SJaJp() : super('ja_JP');
 
   @override
   String get app_name => '木漏れ日';

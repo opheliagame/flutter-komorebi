@@ -44,10 +44,10 @@ class CollectionsListRoute
     int? collectionId,
     List<_i12.PageRouteInfo>? children,
   }) : super(
-         CollectionsListRoute.name,
-         args: CollectionsListRouteArgs(key: key, collectionId: collectionId),
-         initialChildren: children,
-       );
+          CollectionsListRoute.name,
+          args: CollectionsListRouteArgs(key: key, collectionId: collectionId),
+          initialChildren: children,
+        );
 
   static const String name = 'CollectionsListRoute';
 
@@ -98,15 +98,15 @@ class CreateRoute extends _i12.PageRouteInfo<CreateRouteArgs> {
     int? noteId,
     List<_i12.PageRouteInfo>? children,
   }) : super(
-         CreateRoute.name,
-         args: CreateRouteArgs(
-           key: key,
-           entityType: entityType,
-           collectionId: collectionId,
-           noteId: noteId,
-         ),
-         initialChildren: children,
-       );
+          CreateRoute.name,
+          args: CreateRouteArgs(
+            key: key,
+            entityType: entityType,
+            collectionId: collectionId,
+            noteId: noteId,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'CreateRoute';
 
@@ -167,7 +167,7 @@ class CreateRouteArgs {
 /// [_i3.GridScaleTestPage]
 class GridScaleTestRoute extends _i12.PageRouteInfo<void> {
   const GridScaleTestRoute({List<_i12.PageRouteInfo>? children})
-    : super(GridScaleTestRoute.name, initialChildren: children);
+      : super(GridScaleTestRoute.name, initialChildren: children);
 
   static const String name = 'GridScaleTestRoute';
 
@@ -183,7 +183,7 @@ class GridScaleTestRoute extends _i12.PageRouteInfo<void> {
 /// [_i4.HistoryListPage]
 class HistoryListRoute extends _i12.PageRouteInfo<void> {
   const HistoryListRoute({List<_i12.PageRouteInfo>? children})
-    : super(HistoryListRoute.name, initialChildren: children);
+      : super(HistoryListRoute.name, initialChildren: children);
 
   static const String name = 'HistoryListRoute';
 
@@ -203,10 +203,10 @@ class HomeListRoute extends _i12.PageRouteInfo<HomeListRouteArgs> {
     int? collectionId,
     List<_i12.PageRouteInfo>? children,
   }) : super(
-         HomeListRoute.name,
-         args: HomeListRouteArgs(key: key, collectionId: collectionId),
-         initialChildren: children,
-       );
+          HomeListRoute.name,
+          args: HomeListRouteArgs(key: key, collectionId: collectionId),
+          initialChildren: children,
+        );
 
   static const String name = 'HomeListRoute';
 
@@ -248,7 +248,7 @@ class HomeListRouteArgs {
 /// [_i6.HomePage]
 class HomeRoute extends _i12.PageRouteInfo<void> {
   const HomeRoute({List<_i12.PageRouteInfo>? children})
-    : super(HomeRoute.name, initialChildren: children);
+      : super(HomeRoute.name, initialChildren: children);
 
   static const String name = 'HomeRoute';
 
@@ -268,10 +268,10 @@ class NoteDetailRoute extends _i12.PageRouteInfo<NoteDetailRouteArgs> {
     required int noteId,
     List<_i12.PageRouteInfo>? children,
   }) : super(
-         NoteDetailRoute.name,
-         args: NoteDetailRouteArgs(key: key, noteId: noteId),
-         initialChildren: children,
-       );
+          NoteDetailRoute.name,
+          args: NoteDetailRouteArgs(key: key, noteId: noteId),
+          initialChildren: children,
+        );
 
   static const String name = 'NoteDetailRoute';
 
@@ -315,10 +315,10 @@ class NoteListRoute extends _i12.PageRouteInfo<NoteListRouteArgs> {
     int? collectionId,
     List<_i12.PageRouteInfo>? children,
   }) : super(
-         NoteListRoute.name,
-         args: NoteListRouteArgs(key: key, collectionId: collectionId),
-         initialChildren: children,
-       );
+          NoteListRoute.name,
+          args: NoteListRouteArgs(key: key, collectionId: collectionId),
+          initialChildren: children,
+        );
 
   static const String name = 'NoteListRoute';
 
@@ -360,7 +360,7 @@ class NoteListRouteArgs {
 /// [_i9.RoamPage]
 class RoamRoute extends _i12.PageRouteInfo<void> {
   const RoamRoute({List<_i12.PageRouteInfo>? children})
-    : super(RoamRoute.name, initialChildren: children);
+      : super(RoamRoute.name, initialChildren: children);
 
   static const String name = 'RoamRoute';
 
@@ -376,7 +376,7 @@ class RoamRoute extends _i12.PageRouteInfo<void> {
 /// [_i10.SamplePage]
 class SampleRoute extends _i12.PageRouteInfo<void> {
   const SampleRoute({List<_i12.PageRouteInfo>? children})
-    : super(SampleRoute.name, initialChildren: children);
+      : super(SampleRoute.name, initialChildren: children);
 
   static const String name = 'SampleRoute';
 
@@ -392,7 +392,7 @@ class SampleRoute extends _i12.PageRouteInfo<void> {
 /// [_i11.SearchPage]
 class SearchRoute extends _i12.PageRouteInfo<void> {
   const SearchRoute({List<_i12.PageRouteInfo>? children})
-    : super(SearchRoute.name, initialChildren: children);
+      : super(SearchRoute.name, initialChildren: children);
 
   static const String name = 'SearchRoute';
 
