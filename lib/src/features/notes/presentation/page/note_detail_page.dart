@@ -2,10 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/design_system/collection/collection_text_button.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/more_options_action_button.dart';
 import 'package:flutter_komorebi/src/features/history/data/history_repository.dart';
 import 'package:flutter_komorebi/src/features/history/presentation/widget/history_item_list_tile.dart';
+import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:flutter_komorebi/src/features/notes/presentation/notes_list.dart';
+import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @RoutePage()
@@ -22,6 +25,20 @@ class NoteDetailPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('note detail page'),
+        actions: [
+          MoreOptionsActionButton(
+            children: [
+              ListTile(
+                leading: Icon(Icons.edit),
+                title: Text('Edit Note'),
+                onTap: () {
+                  context.pop();
+                  context.pushRoute(CreateRoute(entityType: EntityType.note, noteId: noteId));
+                },
+              ),
+            ],
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: AsyncValueWidget(

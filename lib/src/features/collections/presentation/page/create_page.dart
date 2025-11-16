@@ -31,7 +31,9 @@ class CreatePage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     print('got collection id $collectionId');
     final collectionListStream = ref.watch(collectionsListStreamProvider(ROOT_COLLECTION_ID));
-    final connectedCollections = useState<List<CollectionEntity>>([]);
+    final prevConnectedCollections = useState<List<CollectionEntity>>([]);
+    final newConnectedCollections = useState<List<CollectionEntity>>([]);
+    final allConnectedCollections = [...prevConnectedCollections.value, ...newConnectedCollections.value];
 
     final inputTextEditingController = useTextEditingController();
     final dropdownValue = useState<EntityType?>(entityType);
@@ -58,6 +60,10 @@ class CreatePage extends HookConsumerWidget {
           print('setting text of note for update');
           inputTextEditingController.text = note.content ?? '';
           pickedImage.value = note.media;
+        });
+
+        ref.read(collectionsRepositoryProvider).getCollectionsOfNote(noteId!).then((result) {
+          prevConnectedCollections.value = result;
         });
       }
 
@@ -97,7 +103,7 @@ class CreatePage extends HookConsumerWidget {
                         onChanged: (value) {
                           if (value == null) return;
                           dropdownButtonCollection.value = value;
-                          connectedCollections.value.add(value);
+                          newConnectedCollections.value.add(value);
                         },
                       );
                     },
@@ -105,17 +111,17 @@ class CreatePage extends HookConsumerWidget {
                 ),
               ),
 
-            if (connectedCollections.value.isNotEmpty)
+            if (allConnectedCollections.isNotEmpty)
               Wrap(
                 runSpacing: 10,
                 spacing: 10,
-                children: connectedCollections.value
+                children: allConnectedCollections
                     .map(
                       (c) => InputChip(
                         label: Text(c.name),
-                        selected: connectedCollections.value.contains(c),
+                        selected: allConnectedCollections.contains(c),
                         onDeleted: () {
-                          connectedCollections.value.remove(c);
+                          allConnectedCollections.remove(c);
                         },
                       ),
                     )
@@ -190,6 +196,11 @@ class CreatePage extends HookConsumerWidget {
                           media: pickedImage.value,
                         )
                         .then((_) {
+                      ref.read(connectionUsecaseProvider).addNoteToCollectionList(
+                            noteId: noteId!,
+                            collectionIds: newConnectedCollections.value.map((c) => c.id).toList(),
+                          );
+
                       inputTextEditingController.clear();
 
                       context.pop();
@@ -201,7 +212,7 @@ class CreatePage extends HookConsumerWidget {
                         .createNoteAndConnect(
                           content: value,
                           media: pickedImage.value,
-                          collectionIds: connectedCollections.value.map((c) => c.id).toList(),
+                          collectionIds: newConnectedCollections.value.map((c) => c.id).toList(),
                         )
                         .then((result) {
                       if (result) {
