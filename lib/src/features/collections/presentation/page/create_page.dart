@@ -235,21 +235,25 @@ class _InputWidget extends HookConsumerWidget {
       cursor: SystemMouseCursors.click,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Container(
-          decoration: BoxDecoration(border: Border.all()),
-          child: Form(
-            child: TextFormField(
-              controller: inputTextEditingController,
-              decoration: InputDecoration(hintText: 'What are you thinking about?'),
-              autofocus: true,
-              maxLines: 10,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return '';
-                }
-                return null;
-              },
+        child: Form(
+          child: TextFormField(
+            controller: inputTextEditingController,
+            decoration: InputDecoration(
+              hintText: 'What are you thinking about?',
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
             ),
+            autofocus: true,
+            minLines: 1,
+            maxLines: null,
+            keyboardType: TextInputType.multiline,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return '';
+              }
+              return null;
+            },
           ),
         ),
       ),
