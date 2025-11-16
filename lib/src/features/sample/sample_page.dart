@@ -2,10 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
+import 'package:flutter_komorebi/src/features/collections/presentation/collections_grid.dart';
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
+import 'package:flutter_komorebi/src/features/notes/presentation/notes_list.dart';
 import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -17,6 +20,22 @@ class SamplePage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final collectionIds = ref.watch(allCollectionIdsProvider);
     final noteIds = ref.watch(allNoteIdsProvider);
+
+    final notesZoom = useState(ZoomLevelType.medium);
+
+    var temp = NotesList(
+      zoomLevel: notesZoom.value,
+    );
+
+    useEffect(() {
+      notesZoom.addListener(() {
+        temp = NotesList(
+          zoomLevel: notesZoom.value,
+        );
+      });
+
+      return () {};
+    }, []);
 
     final buttonData = [
       _SamplePageTextButton(
@@ -80,6 +99,27 @@ class SamplePage extends HookConsumerWidget {
         route: (_) => ImageClipboardSampleRoute(isDebug: true),
         name: 'image clipboard sample page',
       ),
+      _SamplePageTextButton(
+        route: (_) => GridScaleTestRoute(
+            child: CollectionsGrid(
+                // zoomLevel: ref.watch(collectionsGridZoomLevelProvider),
+                ),
+            onZoomFinished: (zoomLevel) {
+              // ref.read(collectionsGridZoomLevelProvider.notifier).state = zoomLevel;
+            }),
+        name: 'collection grid scale test route',
+      ),
+      _SamplePageTextButton(
+        route: (_) => GridScaleTestRoute(
+          child: temp,
+          onZoomFinished: (zoomLevel) {
+            print('hetting new zoom level $zoomLevel');
+
+            notesZoom.value = zoomLevel;
+          },
+        ),
+        name: 'notes list scale test route',
+      ),
     ];
 
     final searchTextEditingController = useTextEditingController();
@@ -104,16 +144,7 @@ class SamplePage extends HookConsumerWidget {
                 },
               ),
             ),
-
             ...buttons.value,
-
-            // technical tests
-            TextButton(
-              onPressed: () {
-                // context.pushRoute();
-              },
-              child: Text('grid scale test page'),
-            )
           ],
         ),
       ),

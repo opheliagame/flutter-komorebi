@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
+
 class NoteEntity {
   final int id;
   final String? content;
@@ -17,4 +19,6 @@ class NoteEntity {
     required this.createdAt,
     required this.modifiedAt,
   });
+
+  String? get randomWord => content?.split(' ').toList().sample(1).single;
 }

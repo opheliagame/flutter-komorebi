@@ -11,6 +11,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i13;
 import 'package:flutter/material.dart' as _i14;
+import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart'
+    as _i16;
 import 'package:flutter_komorebi/src/features/collections/presentation/page/collections_list_page.dart'
     as _i1;
 import 'package:flutter_komorebi/src/features/collections/presentation/page/create_page.dart'
@@ -167,18 +169,64 @@ class CreateRouteArgs {
 
 /// generated route for
 /// [_i3.GridScaleTestPage]
-class GridScaleTestRoute extends _i13.PageRouteInfo<void> {
-  const GridScaleTestRoute({List<_i13.PageRouteInfo>? children})
-      : super(GridScaleTestRoute.name, initialChildren: children);
+class GridScaleTestRoute extends _i13.PageRouteInfo<GridScaleTestRouteArgs> {
+  GridScaleTestRoute({
+    _i14.Key? key,
+    required _i14.Widget child,
+    void Function(_i16.ZoomLevelType)? onZoomFinished,
+    List<_i13.PageRouteInfo>? children,
+  }) : super(
+          GridScaleTestRoute.name,
+          args: GridScaleTestRouteArgs(
+            key: key,
+            child: child,
+            onZoomFinished: onZoomFinished,
+          ),
+          initialChildren: children,
+        );
 
   static const String name = 'GridScaleTestRoute';
 
   static _i13.PageInfo page = _i13.PageInfo(
     name,
     builder: (data) {
-      return const _i3.GridScaleTestPage();
+      final args = data.argsAs<GridScaleTestRouteArgs>();
+      return _i3.GridScaleTestPage(
+        key: args.key,
+        child: args.child,
+        onZoomFinished: args.onZoomFinished,
+      );
     },
   );
+}
+
+class GridScaleTestRouteArgs {
+  const GridScaleTestRouteArgs({
+    this.key,
+    required this.child,
+    this.onZoomFinished,
+  });
+
+  final _i14.Key? key;
+
+  final _i14.Widget child;
+
+  final void Function(_i16.ZoomLevelType)? onZoomFinished;
+
+  @override
+  String toString() {
+    return 'GridScaleTestRouteArgs{key: $key, child: $child, onZoomFinished: $onZoomFinished}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! GridScaleTestRouteArgs) return false;
+    return key == other.key && child == other.child;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ child.hashCode;
 }
 
 /// generated route for

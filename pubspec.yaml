@@ -23,6 +23,7 @@ dependencies:
   flutter_hooks: ^0.21.2
   image_picker: ^1.2.0
   auto_route: ^10.1.0+1
+  collection: ^1.19.1
 
 
 dev_dependencies:
