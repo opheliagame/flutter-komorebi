@@ -5,7 +5,6 @@ import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart'
 import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
-import 'package:flutter_komorebi/src/features/collections/presentation/collections_grid.dart';
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:flutter_komorebi/src/features/notes/presentation/notes_list.dart';
@@ -100,24 +99,11 @@ class SamplePage extends HookConsumerWidget {
         name: 'image clipboard sample page',
       ),
       _SamplePageTextButton(
-        route: (_) => GridScaleTestRoute(
-            child: CollectionsGrid(
-                // zoomLevel: ref.watch(collectionsGridZoomLevelProvider),
-                ),
-            onZoomFinished: (zoomLevel) {
-              // ref.read(collectionsGridZoomLevelProvider.notifier).state = zoomLevel;
-            }),
+        route: (_) => GridScaleTestRoute(isCollectionGrid: true),
         name: 'collection grid scale test route',
       ),
       _SamplePageTextButton(
-        route: (_) => GridScaleTestRoute(
-          child: temp,
-          onZoomFinished: (zoomLevel) {
-            print('hetting new zoom level $zoomLevel');
-
-            notesZoom.value = zoomLevel;
-          },
-        ),
+        route: (_) => GridScaleTestRoute(isCollectionGrid: false),
         name: 'notes list scale test route',
       ),
     ];

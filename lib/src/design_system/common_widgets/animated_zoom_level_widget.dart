@@ -1,5 +1,5 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/features/notes/presentation/notes_list.dart';
 
 enum ZoomLevelType {
   small,
@@ -27,9 +27,15 @@ extension ZoomLevelTypeExtension on ZoomLevelType {
 }
 
 class AnimatedZoomLevelWidget extends StatefulWidget {
-  const AnimatedZoomLevelWidget({super.key, required this.child, this.onZoomFinished});
+  const AnimatedZoomLevelWidget({
+    super.key,
+    required this.childBuilder,
+    this.onZoomFinished,
+  });
 
-  final Widget child;
+  /// ⬅️ You provide a widget based on current zoom level
+  final Widget Function(ZoomLevelType zoomLevel) childBuilder;
+
   final void Function(ZoomLevelType)? onZoomFinished;
 
   @override
@@ -39,83 +45,97 @@ class AnimatedZoomLevelWidget extends StatefulWidget {
 class _AnimatedZoomLevelWidgetState extends State<AnimatedZoomLevelWidget> {
   double _scale = 1.0;
   double _baseScale = 1.0;
-  Offset _pos = Offset.zero;
-  ZoomLevelType prevZoomLevel = ZoomLevelType.medium;
-  ZoomLevelType zoomLevel = ZoomLevelType.medium;
+
   bool _hasStartedScale = false;
 
-  final Offset _basePos = Offset.zero;
-  final double minScale = 0.5;
-  final double maxScale = 2.0;
+  ZoomLevelType zoomLevel = ZoomLevelType.medium;
+
+  final double minScale = 0.8;
+  final double maxScale = 1.4;
+
+  late ScaleGestureRecognizer _scaleGesture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scaleGesture = ScaleGestureRecognizer()
+      ..team = GestureArenaTeam() // allows pinch to override scroll
+      ..onStart = _onScaleStart
+      ..onUpdate = _onScaleUpdate
+      ..onEnd = _onScaleEnd;
+  }
+
+  // ------------------------------
+  // SCALE HANDLERS
+  // ------------------------------
+
+  void _onScaleStart(ScaleStartDetails d) {
+    setState(() {
+      _hasStartedScale = true;
+      _baseScale = _scale;
+    });
+  }
+
+  void _onScaleUpdate(ScaleUpdateDetails d) {
+    if (d.pointerCount < 2) return;
+
+    final newScale = (_baseScale * d.scale).clamp(minScale, maxScale);
+
+    setState(() => _scale = newScale);
+  }
+
+  void _onScaleEnd(ScaleEndDetails d) {
+    setState(() => _hasStartedScale = false);
+
+    // Pick next zoom level based on final scale
+    if (_scale > 1.15) {
+      zoomLevel = zoomLevel.zoomIn();
+    } else if (_scale < 0.9) {
+      zoomLevel = zoomLevel.zoomOut();
+    }
+
+    // Reset scale overlay
+    setState(() => _scale = 1.0);
+
+    widget.onZoomFinished?.call(zoomLevel);
+  }
+
+  // ------------------------------
+  // BUILD
+  // ------------------------------
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return RawGestureDetector(
       behavior: HitTestBehavior.translucent,
-      onScaleStart: (details) {
-        setState(() {
-          _baseScale = _scale;
-          _hasStartedScale = true;
-        });
-      },
-      onScaleUpdate: (details) {
-        if (details.pointerCount < 2) return;
-
-        final newScale = (_baseScale * details.scale).clamp(minScale, maxScale);
-
-        final delta = details.focalPointDelta / newScale;
-
-        setState(() {
-          _scale = newScale;
-          _pos = _basePos + delta;
-        });
-      },
-      onScaleEnd: (details) {
-        setState(() {
-          _hasStartedScale = false;
-          _scale = _scale.clamp(minScale, maxScale);
-
-          if (_scale > 1 && _scale < maxScale) {
-            zoomLevel = zoomLevel.zoomIn();
-          }
-          if (_scale < 1) {
-            zoomLevel = zoomLevel.zoomOut();
-          }
-        });
-
-        // widget.onZoomFinished?.call(zoomLevel);
+      gestures: {
+        ScaleGestureRecognizer: GestureRecognizerFactoryWithHandlers<ScaleGestureRecognizer>(
+          () => _scaleGesture,
+          (instance) {},
+        ),
       },
       child: Stack(
         children: [
-          /// Normal view
+          // Base view — interactive
           AnimatedOpacity(
-            opacity: 1.0,
-            duration: const Duration(milliseconds: 200),
+            opacity: _hasStartedScale ? 0.0 : 1.0,
+            duration: const Duration(milliseconds: 120),
             curve: Curves.easeOut,
-            child: NotesList(
-              zoomLevel: zoomLevel,
-            ),
+            child: widget.childBuilder(zoomLevel),
           ),
 
           if (_hasStartedScale)
-
-            /// Zoomable view (Google-Photos-like)
             AnimatedOpacity(
-              opacity: 0.5,
-              duration: const Duration(milliseconds: 200),
+              opacity: 1.0,
+              duration: const Duration(milliseconds: 100),
               curve: Curves.easeOut,
-              child: IgnorePointer(
-                ignoring: false, // only catch touches in zoom mode
-                child: ClipRect(
-                  child: Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.identity()
-                      ..translate(_pos.dx, _pos.dy)
-                      ..scale(_scale),
-                    child: NotesList(
-                      zoomLevel: zoomLevel,
-                    ),
-                  ),
+              child: Transform.scale(
+                scale: _scale,
+                alignment: Alignment.center,
+                child: IgnorePointer(
+                  ignoring: true, // Prevents scroll/gesture conflicts
+                  child: widget.childBuilder(zoomLevel),
                 ),
               ),
             ),

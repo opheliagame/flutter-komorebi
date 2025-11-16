@@ -11,8 +11,6 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i13;
 import 'package:flutter/material.dart' as _i14;
-import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart'
-    as _i16;
 import 'package:flutter_komorebi/src/features/collections/presentation/page/collections_list_page.dart'
     as _i1;
 import 'package:flutter_komorebi/src/features/collections/presentation/page/create_page.dart'
@@ -172,15 +170,13 @@ class CreateRouteArgs {
 class GridScaleTestRoute extends _i13.PageRouteInfo<GridScaleTestRouteArgs> {
   GridScaleTestRoute({
     _i14.Key? key,
-    required _i14.Widget child,
-    void Function(_i16.ZoomLevelType)? onZoomFinished,
+    required bool isCollectionGrid,
     List<_i13.PageRouteInfo>? children,
   }) : super(
           GridScaleTestRoute.name,
           args: GridScaleTestRouteArgs(
             key: key,
-            child: child,
-            onZoomFinished: onZoomFinished,
+            isCollectionGrid: isCollectionGrid,
           ),
           initialChildren: children,
         );
@@ -193,40 +189,33 @@ class GridScaleTestRoute extends _i13.PageRouteInfo<GridScaleTestRouteArgs> {
       final args = data.argsAs<GridScaleTestRouteArgs>();
       return _i3.GridScaleTestPage(
         key: args.key,
-        child: args.child,
-        onZoomFinished: args.onZoomFinished,
+        isCollectionGrid: args.isCollectionGrid,
       );
     },
   );
 }
 
 class GridScaleTestRouteArgs {
-  const GridScaleTestRouteArgs({
-    this.key,
-    required this.child,
-    this.onZoomFinished,
-  });
+  const GridScaleTestRouteArgs({this.key, required this.isCollectionGrid});
 
   final _i14.Key? key;
 
-  final _i14.Widget child;
-
-  final void Function(_i16.ZoomLevelType)? onZoomFinished;
+  final bool isCollectionGrid;
 
   @override
   String toString() {
-    return 'GridScaleTestRouteArgs{key: $key, child: $child, onZoomFinished: $onZoomFinished}';
+    return 'GridScaleTestRouteArgs{key: $key, isCollectionGrid: $isCollectionGrid}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! GridScaleTestRouteArgs) return false;
-    return key == other.key && child == other.child;
+    return key == other.key && isCollectionGrid == other.isCollectionGrid;
   }
 
   @override
-  int get hashCode => key.hashCode ^ child.hashCode;
+  int get hashCode => key.hashCode ^ isCollectionGrid.hashCode;
 }
 
 /// generated route for
