@@ -76,6 +76,10 @@ class SamplePage extends HookConsumerWidget {
         route: (_) => HistoryListRoute(),
         name: 'history list page',
       ),
+      _SamplePageTextButton(
+        route: (_) => ImageClipboardSampleRoute(isDebug: true),
+        name: 'image clipboard sample page',
+      ),
     ];
 
     final searchTextEditingController = useTextEditingController();

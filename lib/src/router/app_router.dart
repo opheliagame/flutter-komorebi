@@ -55,5 +55,9 @@ class AppRouter extends RootStackRouter {
           path: '/gridscaletest',
           page: GridScaleTestRoute.page,
         ),
+        AutoRoute(
+          path: '/image-copy-test',
+          page: ImageClipboardSampleRoute.page,
+        ),
       ];
 }

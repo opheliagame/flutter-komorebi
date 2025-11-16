@@ -10,6 +10,7 @@ import 'package:flutter_komorebi/src/features/collections/presentation/collectio
 import 'package:flutter_komorebi/src/features/connection/usecase/connection_usecase.dart';
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
+import 'package:flutter_komorebi/src/features/sample/image_clipboard.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -126,6 +127,13 @@ class CreatePage extends HookConsumerWidget {
               inputTextEditingController: inputTextEditingController,
             ),
 
+            // paste from clipboard
+            ImageClipboardWidget(
+              onPasteImage: (image) {
+                pickedImage.value = image;
+              },
+            ),
+
             if (pickedImage.value != null) Image.memory(pickedImage.value!),
             if (isEdit || pickedImage.value == null)
               _InputImagePicker(
@@ -232,6 +240,7 @@ class _InputWidget extends HookConsumerWidget {
           child: Form(
             child: TextFormField(
               controller: inputTextEditingController,
+              decoration: InputDecoration(hintText: 'What are you thinking about?'),
               autofocus: true,
               maxLines: 10,
               validator: (value) {
