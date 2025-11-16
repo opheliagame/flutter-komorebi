@@ -17,33 +17,30 @@ class NotesList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final notesListValue = ref.watch(notesListStreamProvider((collectionId ?? ROOT_COLLECTION_ID)));
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: AsyncValueWidget(
-        value: notesListValue,
-        data: (notes) {
-          if (notes.isEmpty) {
-            return Center(child: Text('you havent collected any notes here'));
-          }
+    return AsyncValueWidget(
+      value: notesListValue,
+      data: (notes) {
+        if (notes.isEmpty) {
+          return Center(child: Text('you havent collected any notes here'));
+        }
 
-          return ListView.separated(
-            itemCount: notes.length,
-            itemBuilder: (context, index) {
-              final note = notes[index];
+        return ListView.separated(
+          itemCount: notes.length,
+          itemBuilder: (context, index) {
+            final note = notes[index];
 
-              return NoteListItem(
-                note: note,
-                onTap: () {
-                  context.pushRoute(NoteDetailRoute(noteId: note.id));
-                },
-              );
-            },
-            separatorBuilder: (_, index) {
-              return Divider();
-            },
-          );
-        },
-      ),
+            return NoteListItem(
+              note: note,
+              onTap: () {
+                context.pushRoute(NoteDetailRoute(noteId: note.id));
+              },
+            );
+          },
+          separatorBuilder: (_, index) {
+            return Divider();
+          },
+        );
+      },
     );
   }
 }
@@ -63,16 +60,23 @@ class NoteListItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (note.content != null)
-              Text(
-                note.content!,
-                style: Theme.of(context).textTheme.bodyLarge,
+            if (note.content != null) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  note.content!,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               ),
-            if (note.media != null)
+              const SizedBox(
+                height: 8,
+              ),
+            ],
+            if (note.media != null) ...[
               Image.memory(
                 note.media!,
                 fit: BoxFit.contain,
@@ -80,7 +84,14 @@ class NoteListItem extends StatelessWidget {
                   return Text('error fetching image');
                 },
               ),
-            Text(dateFormatter.format(note.modifiedAt)),
+              const SizedBox(
+                height: 8,
+              ),
+            ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(dateFormatter.format(note.modifiedAt)),
+            ),
           ],
         ),
       ),

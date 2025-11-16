@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/design_system/collection/collection_text_button.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/more_options_action_button.dart';
+import 'package:flutter_komorebi/src/design_system/spacing.dart';
 import 'package:flutter_komorebi/src/features/history/data/history_repository.dart';
-import 'package:flutter_komorebi/src/features/history/presentation/widget/history_item_list_tile.dart';
+import 'package:flutter_komorebi/src/features/history/presentation/widget/history_item_short_widget.dart';
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:flutter_komorebi/src/features/notes/presentation/notes_list.dart';
@@ -45,7 +46,7 @@ class NoteDetailPage extends HookConsumerWidget {
           value: noteStreamValue,
           data: (note) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +62,10 @@ class NoteDetailPage extends HookConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('found in ${collections.length.toString()} collections'),
+                          Padding(
+                            padding: kHorizontalPadding,
+                            child: Text('found in ${collections.length.toString()} collections'),
+                          ),
                           Wrap(
                             runSpacing: 10,
                             spacing: 10,
@@ -76,19 +80,32 @@ class NoteDetailPage extends HookConsumerWidget {
 
                   // history
                   SizedBox(height: 8),
-                  Flexible(
-                    child: AsyncValueWidget(
-                      value: historyListStreamValue,
-                      data: (historyItems) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: historyItems.map((historyItem) {
-                            return HistoryItemListTile(historyItem: historyItem);
-                          }).toList(),
-                        );
-                      },
+                  Padding(
+                    padding: kHorizontalPadding,
+                    child: Text(
+                      'Note history',
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
+                  SizedBox(height: 8),
+                  Padding(
+                    padding: kHorizontalPadding,
+                    child: Flexible(
+                      child: AsyncValueWidget(
+                        value: historyListStreamValue,
+                        data: (historyItems) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: historyItems.map((historyItem) {
+                              return HistoryItemShortWidget(historyItem: historyItem);
+                            }).toList(),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 32),
                 ],
               ),
             );
