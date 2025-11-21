@@ -9,7 +9,8 @@ abstract class ConnectionRepository {
   Future<bool> removeNoteFromCollection({required int noteId, required int collectionId});
   Future<bool> removeNoteFromCollectionList({required int noteId, required List<int> collectionIds});
 
-  Future<List<CollectionEntity>> getRelatedCollections(int collectionId);
+  Future<List<CollectionEntity>> getRelatedCollections(
+      {required int collectionId, required int limit, required int offset});
   Stream<List<CollectionEntity>> watchRelatedCollections(int collectionId);
 }
 

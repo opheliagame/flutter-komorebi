@@ -11,9 +11,11 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
 
   @override
   Future<bool> addNoteToCollection({required int noteId, required int collectionId}) async {
-    final query = database
-        .into(database.collectionNoteTable)
-        .insert(CollectionNoteTableCompanion.insert(noteId: noteId, collectionId: collectionId));
+    final query = database.into(database.collectionNoteRefTable).insert(CollectionNoteRefTableCompanion.insert(
+          noteId: noteId,
+          collectionId: collectionId,
+          createdAt: DateTime.now(),
+        ));
 
     try {
       await query;
@@ -28,9 +30,13 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
     try {
       await database.batch((batch) {
         batch.insertAll(
-          database.collectionNoteTable,
+          database.collectionNoteRefTable,
           List.from(collectionIds).map(
-            (collectionId) => CollectionNoteTableCompanion.insert(noteId: noteId, collectionId: collectionId),
+            (collectionId) => CollectionNoteRefTableCompanion.insert(
+              noteId: noteId,
+              collectionId: collectionId,
+              createdAt: DateTime.now(),
+            ),
           ),
         );
       });
@@ -43,7 +49,7 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
 
   @override
   Future<bool> removeNoteFromCollection({required int noteId, required int collectionId}) async {
-    final query = database.delete(database.collectionNoteTable)
+    final query = database.delete(database.collectionNoteRefTable)
       ..where((q) => q.noteId.equals(noteId) & q.collectionId.equals(collectionId));
     try {
       await query.go();
@@ -58,7 +64,7 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
     try {
       await database.batch((batch) {
         batch.deleteWhere(
-          database.collectionNoteTable,
+          database.collectionNoteRefTable,
           (q) => q.noteId.equals(noteId) & q.collectionId.isIn(collectionIds),
         );
       });
@@ -69,17 +75,41 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
     }
   }
 
-  @override
-  Future<List<CollectionEntity>> getRelatedCollections(int collectionId) async {
-    final query = database.select(database.collectionTable)
-      ..distinct
-      ..join([
-        innerJoin(database.relatedCollection, database.relatedCollection.id.equals(collectionId)),
-      ]);
+  JoinedSelectStatement _getRelatedCollectionsQuery(int collectionId, {int? limit, int? offset}) {
+    final cn1 = database.collectionNoteRefTable.createAlias('cn1');
+    final cn2 = database.collectionNoteRefTable.createAlias('cn2');
 
+    var query = database.select(database.collectionTable).join([
+      innerJoin(
+        cn1,
+        cn1.collectionId.equalsExp(database.collectionTable.id),
+      ),
+      innerJoin(
+        cn2,
+        cn2.noteId.equalsExp(database.collectionNoteRefTable.noteId),
+      ),
+    ])
+      ..where(cn2.collectionId.equals(collectionId))
+      ..orderBy([OrderingTerm.desc(cn2.createdAt)])
+      ..distinct;
+
+    if (limit != null && offset != null) {
+      query = query..limit(limit, offset: offset);
+    }
+
+    return query;
+  }
+
+  @override
+  Future<List<CollectionEntity>> getRelatedCollections({
+    required int collectionId,
+    required int limit,
+    required int offset,
+  }) async {
+    final query = _getRelatedCollectionsQuery(collectionId, limit: limit, offset: offset);
     try {
       final result = await query.get();
-      return result.map((rows) => rows.toDomain()).toList();
+      return result.map((rows) => rows.readTable(database.collectionTable).toDomain()).toList();
     } catch (e) {
       rethrow;
     }
@@ -87,36 +117,10 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
 
   @override
   Stream<List<CollectionEntity>> watchRelatedCollections(int collectionId) {
-    // id = collection id
-
-    final cnAlias = database.collectionNoteTable.createAlias('cn1');
-
-    final query = database.select(database.collectionTable).join([
-      innerJoin(
-        database.collectionNoteTable,
-        database.collectionNoteTable.collectionId.equalsExp(database.collectionTable.id),
-      ),
-      innerJoin(
-        database.collectionNoteTable.createAlias('cn2'),
-        database.collectionNoteTable.createAlias('cn2').noteId.equalsExp(database.collectionNoteTable.noteId),
-      ),
-    ])
-      ..where(database.collectionNoteTable.createAlias('cn2').collectionId.equals(collectionId))
-      ..distinct;
-
-    final list = query.watch().map(
+    final list = _getRelatedCollectionsQuery(collectionId).watch().map(
           (rows) => rows.map((row) => row.readTable(database.collectionTable).toDomain()).toSet().toList(),
         );
 
     return list;
-
-    // try {
-    //   return query.watch().map(
-    //         (rows) => rows.map((row) => row.toDomain()).toList(),
-    //       );
-    // } catch (e) {
-    //   debugPrint(e.toString());
-    //   rethrow;
-    // }
   }
 }

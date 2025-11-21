@@ -12,7 +12,7 @@ class RelatedCollectionsRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collectionsListValue = ref.watch(collectionsListStreamProvider(collectionId ?? ROOT_COLLECTION_ID));
+    final collectionsListValue = ref.watch(relatedCollectionsListStreamProvider(collectionId ?? ROOT_COLLECTION_ID));
 
     return AsyncValueWidget(
       value: collectionsListValue,

@@ -13,7 +13,7 @@ extension MockDataSeeder on AppDatabase {
     // --- Step 0: Clear existing data before inserting new ---
     await batch((batch) {
       batch.deleteWhere(historyTable, (_) => const Constant(true));
-      batch.deleteWhere(collectionNoteTable, (_) => const Constant(true));
+      batch.deleteWhere(collectionNoteRefTable, (_) => const Constant(true));
       batch.deleteWhere(noteTable, (_) => const Constant(true));
       batch.deleteWhere(collectionTable, (_) => const Constant(true));
       batch.deleteWhere(noteCitationTable, (_) => const Constant(true));
@@ -81,10 +81,11 @@ extension MockDataSeeder on AppDatabase {
       final numConnections = 1 + random.nextInt(3);
       for (int j = 0; j < numConnections; j++) {
         final collectionId = collectionIds[random.nextInt(collectionIds.length)];
-        await into(collectionNoteTable).insert(
-          CollectionNoteTableCompanion.insert(
+        await into(collectionNoteRefTable).insert(
+          CollectionNoteRefTableCompanion.insert(
             noteId: noteId,
             collectionId: collectionId,
+            createdAt: DateTime.now(),
           ),
         );
         await into(historyTable).insert(
@@ -132,7 +133,7 @@ extension MockDataSeeder on AppDatabase {
     // --- Step 0: Clear existing data before inserting new ---
     await batch((batch) {
       batch.deleteWhere(historyTable, (_) => const Constant(true));
-      batch.deleteWhere(collectionNoteTable, (_) => const Constant(true));
+      batch.deleteWhere(collectionNoteRefTable, (_) => const Constant(true));
       batch.deleteWhere(noteTable, (_) => const Constant(true));
       batch.deleteWhere(collectionTable, (_) => const Constant(true));
       batch.deleteWhere(noteCitationTable, (_) => const Constant(true));
@@ -229,11 +230,8 @@ extension MockDataSeeder on AppDatabase {
         for (int i = 0; i < numConnections; i++) collectionIds[random.nextInt(collectionIds.length)]
       };
       for (final cId in selectedCollections) {
-        await into(collectionNoteTable).insert(
-          CollectionNoteTableCompanion.insert(
-            noteId: noteId,
-            collectionId: cId,
-          ),
+        await into(collectionNoteRefTable).insert(
+          CollectionNoteRefTableCompanion.insert(noteId: noteId, collectionId: cId, createdAt: DateTime.now()),
         );
         await into(historyTable).insert(
           HistoryTableCompanion.insert(

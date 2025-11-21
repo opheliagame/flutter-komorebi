@@ -11,7 +11,7 @@ class DriftCollectionsRepository implements CollectionsRepository {
   final AppDatabase database;
 
   @override
-  Future<List<CollectionEntity>> getRootCollections() async {
+  Future<List<CollectionEntity>> getAllCollections() async {
     final query = database.select(database.collectionTable)
       ..orderBy(
         [(u) => OrderingTerm(expression: database.collectionTable.modifiedAt, mode: OrderingMode.desc)],
@@ -21,7 +21,7 @@ class DriftCollectionsRepository implements CollectionsRepository {
   }
 
   @override
-  Stream<List<CollectionEntity>> watchRootCollections() {
+  Stream<List<CollectionEntity>> watchAllCollections() {
     final query = database.select(database.collectionTable)
       ..orderBy(
         [(u) => OrderingTerm(expression: database.collectionTable.modifiedAt, mode: OrderingMode.desc)],
@@ -102,7 +102,7 @@ class DriftCollectionsRepository implements CollectionsRepository {
   Future<bool> deleteAllCollections() async {
     try {
       await database.batch((batch) {
-        batch.deleteWhere(database.collectionNoteTable, (_) => const Constant(true));
+        batch.deleteWhere(database.collectionNoteRefTable, (_) => const Constant(true));
         batch.deleteWhere(database.noteTable, (_) => const Constant(true));
         batch.deleteWhere(database.collectionTable, (_) => const Constant(true));
         batch.deleteWhere(database.noteCitationTable, (_) => const Constant(true));
@@ -120,9 +120,9 @@ class DriftCollectionsRepository implements CollectionsRepository {
   Future<List<CollectionEntity>> getCollectionsOfNote(int noteId) async {
     final query = database.select(database.collectionTable).join([
       innerJoin(
-          database.collectionNoteTable,
-          database.collectionNoteTable.collectionId.equalsExp(database.collectionTable.id) &
-              database.collectionNoteTable.noteId.equals(noteId)),
+          database.collectionNoteRefTable,
+          database.collectionNoteRefTable.collectionId.equalsExp(database.collectionTable.id) &
+              database.collectionNoteRefTable.noteId.equals(noteId)),
     ])
       ..distinct;
 
@@ -134,9 +134,9 @@ class DriftCollectionsRepository implements CollectionsRepository {
   Stream<List<CollectionEntity>> watchCollectionsOfNote(int noteId) {
     final query = database.select(database.collectionTable).join([
       innerJoin(
-          database.collectionNoteTable,
-          database.collectionNoteTable.collectionId.equalsExp(database.collectionTable.id) &
-              database.collectionNoteTable.noteId.equals(noteId)),
+          database.collectionNoteRefTable,
+          database.collectionNoteRefTable.collectionId.equalsExp(database.collectionTable.id) &
+              database.collectionNoteRefTable.noteId.equals(noteId)),
     ])
       ..distinct;
 

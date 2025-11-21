@@ -30,7 +30,7 @@ class CreatePage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     print('got collection id $collectionId');
-    final collectionListStream = ref.watch(collectionsListStreamProvider(ROOT_COLLECTION_ID));
+    final collectionListStream = ref.watch(relatedCollectionsListStreamProvider(ROOT_COLLECTION_ID));
     final prevConnectedCollections = useState<List<CollectionEntity>>([]);
     final newConnectedCollections = useState<List<CollectionEntity>>([]);
     final allConnectedCollections = [...prevConnectedCollections.value, ...newConnectedCollections.value];

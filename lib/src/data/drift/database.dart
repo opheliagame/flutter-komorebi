@@ -1,12 +1,11 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/collection_media_table.dart';
+import 'package:flutter_komorebi/src/data/drift/domain/collection_note_ref_table.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/collection_table.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/history_table.dart';
-import 'package:flutter_komorebi/src/data/drift/domain/join_tables.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/note_citation_table.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/note_table.dart';
-import 'package:flutter_komorebi/src/data/drift/domain/related_collection_view.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -17,14 +16,12 @@ part 'database.g.dart';
   tables: [
     CollectionTable,
     NoteTable,
-    CollectionNoteTable,
+    CollectionNoteRefTable,
     CollectionMediaTable,
     NoteCitationTable,
     HistoryTable,
   ],
-  views: [
-    RelatedCollection,
-  ],
+  views: [],
 )
 class AppDatabase extends _$AppDatabase {
   // After generating code, this class needs to define a `schemaVersion` getter

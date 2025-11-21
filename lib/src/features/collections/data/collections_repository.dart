@@ -8,8 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract class CollectionsRepository {
   // crud operations
-  Future<List<CollectionEntity>> getRootCollections();
-  Stream<List<CollectionEntity>> watchRootCollections();
+  Future<List<CollectionEntity>> getAllCollections();
+  Stream<List<CollectionEntity>> watchAllCollections();
   Future<CollectionEntity> getCollection(int collectionId);
 
   Future<bool> createCollection({
@@ -36,34 +36,36 @@ final collectionsRepositoryProvider = Provider<CollectionsRepository>((ref) {
   return DriftCollectionsRepository(ref.read(appDatabaseProvider));
 });
 
-final collectionsListFutureProvider =
-    FutureProvider.family.autoDispose<List<CollectionEntity>, int>((ref, currentCollectionId) async {
+final collectionsListFutureProvider = FutureProvider.autoDispose<List<CollectionEntity>>((ref) async {
   final repository = ref.watch(collectionsRepositoryProvider);
-  final connectionsRepository = ref.watch(connectionRepositoryProvider);
-
-  return currentCollectionId == ROOT_COLLECTION_ID
-      ? repository.getRootCollections()
-      : connectionsRepository.getRelatedCollections(currentCollectionId);
+  return repository.getAllCollections();
 });
 
-final collectionsListStreamProvider = StreamProvider.family<List<CollectionEntity>, int>((ref, currentCollectionId) {
+final collectionsListStreamProvider = StreamProvider<List<CollectionEntity>>((ref) {
   final repository = ref.watch(collectionsRepositoryProvider);
-  final connectionsRepository = ref.watch(connectionRepositoryProvider);
-
-  return currentCollectionId == ROOT_COLLECTION_ID
-      ? repository.watchRootCollections()
-      : connectionsRepository.watchRelatedCollections(currentCollectionId);
+  return repository.watchAllCollections();
 });
 
 final collectionSingleFutureProvider = FutureProvider.family.autoDispose<CollectionEntity, int>((ref, id) {
   final repository = ref.watch(collectionsRepositoryProvider);
-
   return repository.getCollection(id);
 });
 
 final allCollectionIdsProvider = StreamProvider<Iterable<int>>((ref) {
   final repository = ref.read(collectionsRepositoryProvider);
-
-  final notes = repository.watchRootCollections();
+  final notes = repository.watchAllCollections();
   return notes.map((e) => e.map((e1) => e1.id));
+});
+
+final relatedCollectionsListFutureProvider =
+    FutureProvider.family.autoDispose<List<CollectionEntity>, int>((ref, collectionId) {
+  final repository = ref.watch(connectionRepositoryProvider);
+  // use 10 as default limit for now
+  return repository.getRelatedCollections(collectionId: collectionId, limit: 10, offset: 0);
+});
+
+final relatedCollectionsListStreamProvider = StreamProvider.family<List<CollectionEntity>, int>((ref, collectionId) {
+  final repository = ref.watch(connectionRepositoryProvider);
+  // use 10 as default limit for now
+  return repository.watchRelatedCollections(collectionId);
 });
