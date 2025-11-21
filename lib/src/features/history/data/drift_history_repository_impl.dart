@@ -26,6 +26,7 @@ class DriftHistoryRepositoryImpl implements HistoryRepository {
       leftOuterJoin(
           database.collectionTable, database.collectionTable.id.equalsExp(database.historyTable.collectionId)),
     ]).watch();
+    // TODO(imp): is this mapping not dangerous
     final histories = query.map(
       (e) => e.map<HistoryExpandedEntity>((e1) {
         final historyEntity = e1.readTable(database.historyTable).toDomain();

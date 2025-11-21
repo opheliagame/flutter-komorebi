@@ -61,11 +61,11 @@ final relatedCollectionsListFutureProvider =
     FutureProvider.family.autoDispose<List<CollectionEntity>, int>((ref, collectionId) {
   final repository = ref.watch(connectionRepositoryProvider);
   // use 10 as default limit for now
-  return repository.getRelatedCollections(collectionId: collectionId, limit: 10, offset: 0);
+  return repository.getSimilarCollectionsAsList(collectionId: collectionId, limit: 10, offset: 0);
 });
 
 final relatedCollectionsListStreamProvider = StreamProvider.family<List<CollectionEntity>, int>((ref, collectionId) {
   final repository = ref.watch(connectionRepositoryProvider);
   // use 10 as default limit for now
-  return repository.watchRelatedCollections(collectionId);
+  return repository.watchSimilarCollectionsAsList(collectionId);
 });

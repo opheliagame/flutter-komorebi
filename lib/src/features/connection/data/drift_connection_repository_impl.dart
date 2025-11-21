@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
+import 'package:flutter_komorebi/src/core/domain/similar_collections_entity.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/collection_table.dart';
 import 'package:flutter_komorebi/src/features/connection/data/connection_repository.dart';
@@ -75,7 +76,7 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
     }
   }
 
-  JoinedSelectStatement _getRelatedCollectionsQuery(int collectionId, {int? limit, int? offset}) {
+  JoinedSelectStatement _getSimilarCollectionsQuery(int collectionId, {int? limit, int? offset}) {
     final cn1 = database.collectionNoteRefTable.createAlias('cn1');
     final cn2 = database.collectionNoteRefTable.createAlias('cn2');
 
@@ -101,12 +102,12 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
   }
 
   @override
-  Future<List<CollectionEntity>> getRelatedCollections({
+  Future<List<CollectionEntity>> getSimilarCollectionsAsList({
     required int collectionId,
     required int limit,
     required int offset,
   }) async {
-    final query = _getRelatedCollectionsQuery(collectionId, limit: limit, offset: offset);
+    final query = _getSimilarCollectionsQuery(collectionId, limit: limit, offset: offset);
     try {
       final result = await query.get();
       return result.map((rows) => rows.readTable(database.collectionTable).toDomain()).toList();
@@ -116,11 +117,65 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
   }
 
   @override
-  Stream<List<CollectionEntity>> watchRelatedCollections(int collectionId) {
-    final list = _getRelatedCollectionsQuery(collectionId).watch().map(
+  Stream<List<CollectionEntity>> watchSimilarCollectionsAsList(int collectionId) {
+    final list = _getSimilarCollectionsQuery(collectionId).watch().map(
           (rows) => rows.map((row) => row.readTable(database.collectionTable).toDomain()).toSet().toList(),
         );
 
     return list;
+  }
+
+  @override
+  Future<List<SimilarCollectionsEntity>> getRecentSimilarCollections() async {
+    // use 5 as default limit for now
+    final limit = 5;
+
+    final query = database.select(database.collectionTable).join(
+      [
+        innerJoin(database.collectionNoteRefTable,
+            database.collectionTable.id.equalsExp(database.collectionNoteRefTable.collectionId)),
+      ],
+    )
+      ..limit(limit)
+      ..orderBy([OrderingTerm.desc(database.collectionNoteRefTable.createdAt)])
+      ..distinct;
+
+    try {
+      final result = await query.get();
+
+      List<SimilarCollectionsEntity> similarCollections = [];
+
+      final recentUpdatedCollections = result.map((e) => e.readTable(database.collectionTable).toDomain());
+      for (final collection in recentUpdatedCollections) {
+        final result = await getSimilarCollectionsAsList(collectionId: collection.id, limit: limit, offset: 0);
+        similarCollections.add(SimilarCollectionsEntity(collection: collection, similarCollections: result));
+      }
+
+      return similarCollections;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<SimilarCollectionsEntity> getSimilarCollections({
+    required int collectionId,
+    required int limit,
+    required int offset,
+  }) {
+    // TODO: implement getSimilarCollections
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<SimilarCollectionsEntity>> watchRecentSimilarCollections() {
+    // TODO: implement watchRecentSimilarCollections
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<SimilarCollectionsEntity> watchSimilarCollections(int collectionId) {
+    // TODO: implement watchSimilarCollections
+    throw UnimplementedError();
   }
 }

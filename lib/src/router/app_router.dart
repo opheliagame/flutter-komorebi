@@ -59,5 +59,13 @@ class AppRouter extends RootStackRouter {
           path: '/image-copy-test',
           page: ImageClipboardSampleRoute.page,
         ),
+        AutoRoute(
+          path: '/diagram-1',
+          page: ConnectionDiagramRoute.page,
+        ),
+        AutoRoute(
+          path: '/recents-page',
+          page: RecentsRoute.page,
+        ),
       ];
 }

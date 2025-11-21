@@ -106,6 +106,14 @@ class SamplePage extends HookConsumerWidget {
         route: (_) => GridScaleTestRoute(isCollectionGrid: false),
         name: 'notes list scale test route',
       ),
+      _SamplePageTextButton(
+        route: (_) => ConnectionDiagramRoute(),
+        name: 'connection diagram page',
+      ),
+      _SamplePageTextButton(
+        route: (_) => RecentsRoute(),
+        name: 'recents page',
+      ),
     ];
 
     final searchTextEditingController = useTextEditingController();
