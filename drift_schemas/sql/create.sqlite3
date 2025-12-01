@@ -1,0 +1,8 @@
+CREATE DATABASE IF NOT EXISTS 'komorebi';
+CREATE TABLE IF NOT EXISTS "collection" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "name" TEXT NOT NULL, "description" TEXT NULL, "media" BLOB NULL, "created_at" INTEGER NOT NULL, "modified_at" INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS "note_citation" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "title" TEXT NOT NULL, "created_at" INTEGER NOT NULL, "modified_at" INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS "note" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "content" TEXT NULL, "media" BLOB NULL, "citation_id" INTEGER NULL REFERENCES note_citation (id), "created_at" INTEGER NOT NULL, "modified_at" INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS "collection_note" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "note_id" INTEGER NOT NULL REFERENCES note (id), "collection_id" INTEGER NOT NULL REFERENCES collection (id));
+CREATE TABLE IF NOT EXISTS "collection_media" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "name" TEXT NULL, "caption" TEXT NULL, "media" BLOB NOT NULL, "created_at" INTEGER NOT NULL, "modified_at" INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS "history" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "note_id" INTEGER NULL REFERENCES note (id), "collection_id" INTEGER NULL REFERENCES collection (id), "history_type" INTEGER NOT NULL, "content" TEXT NULL, "created_at" INTEGER NOT NULL);
+CREATE VIEW IF NOT EXISTS "related_collection" ("id") AS SELECT "t1"."id" AS "id" FROM "collection" "t1" INNER JOIN "collection_note" "t2" ON "t2"."collection_id" = "t1"."id" INNER JOIN "note" "t0" ON "t0"."id" = "t2"."note_id";

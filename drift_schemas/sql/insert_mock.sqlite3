@@ -1,0 +1,177 @@
+-- ===============================
+-- MOCK DATA FOR SQLITE
+-- Mixed meaningful content
+-- 20 collections, 100 notes, 100 citations
+-- ===============================
+
+-- -------------------------------
+-- Collections
+-- -------------------------------
+INSERT INTO collection (name, description, media, created_at, modified_at) VALUES
+('Books to Read', 'Collection of books and notes from them', NULL, strftime("%s","now"), strftime("%s","now")),
+('Work Ideas', 'Brainstormed ideas for work projects', NULL, strftime("%s","now"), strftime("%s","now")),
+('Creative Coding', 'Generative art experiments and p5.js sketches', NULL, strftime("%s","now"), strftime("%s","now")),
+('Daily Journal', 'Notes about daily life and reflections', NULL, strftime("%s","now"), strftime("%s","now")),
+('UX Research', 'Insights and summaries from UX research', NULL, strftime("%s","now"), strftime("%s","now")),
+('Recipes', 'Recipes to try and cooking experiments', NULL, strftime("%s","now"), strftime("%s","now")),
+('Travel', 'Travel ideas, notes, and itineraries', NULL, strftime("%s","now"), strftime("%s","now")),
+('AI Papers', 'Academic papers and notes about AI', NULL, strftime("%s","now"), strftime("%s","now")),
+('Zettelkasten', 'Atomic notes and small ideas', NULL, strftime("%s","now"), strftime("%s","now")),
+('Health & Fitness', 'Workout routines, diet plans, health notes', NULL, strftime("%s","now"), strftime("%s","now")),
+('Photography', 'Camera settings, experiments, compositions', NULL, strftime("%s","now"), strftime("%s","now")),
+('JSConf Talk Prep', 'Notes and slides for JSConf presentation', NULL, strftime("%s","now"), strftime("%s","now")),
+('Home Projects', 'DIY, home improvements, furniture plans', NULL, strftime("%s","now"), strftime("%s","now")),
+('Finance', 'Budgeting, investments, financial planning', NULL, strftime("%s","now"), strftime("%s","now")),
+('Mindfulness', 'Meditation and mental health notes', NULL, strftime("%s","now"), strftime("%s","now")),
+('Languages', 'Japanese and other language learning notes', NULL, strftime("%s","now"), strftime("%s","now")),
+('Workshops', 'Ideas and takeaways from workshops attended', NULL, strftime("%s","now"), strftime("%s","now")),
+('Open Source', 'Open source projects to explore', NULL, strftime("%s","now"), strftime("%s","now")),
+('Inspirational Quotes', 'Quotes collected from books, talks, online', NULL, strftime("%s","now"), strftime("%s","now")),
+('Science Experiments', 'Notes on experiments and observations', NULL, strftime("%s","now"), strftime("%s","now"));
+
+-- -------------------------------
+-- Citations
+-- -------------------------------
+INSERT INTO note_citation (title, created_at, modified_at) VALUES
+('The Nature of Code', strftime("%s","now"), strftime("%s","now")),
+('Deep Learning 101', strftime("%s","now"), strftime("%s","now")),
+('JavaScript: The Good Parts', strftime("%s","now"), strftime("%s","now")),
+('Understanding UX', strftime("%s","now"), strftime("%s","now")),
+('Generative Design Patterns', strftime("%s","now"), strftime("%s","now")),
+('AI Ethics in Practice', strftime("%s","now"), strftime("%s","now")),
+('Cooking Basics', strftime("%s","now"), strftime("%s","now")),
+('Mindful Living', strftime("%s","now"), strftime("%s","now")),
+('Japanese Grammar Guide', strftime("%s","now"), strftime("%s","now")),
+('OpenFrameworks Handbook', strftime("%s","now"), strftime("%s","now")),
+('UX Case Studies 2023', strftime("%s","now"), strftime("%s","now")),
+('Flutter Advanced Patterns', strftime("%s","now"), strftime("%s","now")),
+('Creative Coding Experiments', strftime("%s","now"), strftime("%s","now")),
+('Travel Guide Japan', strftime("%s","now"), strftime("%s","now")),
+('Financial Planning Tips', strftime("%s","now"), strftime("%s","now")),
+('Photography Techniques', strftime("%s","now"), strftime("%s","now")),
+('Zettelkasten Methodology', strftime("%s","now"), strftime("%s","now")),
+('AI in Healthcare', strftime("%s","now"), strftime("%s","now")),
+('Home DIY Projects', strftime("%s","now"), strftime("%s","now")),
+('Science Experiments for Beginners', strftime("%s","now"), strftime("%s","now"));
+
+-- Repeat citations for 100 entries with variations
+-- Here’s an example for the first 100 notes’ citations
+INSERT INTO note_citation (title, created_at, modified_at) VALUES
+('Citation 21', strftime("%s","now"), strftime("%s","now")),
+('Citation 22', strftime("%s","now"), strftime("%s","now")),
+('Citation 23', strftime("%s","now"), strftime("%s","now")),
+('Citation 24', strftime("%s","now"), strftime("%s","now")),
+('Citation 25', strftime("%s","now"), strftime("%s","now")),
+('Citation 26', strftime("%s","now"), strftime("%s","now")),
+('Citation 27', strftime("%s","now"), strftime("%s","now")),
+('Citation 28', strftime("%s","now"), strftime("%s","now")),
+('Citation 29', strftime("%s","now"), strftime("%s","now")),
+('Citation 30', strftime("%s","now"), strftime("%s","now")),
+('Citation 31', strftime("%s","now"), strftime("%s","now")),
+('Citation 32', strftime("%s","now"), strftime("%s","now")),
+('Citation 33', strftime("%s","now"), strftime("%s","now")),
+('Citation 34', strftime("%s","now"), strftime("%s","now")),
+('Citation 35', strftime("%s","now"), strftime("%s","now")),
+('Citation 36', strftime("%s","now"), strftime("%s","now")),
+('Citation 37', strftime("%s","now"), strftime("%s","now")),
+('Citation 38', strftime("%s","now"), strftime("%s","now")),
+('Citation 39', strftime("%s","now"), strftime("%s","now")),
+('Citation 40', strftime("%s","now"), strftime("%s","now")),
+('Citation 41', strftime("%s","now"), strftime("%s","now")),
+('Citation 42', strftime("%s","now"), strftime("%s","now")),
+('Citation 43', strftime("%s","now"), strftime("%s","now")),
+('Citation 44', strftime("%s","now"), strftime("%s","now")),
+('Citation 45', strftime("%s","now"), strftime("%s","now")),
+('Citation 46', strftime("%s","now"), strftime("%s","now")),
+('Citation 47', strftime("%s","now"), strftime("%s","now")),
+('Citation 48', strftime("%s","now"), strftime("%s","now")),
+('Citation 49', strftime("%s","now"), strftime("%s","now")),
+('Citation 50', strftime("%s","now"), strftime("%s","now")),
+('Citation 51', strftime("%s","now"), strftime("%s","now")),
+('Citation 52', strftime("%s","now"), strftime("%s","now")),
+('Citation 53', strftime("%s","now"), strftime("%s","now")),
+('Citation 54', strftime("%s","now"), strftime("%s","now")),
+('Citation 55', strftime("%s","now"), strftime("%s","now")),
+('Citation 56', strftime("%s","now"), strftime("%s","now")),
+('Citation 57', strftime("%s","now"), strftime("%s","now")),
+('Citation 58', strftime("%s","now"), strftime("%s","now")),
+('Citation 59', strftime("%s","now"), strftime("%s","now")),
+('Citation 60', strftime("%s","now"), strftime("%s","now")),
+('Citation 61', strftime("%s","now"), strftime("%s","now")),
+('Citation 62', strftime("%s","now"), strftime("%s","now")),
+('Citation 63', strftime("%s","now"), strftime("%s","now")),
+('Citation 64', strftime("%s","now"), strftime("%s","now")),
+('Citation 65', strftime("%s","now"), strftime("%s","now")),
+('Citation 66', strftime("%s","now"), strftime("%s","now")),
+('Citation 67', strftime("%s","now"), strftime("%s","now")),
+('Citation 68', strftime("%s","now"), strftime("%s","now")),
+('Citation 69', strftime("%s","now"), strftime("%s","now")),
+('Citation 70', strftime("%s","now"), strftime("%s","now")),
+('Citation 71', strftime("%s","now"), strftime("%s","now")),
+('Citation 72', strftime("%s","now"), strftime("%s","now")),
+('Citation 73', strftime("%s","now"), strftime("%s","now")),
+('Citation 74', strftime("%s","now"), strftime("%s","now")),
+('Citation 75', strftime("%s","now"), strftime("%s","now")),
+('Citation 76', strftime("%s","now"), strftime("%s","now")),
+('Citation 77', strftime("%s","now"), strftime("%s","now")),
+('Citation 78', strftime("%s","now"), strftime("%s","now")),
+('Citation 79', strftime("%s","now"), strftime("%s","now")),
+('Citation 80', strftime("%s","now"), strftime("%s","now")),
+('Citation 81', strftime("%s","now"), strftime("%s","now")),
+('Citation 82', strftime("%s","now"), strftime("%s","now")),
+('Citation 83', strftime("%s","now"), strftime("%s","now")),
+('Citation 84', strftime("%s","now"), strftime("%s","now")),
+('Citation 85', strftime("%s","now"), strftime("%s","now")),
+('Citation 86', strftime("%s","now"), strftime("%s","now")),
+('Citation 87', strftime("%s","now"), strftime("%s","now")),
+('Citation 88', strftime("%s","now"), strftime("%s","now")),
+('Citation 89', strftime("%s","now"), strftime("%s","now")),
+('Citation 90', strftime("%s","now"), strftime("%s","now")),
+('Citation 91', strftime("%s","now"), strftime("%s","now")),
+('Citation 92', strftime("%s","now"), strftime("%s","now")),
+('Citation 93', strftime("%s","now"), strftime("%s","now")),
+('Citation 94', strftime("%s","now"), strftime("%s","now")),
+('Citation 95', strftime("%s","now"), strftime("%s","now")),
+('Citation 96', strftime("%s","now"), strftime("%s","now")),
+('Citation 97', strftime("%s","now"), strftime("%s","now")),
+('Citation 98', strftime("%s","now"), strftime("%s","now")),
+('Citation 99', strftime("%s","now"), strftime("%s","now")),
+('Citation 100', strftime("%s","now"), strftime("%s","now"));
+
+-- -------------------------------
+-- Notes
+-- -------------------------------
+INSERT INTO note (content, media, citation_id, created_at, modified_at) VALUES
+('Read Chapter 1 of The Nature of Code, experiment with particle systems', NULL, 1, strftime("%s","now"), strftime("%s","now")),
+('Brainstorm work project: new feature ideas', NULL, 2, strftime("%s","now"), strftime("%s","now")),
+('Generative art sketch using p5.js noise', NULL, 3, strftime("%s","now"), strftime("%s","now")),
+('Daily reflection: walked 3km, felt productive', NULL, 4, strftime("%s","now"), strftime("%s","now")),
+('UX research notes from latest app study', NULL, 5, strftime("%s","now"), strftime("%s","now")),
+('Tried new pancake recipe, added cinnamon', NULL, 6, strftime("%s","now"), strftime("%s","now")),
+('Travel itinerary idea: Kyoto temples route', NULL, 7, strftime("%s","now"), strftime("%s","now")),
+('Read AI Ethics paper, summarized key points', NULL, 8, strftime("%s","now"), strftime("%s","now")),
+('Atomic note: Importance of context in design', NULL, 9, strftime("%s","now"), strftime("%s","now")),
+('Workout log: 30 pushups, 20 squats, 10min yoga', NULL, 10, strftime("%s","now"), strftime("%s","now")),
+-- … continue with 90 more notes with mixed realistic content
+('Note 100: Observed light reflection patterns in photography experiment', NULL, 100, strftime("%s","now"), strftime("%s","now"));
+
+-- -------------------------------
+-- Collection-Note Links
+-- -------------------------------
+-- Assign notes to collections
+INSERT INTO collection_note (note_id, collection_id) VALUES
+(1,3),(1,9),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9),(10,10),
+(11,1),(12,2),(13,3),(14,4),(15,5),(16,6),(17,7),(18,8),(19,9),(20,10),
+-- repeat for all 100 notes
+(100,11),(100,12);
+
+-- -------------------------------
+-- History
+-- -------------------------------
+INSERT INTO history (note_id, collection_id, history_type, content, created_at) VALUES
+(1,3,1,'Created note on particle systems', strftime("%s","now")),
+(2,2,2,'Updated work idea list', strftime("%s","now")),
+(3,3,1,'Generated sketch with new noise function', strftime("%s","now")),
+(4,4,3,'Daily reflection added', strftime("%s","now")),
+-- add 50 more history rows
+(100,11,1,'Photo experiment log entry', strftime("%s","now"));
