@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/design_system/collection/collection_tile.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
@@ -8,11 +7,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class RelatedCollectionsRow extends ConsumerWidget {
   const RelatedCollectionsRow({super.key, required this.collectionId});
 
-  final int? collectionId;
+  final int collectionId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collectionsListValue = ref.watch(relatedCollectionsListStreamProvider(collectionId ?? ROOT_COLLECTION_ID));
+    final collectionsListValue = ref.watch(relatedCollectionsListStreamProvider(collectionId));
 
     return AsyncValueWidget(
       value: collectionsListValue,

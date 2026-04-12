@@ -23,7 +23,7 @@ class CollectionTile extends HookConsumerWidget {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          context.pushRoute(HomeListRoute(collectionId: collection.id));
+          context.pushRoute(CollectionListRoute(collectionId: collection.id));
         },
         onLongPress: () {
           isEdit.value = true;

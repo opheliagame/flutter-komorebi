@@ -118,11 +118,15 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
 
   @override
   Stream<List<CollectionEntity>> watchSimilarCollectionsAsList(int collectionId) {
-    final list = _getSimilarCollectionsQuery(collectionId).watch().map(
-          (rows) => rows.map((row) => row.readTable(database.collectionTable).toDomain()).toSet().toList(),
-        );
-
-    return list;
+    try {
+      final list = _getSimilarCollectionsQuery(collectionId).watch().map(
+            (rows) => rows.map((row) => row.readTable(database.collectionTable).toDomain()).toSet().toList(),
+          );
+      return list;
+    } catch (e) {
+      print(e);
+      return Stream.empty();
+    }
   }
 
   @override

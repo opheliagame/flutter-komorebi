@@ -73,5 +73,6 @@ class AppDatabase extends _$AppDatabase {
 
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
   final database = AppDatabase();
+  // database.insertMeaningfulMockData();
   return database;
 });

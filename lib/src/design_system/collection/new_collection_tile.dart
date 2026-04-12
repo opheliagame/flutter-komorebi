@@ -6,10 +6,7 @@ import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 class NewCollectionTile extends StatelessWidget {
   const NewCollectionTile({
     super.key,
-    required this.collectionId,
   });
-
-  final int collectionId;
 
   @override
   Widget build(BuildContext context) {

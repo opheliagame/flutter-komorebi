@@ -19,7 +19,7 @@ class AppRouter extends RootStackRouter {
           children: [
             AutoRoute(
               path: 'home',
-              page: HomeListRoute.page,
+              page: CollectionListRoute.page,
             ),
             AutoRoute(
               path: 'search',

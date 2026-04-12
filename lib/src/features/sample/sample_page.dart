@@ -24,11 +24,15 @@ class SamplePage extends HookConsumerWidget {
 
     var temp = NotesList(
       zoomLevel: notesZoom.value,
+      // FIXME collectionId as constant 0 will fail
+      collectionId: 0,
     );
 
     useEffect(() {
       notesZoom.addListener(() {
         temp = NotesList(
+          // FIXME collectionId as constant 0 will fail
+          collectionId: 0,
           zoomLevel: notesZoom.value,
         );
       });
@@ -42,7 +46,10 @@ class SamplePage extends HookConsumerWidget {
         name: 'Home Page',
       ),
       _SamplePageTextButton(
-        route: (_) => HomeListRoute(),
+        route: (_) => CollectionListRoute(
+          // FIXME collectionId as constant 0 will fail
+          collectionId: 0,
+        ),
         name: 'Home list page',
       ),
       _SamplePageTextButton(
@@ -50,7 +57,10 @@ class SamplePage extends HookConsumerWidget {
         name: 'collections list page',
       ),
       _SamplePageTextButton(
-        route: (_) => NoteListRoute(),
+        route: (_) => NoteListRoute(
+          // FIXME collectionId as constant 0 will fail
+          collectionId: 0,
+        ),
         name: 'notes list page',
       ),
       _SamplePageTextButton(

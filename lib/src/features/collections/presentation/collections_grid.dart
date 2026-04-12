@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/design_system/collection/collection_tile.dart';
 import 'package:flutter_komorebi/src/design_system/collection/new_collection_tile.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart';
@@ -15,7 +14,9 @@ class CollectionsGrid extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collectionsListValue = ref.watch(relatedCollectionsListStreamProvider(collectionId ?? ROOT_COLLECTION_ID));
+    final collectionsListValue = collectionId != null
+        ? ref.watch(relatedCollectionsListStreamProvider(collectionId!))
+        : ref.watch(collectionsListFutureProvider);
     final crossAxisCount = switch (zoomLevel) {
       ZoomLevelType.small => 4,
       ZoomLevelType.medium => 3,
@@ -32,7 +33,7 @@ class CollectionsGrid extends ConsumerWidget {
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
             children: [
-              NewCollectionTile(collectionId: collectionId ?? ROOT_COLLECTION_ID),
+              NewCollectionTile(),
               ...collections.map(
                 (collection) => CollectionTile(collection: collection),
               ),

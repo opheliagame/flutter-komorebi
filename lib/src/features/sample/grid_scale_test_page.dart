@@ -22,6 +22,8 @@ class GridScaleTestPage extends StatelessWidget {
             return CollectionsGrid(zoomLevel: zoomLevel);
           } else {
             return NotesList(
+              // FIXME collectionId as constant 0 will fail
+              collectionId: 0,
               zoomLevel: zoomLevel,
             );
           }

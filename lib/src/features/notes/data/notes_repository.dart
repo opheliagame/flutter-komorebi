@@ -39,11 +39,8 @@ final notesRepositoryProvider = Provider<NotesRepository>((ref) {
 final notesListStreamProvider = StreamProvider.family<List<NoteEntity>, int>((ref, currentCollectionId) {
   final repository = ref.read(notesRepositoryProvider);
 
-  if (currentCollectionId == ROOT_COLLECTION_ID) {
-    return repository.watchAllNotes();
-  } else {
-    return repository.watchNotesInCollection(currentCollectionId);
-  }
+  // TODO(dev): do we need logic to watch all notes?
+  return repository.watchNotesInCollection(currentCollectionId);
 });
 
 final noteStreamProvider = StreamProvider.family<NoteEntity, int>((ref, noteId) {

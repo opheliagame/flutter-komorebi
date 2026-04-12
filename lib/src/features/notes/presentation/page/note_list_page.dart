@@ -6,9 +6,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @RoutePage()
 class NoteListPage extends ConsumerWidget {
-  const NoteListPage({super.key, this.collectionId});
+  const NoteListPage({super.key, required this.collectionId});
 
-  final int? collectionId;
+  final int collectionId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,6 +23,7 @@ class NoteListPage extends ConsumerWidget {
             child: AnimatedZoomLevelWidget(
               childBuilder: (zoomLevel) {
                 return NotesList(
+                  collectionId: collectionId,
                   zoomLevel: zoomLevel,
                 );
               },

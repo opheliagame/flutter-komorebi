@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
@@ -9,13 +8,13 @@ import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NotesGrid extends ConsumerWidget {
-  const NotesGrid({super.key, this.collectionId});
+  const NotesGrid({super.key, required this.collectionId});
 
-  final int? collectionId;
+  final int collectionId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notesListValue = ref.watch(notesListStreamProvider(collectionId ?? ROOT_COLLECTION_ID));
+    final notesListValue = ref.watch(notesListStreamProvider(collectionId));
 
     return Padding(
       padding: const EdgeInsets.all(8.0),

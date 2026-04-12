@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/more_options_action_button.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_row.dart';
@@ -10,17 +9,17 @@ import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @RoutePage()
-class HomeListPage extends ConsumerWidget {
-  const HomeListPage({super.key, this.collectionId});
+class CollectionListPage extends ConsumerWidget {
+  const CollectionListPage({super.key, required this.collectionId});
 
-  final int? collectionId;
+  final int collectionId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collectionFutureValue = ref.watch(collectionSingleFutureProvider(collectionId ?? ROOT_COLLECTION_ID));
+    final collectionFutureValue = ref.watch(collectionSingleFutureProvider(collectionId));
 
     return Scaffold(
-      appBar: AppBar(title: Text(collectionFutureValue.valueOrNull?.name ?? 'home list page'), actions: [
+      appBar: AppBar(title: Text(collectionFutureValue.value?.name ?? ''), actions: [
         MoreOptionsActionButton(
           children: [
             ListTile(

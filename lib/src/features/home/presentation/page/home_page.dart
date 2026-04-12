@@ -11,7 +11,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return AutoTabsRouter(
       routes: [
-        HomeListRoute(),
+        // FIXME collectionId as constant will fail
+        CollectionListRoute(collectionId: 0),
         SearchRoute(),
         RoamRoute(),
       ],

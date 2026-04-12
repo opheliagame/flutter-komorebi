@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/core/domain/note_entity.dart';
 import 'package:flutter_komorebi/src/core/extensions/datetime.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart';
@@ -10,14 +9,14 @@ import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NotesList extends ConsumerWidget {
-  const NotesList({super.key, this.collectionId, this.zoomLevel = ZoomLevelType.medium});
+  const NotesList({super.key, required this.collectionId, this.zoomLevel = ZoomLevelType.medium});
 
-  final int? collectionId;
+  final int collectionId;
   final ZoomLevelType zoomLevel;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notesListValue = ref.watch(notesListStreamProvider((collectionId ?? ROOT_COLLECTION_ID)));
+    final notesListValue = ref.watch(notesListStreamProvider((collectionId)));
 
     return AsyncValueWidget(
       value: notesListValue,

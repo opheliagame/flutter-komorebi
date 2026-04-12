@@ -12,17 +12,17 @@
 import 'package:auto_route/auto_route.dart' as _i15;
 import 'package:flutter/material.dart' as _i16;
 import 'package:flutter_komorebi/src/features/collections/presentation/page/collections_list_page.dart'
-    as _i1;
+    as _i2;
 import 'package:flutter_komorebi/src/features/collections/presentation/page/create_page.dart'
-    as _i3;
+    as _i4;
 import 'package:flutter_komorebi/src/features/connection/presentation/roam_page.dart'
     as _i12;
 import 'package:flutter_komorebi/src/features/history/presentation/page/history_list_page.dart'
-    as _i5;
+    as _i6;
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart'
     as _i17;
-import 'package:flutter_komorebi/src/features/home/presentation/page/home_list_page.dart'
-    as _i6;
+import 'package:flutter_komorebi/src/features/home/presentation/page/collection_list_page.dart'
+    as _i1;
 import 'package:flutter_komorebi/src/features/home/presentation/page/home_page.dart'
     as _i7;
 import 'package:flutter_komorebi/src/features/notes/presentation/page/note_detail_page.dart'
@@ -30,9 +30,9 @@ import 'package:flutter_komorebi/src/features/notes/presentation/page/note_detai
 import 'package:flutter_komorebi/src/features/notes/presentation/page/note_list_page.dart'
     as _i10;
 import 'package:flutter_komorebi/src/features/sample/connection_diagram_page.dart'
-    as _i2;
+    as _i3;
 import 'package:flutter_komorebi/src/features/sample/grid_scale_test_page.dart'
-    as _i4;
+    as _i5;
 import 'package:flutter_komorebi/src/features/sample/image_clipboard.dart'
     as _i8;
 import 'package:flutter_komorebi/src/features/sample/recents_page.dart' as _i11;
@@ -41,7 +41,57 @@ import 'package:flutter_komorebi/src/features/search/presentation/search_page.da
     as _i14;
 
 /// generated route for
-/// [_i1.CollectionsListPage]
+/// [_i1.CollectionListPage]
+class CollectionListRoute extends _i15.PageRouteInfo<CollectionListRouteArgs> {
+  CollectionListRoute({
+    _i16.Key? key,
+    required int collectionId,
+    List<_i15.PageRouteInfo>? children,
+  }) : super(
+          CollectionListRoute.name,
+          args: CollectionListRouteArgs(key: key, collectionId: collectionId),
+          initialChildren: children,
+        );
+
+  static const String name = 'CollectionListRoute';
+
+  static _i15.PageInfo page = _i15.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<CollectionListRouteArgs>();
+      return _i1.CollectionListPage(
+        key: args.key,
+        collectionId: args.collectionId,
+      );
+    },
+  );
+}
+
+class CollectionListRouteArgs {
+  const CollectionListRouteArgs({this.key, required this.collectionId});
+
+  final _i16.Key? key;
+
+  final int collectionId;
+
+  @override
+  String toString() {
+    return 'CollectionListRouteArgs{key: $key, collectionId: $collectionId}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! CollectionListRouteArgs) return false;
+    return key == other.key && collectionId == other.collectionId;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ collectionId.hashCode;
+}
+
+/// generated route for
+/// [_i2.CollectionsListPage]
 class CollectionsListRoute
     extends _i15.PageRouteInfo<CollectionsListRouteArgs> {
   CollectionsListRoute({
@@ -62,7 +112,7 @@ class CollectionsListRoute
       final args = data.argsAs<CollectionsListRouteArgs>(
         orElse: () => const CollectionsListRouteArgs(),
       );
-      return _i1.CollectionsListPage(
+      return _i2.CollectionsListPage(
         key: args.key,
         collectionId: args.collectionId,
       );
@@ -94,7 +144,7 @@ class CollectionsListRouteArgs {
 }
 
 /// generated route for
-/// [_i2.ConnectionDiagramPage]
+/// [_i3.ConnectionDiagramPage]
 class ConnectionDiagramRoute extends _i15.PageRouteInfo<void> {
   const ConnectionDiagramRoute({List<_i15.PageRouteInfo>? children})
       : super(ConnectionDiagramRoute.name, initialChildren: children);
@@ -104,13 +154,13 @@ class ConnectionDiagramRoute extends _i15.PageRouteInfo<void> {
   static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
-      return const _i2.ConnectionDiagramPage();
+      return const _i3.ConnectionDiagramPage();
     },
   );
 }
 
 /// generated route for
-/// [_i3.CreatePage]
+/// [_i4.CreatePage]
 class CreateRoute extends _i15.PageRouteInfo<CreateRouteArgs> {
   CreateRoute({
     _i16.Key? key,
@@ -135,7 +185,7 @@ class CreateRoute extends _i15.PageRouteInfo<CreateRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<CreateRouteArgs>();
-      return _i3.CreatePage(
+      return _i4.CreatePage(
         key: args.key,
         entityType: args.entityType,
         collectionId: args.collectionId,
@@ -185,7 +235,7 @@ class CreateRouteArgs {
 }
 
 /// generated route for
-/// [_i4.GridScaleTestPage]
+/// [_i5.GridScaleTestPage]
 class GridScaleTestRoute extends _i15.PageRouteInfo<GridScaleTestRouteArgs> {
   GridScaleTestRoute({
     _i16.Key? key,
@@ -206,7 +256,7 @@ class GridScaleTestRoute extends _i15.PageRouteInfo<GridScaleTestRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<GridScaleTestRouteArgs>();
-      return _i4.GridScaleTestPage(
+      return _i5.GridScaleTestPage(
         key: args.key,
         isCollectionGrid: args.isCollectionGrid,
       );
@@ -238,7 +288,7 @@ class GridScaleTestRouteArgs {
 }
 
 /// generated route for
-/// [_i5.HistoryListPage]
+/// [_i6.HistoryListPage]
 class HistoryListRoute extends _i15.PageRouteInfo<void> {
   const HistoryListRoute({List<_i15.PageRouteInfo>? children})
       : super(HistoryListRoute.name, initialChildren: children);
@@ -248,58 +298,9 @@ class HistoryListRoute extends _i15.PageRouteInfo<void> {
   static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
-      return const _i5.HistoryListPage();
+      return const _i6.HistoryListPage();
     },
   );
-}
-
-/// generated route for
-/// [_i6.HomeListPage]
-class HomeListRoute extends _i15.PageRouteInfo<HomeListRouteArgs> {
-  HomeListRoute({
-    _i16.Key? key,
-    int? collectionId,
-    List<_i15.PageRouteInfo>? children,
-  }) : super(
-          HomeListRoute.name,
-          args: HomeListRouteArgs(key: key, collectionId: collectionId),
-          initialChildren: children,
-        );
-
-  static const String name = 'HomeListRoute';
-
-  static _i15.PageInfo page = _i15.PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<HomeListRouteArgs>(
-        orElse: () => const HomeListRouteArgs(),
-      );
-      return _i6.HomeListPage(key: args.key, collectionId: args.collectionId);
-    },
-  );
-}
-
-class HomeListRouteArgs {
-  const HomeListRouteArgs({this.key, this.collectionId});
-
-  final _i16.Key? key;
-
-  final int? collectionId;
-
-  @override
-  String toString() {
-    return 'HomeListRouteArgs{key: $key, collectionId: $collectionId}';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other is! HomeListRouteArgs) return false;
-    return key == other.key && collectionId == other.collectionId;
-  }
-
-  @override
-  int get hashCode => key.hashCode ^ collectionId.hashCode;
 }
 
 /// generated route for
@@ -418,7 +419,7 @@ class NoteDetailRouteArgs {
 class NoteListRoute extends _i15.PageRouteInfo<NoteListRouteArgs> {
   NoteListRoute({
     _i16.Key? key,
-    int? collectionId,
+    required int collectionId,
     List<_i15.PageRouteInfo>? children,
   }) : super(
           NoteListRoute.name,
@@ -431,20 +432,18 @@ class NoteListRoute extends _i15.PageRouteInfo<NoteListRouteArgs> {
   static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<NoteListRouteArgs>(
-        orElse: () => const NoteListRouteArgs(),
-      );
+      final args = data.argsAs<NoteListRouteArgs>();
       return _i10.NoteListPage(key: args.key, collectionId: args.collectionId);
     },
   );
 }
 
 class NoteListRouteArgs {
-  const NoteListRouteArgs({this.key, this.collectionId});
+  const NoteListRouteArgs({this.key, required this.collectionId});
 
   final _i16.Key? key;
 
-  final int? collectionId;
+  final int collectionId;
 
   @override
   String toString() {

@@ -16,7 +16,7 @@ class CollectionTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        context.router.push(HomeListRoute(collectionId: collectionId));
+        context.router.push(CollectionListRoute(collectionId: collectionId));
       },
       child: Text(
         collectionName,
