@@ -47,5 +47,11 @@ app.*.map.json
 # FVM Version Cache
 .fvm/
 
-#iOS build artifacts
+# iOS build artifacts
 /ios/build
+
+# obsidian docs
+01-kiritori-docs/.obsidian/*
+
+# temp files
+*.sqlite
