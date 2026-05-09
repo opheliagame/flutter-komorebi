@@ -1,0 +1,33 @@
+screen: 01-collection
+
+# Data requirements for this screen
+context:
+  - name: collection_id
+    role: id of the current collection 
+
+# The visual structure
+layout:
+  - id: page_app_bar
+    component_type: AppBar
+    items:
+      - id: back_button
+        component_type: Button
+        actions:
+          - trigger: "onTap"
+            behavior: "navigate"
+            destination: "previous screen"
+      - id: collection_title
+        component_type: Header
+      - id: vertical_more_button
+        component_type: Button
+
+  - id: related_collections_list
+    component_type: list
+    role: show list of collections related to current collection through notes 
+    
+
+  - id: notes_list
+    component_type: list 
+    role: show list of notes in current collection 
+
+

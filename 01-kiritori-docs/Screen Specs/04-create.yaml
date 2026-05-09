@@ -1,0 +1,9 @@
+screen: 04-create
+version: 1.0.0
+
+# Data requirements for this screen
+context:
+  none
+
+# The visual structure
+layout:

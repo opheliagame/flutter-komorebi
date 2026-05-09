@@ -1,0 +1,51 @@
+screen: 01-home
+
+# Data requirements for this screen
+context:
+  none
+
+# The visual structure
+layout:
+  - id: app_header
+    component_type: AppBar
+    items:
+      - id: app_title
+        component_type: Header
+        label: "キリトリ"
+      - id: search_button
+        component_type: Button
+        actions:
+          - trigger: "onTap"
+            behavior: "navigate"
+            destination: "02-search"
+
+  - id: connected_notes_visualization
+
+
+  - id: bottom_nav_bar
+    component_type: BottomNavigationBar
+    items:
+      - id: nav_home_button
+        actions:
+          - trigger: "onTap"
+            behavior: "navigate"
+            destination: "01-home"
+        
+      - id: nav_search_button
+        actions:
+          - trigger: "onTap"
+            behavior: "navigate"
+            destination: "02-search"
+
+      - id: nav_roam_button
+        actions:
+          - trigger: "onTap"
+            behavior: "navigate"
+            destination: "03-roam"
+
+      - id: nav_create_button
+        actions:
+          - trigger: "onTap"
+            behavior: "navigate"
+            destination: "04-create"
+        
