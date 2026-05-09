@@ -16,7 +16,7 @@ class CollectionListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collectionFutureValue = ref.watch(collectionSingleStreamProvider(collectionId));
+    final collectionFutureValue = ref.watch(collectionSingleFutureProvider(collectionId));
 
     return Scaffold(
       appBar: AppBar(

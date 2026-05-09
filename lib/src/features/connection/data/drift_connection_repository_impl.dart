@@ -134,29 +134,32 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
     }
   }
 
-  @override
-  Future<List<SimilarCollectionsEntity>> getRecentSimilarCollections() async {
-    // use 5 as default limit for now
-    final limit = 5;
-
+  // use 5 as default limit for now
+  final _recentSimilarCollectionsQueryLimit = 5;
+  JoinedSelectStatement _recentSimilarCollectionsQuery() {
     final query = database.select(database.collectionTable).join(
       [
         innerJoin(database.collectionNoteRefTable,
             database.collectionTable.id.equalsExp(database.collectionNoteRefTable.collectionId)),
       ],
     )
-      ..limit(limit)
+      ..limit(_recentSimilarCollectionsQueryLimit)
       ..orderBy([OrderingTerm.desc(database.collectionNoteRefTable.createdAt)])
       ..distinct;
 
+    return query;
+  }
+
+  @override
+  Future<List<SimilarCollectionsEntity>> getRecentSimilarCollections() async {
+    final query = _recentSimilarCollectionsQuery();
     try {
       final result = await query.get();
-
       List<SimilarCollectionsEntity> similarCollections = [];
-
       final recentUpdatedCollections = result.map((e) => e.readTable(database.collectionTable).toDomain());
       for (final collection in recentUpdatedCollections) {
-        final result = await getSimilarCollectionsAsList(collectionId: collection.id, limit: limit, offset: 0);
+        final result = await getSimilarCollectionsAsList(
+            collectionId: collection.id, limit: _recentSimilarCollectionsQueryLimit, offset: 0);
         similarCollections.add(SimilarCollectionsEntity(collection: collection, similarCollections: result));
       }
 
@@ -167,18 +170,33 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
   }
 
   @override
+  Stream<List<SimilarCollectionsEntity>> watchRecentSimilarCollections() {
+    return _recentSimilarCollectionsQuery().watch().asyncExpand((rows) async* {
+      final collections = rows.map((e) => e.readTable(database.collectionTable).toDomain()).toSet().toList();
+
+      final result = <SimilarCollectionsEntity>[];
+      for (final collection in collections) {
+        final similar = await getSimilarCollectionsAsList(
+          collectionId: collection.id,
+          limit: _recentSimilarCollectionsQueryLimit,
+          offset: 0,
+        );
+        result.add(SimilarCollectionsEntity(
+          collection: collection,
+          similarCollections: similar,
+        ));
+      }
+      yield result;
+    });
+  }
+
+  @override
   Future<SimilarCollectionsEntity> getSimilarCollections({
     required int collectionId,
     required int limit,
     required int offset,
   }) {
     // TODO(dev): implement getSimilarCollections
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<SimilarCollectionsEntity>> watchRecentSimilarCollections() {
-    // TODO(dev): implement watchRecentSimilarCollections
     throw UnimplementedError();
   }
 

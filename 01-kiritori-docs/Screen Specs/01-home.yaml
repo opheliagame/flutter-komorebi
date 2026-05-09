@@ -20,6 +20,7 @@ layout:
             destination: "02-search"
 
   - id: connected_notes_visualization
+    role: shows random collections and the relationships between thems
 
 
   - id: bottom_nav_bar

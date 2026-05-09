@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/router/app_router.gr.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @RoutePage()
 class MainTabPage extends StatelessWidget {
@@ -14,6 +14,7 @@ class MainTabPage extends StatelessWidget {
         HomeRoute(),
         SearchRoute(),
         RoamRoute(),
+        CreateRoute(entityType: EntityType.note),
       ],
       transitionBuilder: (context, child, animation) => FadeTransition(
         opacity: animation,
@@ -31,19 +32,18 @@ class MainTabPage extends StatelessWidget {
           body: child,
           bottomNavigationBar: NavigationBar(
             selectedIndex: tabsRouter.activeIndex,
-            destinations: [
+            destinations: const [
               NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
               NavigationDestination(icon: Icon(Icons.search), label: 'Search'),
               NavigationDestination(icon: Icon(Icons.shuffle), label: 'Roam'),
+              NavigationDestination(icon: Icon(Icons.add), label: 'Create'),
             ],
-            onDestinationSelected: tabsRouter.setActiveIndex,
+            onDestinationSelected: (index) {
+              tabsRouter.setActiveIndex(index);
+            },
           ),
         );
       },
     );
   }
 }
-
-final currentNavigationBarIndexProvider = StateProvider<int>((ref) {
-  return 0;
-});

@@ -25,7 +25,7 @@ abstract class ConnectionRepository {
   Stream<SimilarCollectionsEntity> watchSimilarCollections(int collectionId);
 
   Future<List<SimilarCollectionsEntity>> getRecentSimilarCollections();
-  Future<List<SimilarCollectionsEntity>> watchRecentSimilarCollections();
+  Stream<List<SimilarCollectionsEntity>> watchRecentSimilarCollections();
 }
 
 final connectionRepositoryProvider = Provider<ConnectionRepository>((ref) {
@@ -35,4 +35,9 @@ final connectionRepositoryProvider = Provider<ConnectionRepository>((ref) {
 final recentSimilarCollectionsListFutureProvider = FutureProvider((ref) {
   final repository = ref.read(connectionRepositoryProvider);
   return repository.getRecentSimilarCollections();
+});
+
+final recentSimilarCollectionsListStreamProvider = StreamProvider((ref) {
+  final repository = ref.read(connectionRepositoryProvider);
+  return repository.watchRecentSimilarCollections();
 });
