@@ -11,6 +11,7 @@ abstract class CollectionsRepository {
   Future<List<CollectionEntity>> getAllCollections();
   Stream<List<CollectionEntity>> watchAllCollections();
   Future<CollectionEntity> getCollection(int collectionId);
+  Stream<CollectionEntity> watchCollection(int collectionId);
 
   Future<bool> createCollection({
     required String collectionName,
@@ -49,6 +50,11 @@ final collectionsListStreamProvider = StreamProvider<List<CollectionEntity>>((re
 final collectionSingleFutureProvider = FutureProvider.family.autoDispose<CollectionEntity, int>((ref, id) {
   final repository = ref.watch(collectionsRepositoryProvider);
   return repository.getCollection(id);
+});
+
+final collectionSingleStreamProvider = StreamProvider.family.autoDispose<CollectionEntity, int>((ref, id) {
+  final repository = ref.watch(collectionsRepositoryProvider);
+  return repository.watchCollection(id);
 });
 
 final allCollectionIdsProvider = StreamProvider<Iterable<int>>((ref) {

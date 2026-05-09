@@ -63,6 +63,12 @@ class FakeCollectionsRepository implements CollectionsRepository {
     // TODO: implement updateCollection
     throw UnimplementedError();
   }
+
+  @override
+  Stream<CollectionEntity> watchCollection(int collectionId) {
+    // TODO: implement watchCollection
+    throw UnimplementedError();
+  }
 }
 
 final fakeCollectionsRepositoryProvider = Provider<FakeCollectionsRepository>((ref) {

@@ -16,7 +16,7 @@ class CollectionsGrid extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final collectionsListValue = collectionId != null
         ? ref.watch(relatedCollectionsListStreamProvider(collectionId!))
-        : ref.watch(collectionsListFutureProvider);
+        : ref.watch(collectionsListStreamProvider);
     final crossAxisCount = switch (zoomLevel) {
       ZoomLevelType.small => 4,
       ZoomLevelType.medium => 3,

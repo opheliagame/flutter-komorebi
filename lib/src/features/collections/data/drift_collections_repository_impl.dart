@@ -37,6 +37,13 @@ class DriftCollectionsRepository implements CollectionsRepository {
   }
 
   @override
+  Stream<CollectionEntity> watchCollection(int collectionId) {
+    final query = database.select(database.collectionTable)..where((q) => q.id.equals(collectionId));
+
+    return (query.watchSingle().map((e) => e.toDomain()));
+  }
+
+  @override
   Future<bool> createCollection({
     required String collectionName,
     required String? description,

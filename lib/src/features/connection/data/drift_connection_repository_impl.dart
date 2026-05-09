@@ -87,7 +87,7 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
       ),
       innerJoin(
         cn2,
-        cn2.noteId.equalsExp(database.collectionNoteRefTable.noteId),
+        cn2.noteId.equalsExp(cn1.noteId),
       ),
     ])
       ..where(cn2.collectionId.equals(collectionId))
@@ -110,14 +110,21 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
     final query = _getSimilarCollectionsQuery(collectionId, limit: limit, offset: offset);
     try {
       final result = await query.get();
-      return result.map((rows) => rows.readTable(database.collectionTable).toDomain()).toList();
+      return result
+          .map(
+            (rows) => rows.readTable(database.collectionTable).toDomain(),
+          )
+          .toList();
     } catch (e) {
+      print("!!!!! $e");
       rethrow;
     }
   }
 
   @override
-  Stream<List<CollectionEntity>> watchSimilarCollectionsAsList(int collectionId) {
+  Stream<List<CollectionEntity>> watchSimilarCollectionsAsList(
+    int collectionId,
+  ) {
     try {
       final list = _getSimilarCollectionsQuery(collectionId).watch().map(
             (rows) => rows.map((row) => row.readTable(database.collectionTable).toDomain()).toSet().toList(),

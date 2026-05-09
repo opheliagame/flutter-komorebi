@@ -16,29 +16,33 @@ class CollectionListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collectionFutureValue = ref.watch(collectionSingleFutureProvider(collectionId));
+    final collectionFutureValue = ref.watch(collectionSingleStreamProvider(collectionId));
 
     return Scaffold(
-      appBar: AppBar(title: Text(collectionFutureValue.value?.name ?? ''), actions: [
-        MoreOptionsActionButton(
-          children: [
-            ListTile(
-              title: Text('new collection'),
-              onTap: () {
-                context.pop();
-                context.pushRoute(CreateRoute(entityType: EntityType.collection));
-              },
-            ),
-            ListTile(
-              title: Text('new note'),
-              onTap: () {
-                context.pop();
-                context.pushRoute(CreateRoute(entityType: EntityType.note));
-              },
+      appBar: AppBar(
+          title: Text(
+            '${collectionFutureValue.value?.name} ${collectionFutureValue.value?.id}',
+          ),
+          actions: [
+            MoreOptionsActionButton(
+              children: [
+                ListTile(
+                  title: Text('new collection'),
+                  onTap: () {
+                    context.pop();
+                    context.pushRoute(CreateRoute(entityType: EntityType.collection));
+                  },
+                ),
+                ListTile(
+                  title: Text('new note'),
+                  onTap: () {
+                    context.pop();
+                    context.pushRoute(CreateRoute(entityType: EntityType.note));
+                  },
+                )
+              ],
             )
-          ],
-        )
-      ]),
+          ]),
       body: SafeArea(
         child: Column(
           children: [
