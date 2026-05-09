@@ -12,7 +12,7 @@ class HistoryItemListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // todo(design): add on click event to navigate to specific pages
+    // TODO(design): add on click event to navigate to specific pages
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(

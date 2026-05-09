@@ -4,8 +4,8 @@ import 'package:drift/drift.dart';
 import 'package:drift_dev/api/migrations_native.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'generated/schema.dart';
 
+import 'generated/schema.dart';
 import 'generated/schema_v1.dart' as v1;
 import 'generated/schema_v2.dart' as v2;
 
@@ -42,12 +42,12 @@ void main() {
   // (e.g. by alterating their type or constraints). Migrations that only add
   // tables or columns typically don't need these advanced tests. For more
   // information, see https://drift.simonbinder.eu/migrations/tests/#verifying-data-integrity
-  // TODO: This generated template shows how these tests could be written. Adopt
+  // TODO(dev): This generated template shows how these tests could be written. Adopt
   // it to your own needs when testing migrations with data integrity.
   test('migration from v1 to v2 does not corrupt data', () async {
     // Add data to insert into the old database, and the expected rows after the
     // migration.
-    // TODO: Fill these lists
+    // TODO(dev): Fill these lists
     final oldCollectionMediaData = <v1.CollectionMediaData>[];
     final expectedNewCollectionMediaData = <v2.CollectionMediaData>[];
 
@@ -81,15 +81,11 @@ void main() {
         batch.insertAll(oldDb.history, oldHistoryData);
       },
       validateItems: (newDb) async {
-        expect(expectedNewCollectionMediaData,
-            await newDb.select(newDb.collectionMedia).get());
-        expect(expectedNewCollectionData,
-            await newDb.select(newDb.collection).get());
-        expect(expectedNewNoteCitationData,
-            await newDb.select(newDb.noteCitation).get());
+        expect(expectedNewCollectionMediaData, await newDb.select(newDb.collectionMedia).get());
+        expect(expectedNewCollectionData, await newDb.select(newDb.collection).get());
+        expect(expectedNewNoteCitationData, await newDb.select(newDb.noteCitation).get());
         expect(expectedNewNoteData, await newDb.select(newDb.note).get());
-        expect(expectedNewCollectionNoteData,
-            await newDb.select(newDb.collectionNote).get());
+        expect(expectedNewCollectionNoteData, await newDb.select(newDb.collectionNote).get());
         expect(expectedNewHistoryData, await newDb.select(newDb.history).get());
       },
     );

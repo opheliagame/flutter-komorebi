@@ -7,7 +7,6 @@ import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_wi
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
-import 'package:flutter_komorebi/src/features/notes/presentation/notes_list.dart';
 import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -22,19 +21,19 @@ class SamplePage extends HookConsumerWidget {
 
     final notesZoom = useState(ZoomLevelType.medium);
 
-    var temp = NotesList(
-      zoomLevel: notesZoom.value,
-      // FIXME collectionId as constant 0 will fail
-      collectionId: 0,
-    );
+    // var temp = NotesList(
+    //   zoomLevel: notesZoom.value,
+    //   // FIXME collectionId as constant 0 will fail
+    //   collectionId: 0,
+    // );
 
     useEffect(() {
       notesZoom.addListener(() {
-        temp = NotesList(
-          // FIXME collectionId as constant 0 will fail
-          collectionId: 0,
-          zoomLevel: notesZoom.value,
-        );
+        // temp = NotesList(
+        //   // FIXME collectionId as constant 0 will fail
+        //   collectionId: 0,
+        //   zoomLevel: notesZoom.value,
+        // );
       });
 
       return () {};
@@ -173,7 +172,6 @@ class _SamplePageTextButton<T extends Object> extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final selection = useState<T?>(null);
-    print('debug: current options length ${options?.value?.length}');
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

@@ -116,7 +116,6 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
           )
           .toList();
     } catch (e) {
-      print("!!!!! $e");
       rethrow;
     }
   }
@@ -131,7 +130,6 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
           );
       return list;
     } catch (e) {
-      print(e);
       return Stream.empty();
     }
   }
@@ -174,19 +172,19 @@ class DriftConnectionRepositoryImpl implements ConnectionRepository {
     required int limit,
     required int offset,
   }) {
-    // TODO: implement getSimilarCollections
+    // TODO(dev): implement getSimilarCollections
     throw UnimplementedError();
   }
 
   @override
   Future<List<SimilarCollectionsEntity>> watchRecentSimilarCollections() {
-    // TODO: implement watchRecentSimilarCollections
+    // TODO(dev): implement watchRecentSimilarCollections
     throw UnimplementedError();
   }
 
   @override
   Stream<SimilarCollectionsEntity> watchSimilarCollections(int collectionId) {
-    // TODO: implement watchSimilarCollections
+    // TODO(dev): implement watchSimilarCollections
     throw UnimplementedError();
   }
 }

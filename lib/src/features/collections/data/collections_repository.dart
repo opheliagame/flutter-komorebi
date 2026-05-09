@@ -32,7 +32,7 @@ abstract class CollectionsRepository {
   Stream<List<CollectionEntity>> watchCollectionsOfNote(int noteId);
 }
 
-// TODO switch this based on env variable
+// TODOswitch this based on env variable
 final collectionsRepositoryProvider = Provider<CollectionsRepository>((ref) {
   return DriftCollectionsRepository(ref.read(appDatabaseProvider));
 });

@@ -7,50 +7,50 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class FakeCollectionsRepository implements CollectionsRepository {
   @override
   Future<bool> deleteAllCollections() {
-    // TODO: implement deleteAllCollections
+    // TODO(dev): implement deleteAllCollections
     throw UnimplementedError();
   }
 
   @override
   Future<bool> deleteCollection(int collectionId) {
-    // TODO: implement deleteCollection
+    // TODO(dev): implement deleteCollection
     throw UnimplementedError();
   }
 
   @override
   Future<List<CollectionEntity>> getCollectionsOfNote(int noteId) {
-    // TODO: implement getCollectionsOfNote
+    // TODO(dev): implement getCollectionsOfNote
     throw UnimplementedError();
   }
 
   @override
   Future<List<CollectionEntity>> getAllCollections() {
-    // TODO: implement getRootCollections
+    // TODO(dev): implement getRootCollections
     throw UnimplementedError();
   }
 
   @override
   Stream<List<CollectionEntity>> watchCollectionsOfNote(int noteId) {
-    // TODO: implement watchCollectionsOfNote
+    // TODO(dev): implement watchCollectionsOfNote
     throw UnimplementedError();
   }
 
   @override
   Stream<List<CollectionEntity>> watchAllCollections() {
-    // TODO: implement watchRootCollections
+    // TODO(dev): implement watchRootCollections
     throw UnimplementedError();
   }
 
   @override
   Future<CollectionEntity> getCollection(int collectionId) {
-    // TODO: implement getCollection
+    // TODO(dev): implement getCollection
     throw UnimplementedError();
   }
 
   @override
   Future<bool> createCollection(
       {required String collectionName, required String? description, required Uint8List? media}) {
-    // TODO: implement createCollection
+    // TODO(dev): implement createCollection
     throw UnimplementedError();
   }
 
@@ -60,13 +60,13 @@ class FakeCollectionsRepository implements CollectionsRepository {
       required String collectionName,
       required String? description,
       required Uint8List? media}) {
-    // TODO: implement updateCollection
+    // TODO(dev): implement updateCollection
     throw UnimplementedError();
   }
 
   @override
   Stream<CollectionEntity> watchCollection(int collectionId) {
-    // TODO: implement watchCollection
+    // TODO(dev): implement watchCollection
     throw UnimplementedError();
   }
 }

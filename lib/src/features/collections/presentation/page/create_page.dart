@@ -29,7 +29,6 @@ class CreatePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print('got collection id $collectionId');
     final collectionListStream = ref.watch(collectionsListStreamProvider);
     final prevConnectedCollections = useState<List<CollectionEntity>>([]);
     final newConnectedCollections = useState<List<CollectionEntity>>([]);
@@ -45,7 +44,6 @@ class CreatePage extends HookConsumerWidget {
     useEffect(() {
       if (collectionId != null) {
         ref.read(collectionsRepositoryProvider).getCollection(collectionId!).then((collection) {
-          print('setting text of collection for update');
           inputTextEditingController.text = collection.name;
           pickedImage.value = collection.media;
         });
@@ -57,7 +55,6 @@ class CreatePage extends HookConsumerWidget {
     useEffect(() {
       if (noteId != null) {
         ref.watch(notesRepositoryProvider).getNote(noteId!).then((note) {
-          print('setting text of note for update');
           inputTextEditingController.text = note.content ?? '';
           pickedImage.value = note.media;
         });
