@@ -170,8 +170,7 @@ class CreatePage extends HookConsumerWidget {
                         .then((result) {
                       if (result) {
                         inputTextEditingController.clear();
-
-                        context.pop();
+                        isCompleted.value = true;
                       }
                     });
                   } else {
@@ -185,8 +184,7 @@ class CreatePage extends HookConsumerWidget {
                         .then((result) {
                       if (result) {
                         inputTextEditingController.clear();
-
-                        context.pop();
+                        isCompleted.value = true;
                       }
                     });
                   }
@@ -206,8 +204,7 @@ class CreatePage extends HookConsumerWidget {
                           );
 
                       inputTextEditingController.clear();
-
-                      context.pop();
+                      isCompleted.value = true;
                     });
                   } else {
                     // create note in collection
