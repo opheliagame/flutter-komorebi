@@ -7,3 +7,42 @@ context:
 
 # The visual structure
 layout:
+  - id: app_header
+    component_type: AppBar
+    items:
+      - id: app_title
+        component_type: Header
+        label: "キリトリ"
+      - id: search_button
+        component_type: Button
+        actions:
+          - trigger: "onTap"
+            behavior: "navigate"
+            destination: "02-search"
+
+
+  - id: trail_section
+    role: describe the last visited note's collections
+    items:
+      - label: "you came from"
+      - id: collection_chips_section
+        component_type: list 
+        items:
+          - id: collection_chip
+            component_type: chip
+            role: display collection name 
+
+
+  - id: body_section
+    role: display current note's content
+    
+
+  - id: connections_section
+    role: show current note's connections
+    items:
+      - id: collection_chips_section
+        component_type: list 
+        items:
+          - id: collection_chip
+            component_type: chip
+            role: display collection name 
