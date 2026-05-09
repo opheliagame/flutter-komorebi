@@ -88,9 +88,9 @@ class NoteDetailPage extends HookConsumerWidget {
                     ),
                   ),
                   SizedBox(height: 8),
-                  Padding(
-                    padding: kHorizontalPadding,
-                    child: Flexible(
+                  Flexible(
+                    child: Padding(
+                      padding: kHorizontalPadding,
                       child: AsyncValueWidget(
                         value: historyListStreamValue,
                         data: (historyItems) {

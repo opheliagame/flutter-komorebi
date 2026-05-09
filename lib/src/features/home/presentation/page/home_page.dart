@@ -13,6 +13,7 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           S.of(context)?.app_name ?? 'キリトリ',
           style: const TextStyle(fontWeight: FontWeight.bold),

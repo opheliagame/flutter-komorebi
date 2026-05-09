@@ -40,6 +40,7 @@ class CreatePage extends HookConsumerWidget {
     final dropdownButtonCollection = useState<CollectionEntity?>(null);
 
     final isEdit = collectionId != null || noteId != null ? true : false;
+    final isCompleted = useState(false);
 
     useEffect(() {
       if (collectionId != null) {
@@ -66,6 +67,12 @@ class CreatePage extends HookConsumerWidget {
 
       return () {};
     }, [noteId]);
+
+    // pop page once editing or creation task is complete
+    useEffect(() {
+      context.router.back();
+      return () {};
+    }, [isCompleted.value]);
 
     return Scaffold(
       appBar: AppBar(
@@ -146,7 +153,7 @@ class CreatePage extends HookConsumerWidget {
               ),
 
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 final value = inputTextEditingController.value.text;
                 if (value.isEmpty && pickedImage.value == null) return;
 
@@ -204,20 +211,16 @@ class CreatePage extends HookConsumerWidget {
                     });
                   } else {
                     // create note in collection
-                    ref
-                        .read(connectionUsecaseProvider)
-                        .createNoteAndConnect(
+                    final result = await ref.read(connectionUsecaseProvider).createNoteAndConnect(
                           content: value,
                           media: pickedImage.value,
                           collectionIds: newConnectedCollections.value.map((c) => c.id).toList(),
-                        )
-                        .then((result) {
-                      if (result) {
-                        inputTextEditingController.clear();
+                        );
 
-                        context.pop();
-                      }
-                    });
+                    if (result) {
+                      inputTextEditingController.clear();
+                      isCompleted.value = true;
+                    }
                   }
                 }
               },

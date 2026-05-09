@@ -7,3 +7,11 @@ context:
 
 # The visual structure
 layout:
+  - id: search_bar
+    component_type: text_input
+    label: "search query"
+    role: take search input from user 
+
+  - id: search_results
+    component_type: list
+    role: show search results using search_bar 

@@ -55,10 +55,24 @@ final allNoteIdsProvider = StreamProvider<Iterable<int>>((ref) {
   return notes.map((e) => e.map((e1) => e1.id));
 });
 
+final allNotesStreamProvider = StreamProvider<List<NoteEntity>>((ref) {
+  final repository = ref.read(notesRepositoryProvider);
+  return repository.watchAllNotes();
+});
+
+final searchQueryProvider = StateProvider<String>((ref) => '');
+
+final searchResultsProvider = Provider<AsyncValue<List<NoteEntity>>>((ref) {
+  final query = ref.watch(searchQueryProvider).trim().toLowerCase();
+  final notesAsync = ref.watch(allNotesStreamProvider);
+  if (query.isEmpty) return const AsyncValue.data([]);
+  return notesAsync.whenData(
+    (notes) => notes.where((n) => n.content != null && n.content!.toLowerCase().contains(query)).toList(),
+  );
+});
+
 final collectionsOfSingleNoteStreamProvider =
     StreamProvider.family.autoDispose<List<CollectionEntity>, int>((ref, noteId) {
   final repository = ref.read(collectionsRepositoryProvider);
-
-  final result = repository.watchCollectionsOfNote(noteId);
-  return result;
+  return repository.watchCollectionsOfNote(noteId);
 });
