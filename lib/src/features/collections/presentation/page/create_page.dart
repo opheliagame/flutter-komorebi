@@ -70,7 +70,9 @@ class CreatePage extends HookConsumerWidget {
 
     // pop page once editing or creation task is complete
     useEffect(() {
-      context.router.back();
+      if (isCompleted.value == true) {
+        context.router.back();
+      }
       return () {};
     }, [isCompleted.value]);
 
