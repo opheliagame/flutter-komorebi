@@ -33,7 +33,7 @@ class CreatePage extends HookConsumerWidget {
     final dropdownKey = useMemoized(() => GlobalKey<DropdownSearchState<CollectionEntity>>());
 
     final inputTextEditingController = useTextEditingController();
-    final collectionSearchController = useTextEditingController();
+    final collectionSearchController = useTextEditingController(text: '');
     final collectionSearchFocusNode = useFocusNode();
     final dropdownValue = useState<EntityType?>(entityType);
     final pickedImage = useState<Uint8List?>(null);
