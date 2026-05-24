@@ -34,6 +34,7 @@ class CreatePage extends HookConsumerWidget {
 
     final inputTextEditingController = useTextEditingController();
     final collectionSearchController = useTextEditingController();
+    final collectionSearchFocusNode = useFocusNode();
     final dropdownValue = useState<EntityType?>(entityType);
     final pickedImage = useState<Uint8List?>(null);
 
@@ -86,8 +87,8 @@ class CreatePage extends HookConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                 child: DropdownSearch<CollectionEntity>.multiSelection(
                   key: dropdownKey,
-                  items: (filter, _) async {
-                    final all = await ref.read(collectionsListStreamProvider.future);
+                  items: (filter, _) {
+                    final all = ref.read(collectionsListStreamProvider).valueOrNull ?? [];
                     return filter.isEmpty
                         ? all
                         : all.where((c) => c.name.toLowerCase().contains(filter.toLowerCase())).toList();
@@ -95,13 +96,17 @@ class CreatePage extends HookConsumerWidget {
                   selectedItems: selectedCollections.value,
                   itemAsString: (c) => c.name,
                   compareFn: (a, b) => a.id == b.id,
-                  onSelected: (items) => selectedCollections.value = items,
+                  onSelected: (items) {
+                    selectedCollections.value = items;
+                  },
                   popupProps: MultiSelectionPopupProps.modalBottomSheet(
                     showSearchBox: true,
                     searchFieldProps: TextFieldProps(
                       controller: collectionSearchController,
+                      focusNode: collectionSearchFocusNode,
                       decoration: const InputDecoration(hintText: 'search or create a collection…'),
                     ),
+                    onDisplayed: () => collectionSearchFocusNode.requestFocus(),
                     emptyBuilder: (ctx, searchEntry) {
                       final name = searchEntry.trim();
                       if (name.isEmpty) {
@@ -117,14 +122,6 @@ class CreatePage extends HookConsumerWidget {
                           await ref
                               .read(collectionsNotifierProvider.notifier)
                               .createCollection(collectionName: name, media: null);
-                          final updated = await ref.read(collectionsRepositoryProvider).getAllCollections();
-                          final match = updated.where((c) => c.name == name).toList();
-                          final created = match.isNotEmpty ? match.last : null;
-                          if (created != null && !selectedCollections.value.any((c) => c.id == created.id)) {
-                            final updated = [...selectedCollections.value, created];
-                            selectedCollections.value = updated;
-                            dropdownKey.currentState?.changeSelectedItems(updated);
-                          }
                           collectionSearchController.clear();
                         },
                       );
