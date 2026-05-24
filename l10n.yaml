@@ -3,5 +3,4 @@ template-arb-file: intl_en.arb
 output-localization-file: app_localizations.dart
 output-class: S
 output-dir: lib/src/core/l10n/generated
-synthetic-package: false
 nullable-getter: true
