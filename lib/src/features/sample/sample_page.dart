@@ -52,11 +52,11 @@ class SamplePage extends HookConsumerWidget {
           // FIXME collectionId as constant 0 will fail
           collectionId: 0,
         ),
-        name: 'Home list page',
+        name: 'collection list page',
       ),
       _SamplePageTextButton(
         route: (_) => CollectionsListRoute(),
-        name: 'collections list page',
+        name: 'all collections',
       ),
       _SamplePageTextButton(
         route: (_) => NoteListRoute(
@@ -115,8 +115,12 @@ class SamplePage extends HookConsumerWidget {
         name: 'collection grid scale test route',
       ),
       _SamplePageTextButton(
-        route: (_) => GridScaleTestRoute(isCollectionGrid: false),
+        route: (value) => GridScaleTestRoute(
+          isCollectionGrid: false,
+          collectionId: value,
+        ),
         name: 'notes list scale test route',
+        options: collectionIds,
       ),
       _SamplePageTextButton(
         route: (_) => ConnectionDiagramRoute(),

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/more_options_action_button.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_row.dart';
@@ -55,8 +56,11 @@ class CollectionListPage extends ConsumerWidget {
             ),
             Flexible(
               flex: 1,
-              child: NotesList(
-                collectionId: collectionId,
+              child: AnimatedZoomLevelWidget(
+                childBuilder: (zoomLevel) => NotesList(
+                  collectionId: collectionId,
+                  zoomLevel: zoomLevel,
+                ),
               ),
             ),
           ],

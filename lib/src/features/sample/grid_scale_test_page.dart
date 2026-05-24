@@ -6,9 +6,10 @@ import 'package:flutter_komorebi/src/features/notes/presentation/notes_list.dart
 
 @RoutePage()
 class GridScaleTestPage extends StatelessWidget {
-  const GridScaleTestPage({super.key, required this.isCollectionGrid});
+  const GridScaleTestPage({super.key, required this.isCollectionGrid, this.collectionId});
 
   final bool isCollectionGrid;
+  final int? collectionId;
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +19,11 @@ class GridScaleTestPage extends StatelessWidget {
       ),
       body: AnimatedZoomLevelWidget(
         childBuilder: (zoomLevel) {
-          if (isCollectionGrid) {
+          if (isCollectionGrid && collectionId != null) {
             return CollectionsGrid(zoomLevel: zoomLevel);
           } else {
             return NotesList(
-              // FIXME collectionId as constant 0 will fail
-              collectionId: 0,
+              collectionId: collectionId!,
               zoomLevel: zoomLevel,
             );
           }

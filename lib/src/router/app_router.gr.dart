@@ -10,7 +10,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i16;
-import 'package:flutter/material.dart' as _i17;
+import 'package:flutter/foundation.dart' as _i17;
+import 'package:flutter/material.dart' as _i18;
 import 'package:flutter_komorebi/src/features/collections/presentation/page/collections_list_page.dart'
     as _i2;
 import 'package:flutter_komorebi/src/features/collections/presentation/page/create_page.dart'
@@ -20,7 +21,7 @@ import 'package:flutter_komorebi/src/features/connection/presentation/roam_page.
 import 'package:flutter_komorebi/src/features/history/presentation/page/history_list_page.dart'
     as _i6;
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart'
-    as _i18;
+    as _i19;
 import 'package:flutter_komorebi/src/features/home/presentation/page/collection_list_page.dart'
     as _i1;
 import 'package:flutter_komorebi/src/features/home/presentation/page/home_page.dart'
@@ -97,7 +98,7 @@ class CollectionListRouteArgs {
 class CollectionsListRoute
     extends _i16.PageRouteInfo<CollectionsListRouteArgs> {
   CollectionsListRoute({
-    _i17.Key? key,
+    _i18.Key? key,
     int? collectionId,
     List<_i16.PageRouteInfo>? children,
   }) : super(
@@ -125,7 +126,7 @@ class CollectionsListRoute
 class CollectionsListRouteArgs {
   const CollectionsListRouteArgs({this.key, this.collectionId});
 
-  final _i17.Key? key;
+  final _i18.Key? key;
 
   final int? collectionId;
 
@@ -165,8 +166,8 @@ class ConnectionDiagramRoute extends _i16.PageRouteInfo<void> {
 /// [_i4.CreatePage]
 class CreateRoute extends _i16.PageRouteInfo<CreateRouteArgs> {
   CreateRoute({
-    _i17.Key? key,
-    required _i18.EntityType entityType,
+    _i18.Key? key,
+    required _i19.EntityType entityType,
     int? collectionId,
     int? noteId,
     List<_i16.PageRouteInfo>? children,
@@ -205,9 +206,9 @@ class CreateRouteArgs {
     this.noteId,
   });
 
-  final _i17.Key? key;
+  final _i18.Key? key;
 
-  final _i18.EntityType entityType;
+  final _i19.EntityType entityType;
 
   final int? collectionId;
 
@@ -240,14 +241,16 @@ class CreateRouteArgs {
 /// [_i5.GridScaleTestPage]
 class GridScaleTestRoute extends _i16.PageRouteInfo<GridScaleTestRouteArgs> {
   GridScaleTestRoute({
-    _i17.Key? key,
+    _i18.Key? key,
     required bool isCollectionGrid,
+    int? collectionId,
     List<_i16.PageRouteInfo>? children,
   }) : super(
           GridScaleTestRoute.name,
           args: GridScaleTestRouteArgs(
             key: key,
             isCollectionGrid: isCollectionGrid,
+            collectionId: collectionId,
           ),
           initialChildren: children,
         );
@@ -261,32 +264,42 @@ class GridScaleTestRoute extends _i16.PageRouteInfo<GridScaleTestRouteArgs> {
       return _i5.GridScaleTestPage(
         key: args.key,
         isCollectionGrid: args.isCollectionGrid,
+        collectionId: args.collectionId,
       );
     },
   );
 }
 
 class GridScaleTestRouteArgs {
-  const GridScaleTestRouteArgs({this.key, required this.isCollectionGrid});
+  const GridScaleTestRouteArgs({
+    this.key,
+    required this.isCollectionGrid,
+    this.collectionId,
+  });
 
-  final _i17.Key? key;
+  final _i18.Key? key;
 
   final bool isCollectionGrid;
 
+  final int? collectionId;
+
   @override
   String toString() {
-    return 'GridScaleTestRouteArgs{key: $key, isCollectionGrid: $isCollectionGrid}';
+    return 'GridScaleTestRouteArgs{key: $key, isCollectionGrid: $isCollectionGrid, collectionId: $collectionId}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! GridScaleTestRouteArgs) return false;
-    return key == other.key && isCollectionGrid == other.isCollectionGrid;
+    return key == other.key &&
+        isCollectionGrid == other.isCollectionGrid &&
+        collectionId == other.collectionId;
   }
 
   @override
-  int get hashCode => key.hashCode ^ isCollectionGrid.hashCode;
+  int get hashCode =>
+      key.hashCode ^ isCollectionGrid.hashCode ^ collectionId.hashCode;
 }
 
 /// generated route for
@@ -326,7 +339,7 @@ class HomeRoute extends _i16.PageRouteInfo<void> {
 class ImageClipboardSampleRoute
     extends _i16.PageRouteInfo<ImageClipboardSampleRouteArgs> {
   ImageClipboardSampleRoute({
-    _i17.Key? key,
+    _i18.Key? key,
     required bool isDebug,
     List<_i16.PageRouteInfo>? children,
   }) : super(
@@ -349,7 +362,7 @@ class ImageClipboardSampleRoute
 class ImageClipboardSampleRouteArgs {
   const ImageClipboardSampleRouteArgs({this.key, required this.isDebug});
 
-  final _i17.Key? key;
+  final _i18.Key? key;
 
   final bool isDebug;
 
@@ -389,7 +402,7 @@ class MainTabRoute extends _i16.PageRouteInfo<void> {
 /// [_i10.NoteDetailPage]
 class NoteDetailRoute extends _i16.PageRouteInfo<NoteDetailRouteArgs> {
   NoteDetailRoute({
-    _i17.Key? key,
+    _i18.Key? key,
     required int noteId,
     List<_i16.PageRouteInfo>? children,
   }) : super(
@@ -412,7 +425,7 @@ class NoteDetailRoute extends _i16.PageRouteInfo<NoteDetailRouteArgs> {
 class NoteDetailRouteArgs {
   const NoteDetailRouteArgs({this.key, required this.noteId});
 
-  final _i17.Key? key;
+  final _i18.Key? key;
 
   final int noteId;
 
@@ -436,7 +449,7 @@ class NoteDetailRouteArgs {
 /// [_i11.NoteListPage]
 class NoteListRoute extends _i16.PageRouteInfo<NoteListRouteArgs> {
   NoteListRoute({
-    _i17.Key? key,
+    _i18.Key? key,
     required int collectionId,
     List<_i16.PageRouteInfo>? children,
   }) : super(
@@ -459,7 +472,7 @@ class NoteListRoute extends _i16.PageRouteInfo<NoteListRouteArgs> {
 class NoteListRouteArgs {
   const NoteListRouteArgs({this.key, required this.collectionId});
 
-  final _i17.Key? key;
+  final _i18.Key? key;
 
   final int collectionId;
 
