@@ -2,6 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
+import 'package:flutter_komorebi/src/data/drift/database.dart';
+import 'package:flutter_komorebi/src/data/drift/database_backup_service.dart';
+import 'package:flutter_komorebi/src/data/drift/database_extension.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
@@ -136,6 +139,8 @@ class SamplePage extends HookConsumerWidget {
       body: SafeArea(
         child: ListView(
           children: [
+            _BackupSection(),
+            const Divider(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextField(
@@ -151,6 +156,57 @@ class SamplePage extends HookConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _BackupSection extends ConsumerWidget {
+  const _BackupSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TextButton.icon(
+          onPressed: () => ref.read(databaseBackupServiceProvider).exportDatabase(context),
+          icon: const Icon(Icons.upload),
+          label: const Text('export db'),
+        ),
+        const SizedBox(width: 8),
+        TextButton.icon(
+          onPressed: () => ref.read(databaseBackupServiceProvider).importDatabase(context),
+          icon: const Icon(Icons.download),
+          label: const Text('import db'),
+        ),
+        const SizedBox(width: 8),
+        TextButton.icon(
+          style: TextButton.styleFrom(foregroundColor: Colors.red),
+          onPressed: () async {
+            final confirmed = await showDialog<bool>(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: const Text('clear all data?'),
+                content: const Text('This will permanently delete all collections, notes, and connections.'),
+                actions: [
+                  TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('cancel')),
+                  TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('clear')),
+                ],
+              ),
+            );
+            if (confirmed == true && context.mounted) {
+              await ref.read(appDatabaseProvider).clearAllData();
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('database cleared')),
+                );
+              }
+            }
+          },
+          icon: const Icon(Icons.delete_forever),
+          label: const Text('clear db'),
+        ),
+      ],
     );
   }
 }

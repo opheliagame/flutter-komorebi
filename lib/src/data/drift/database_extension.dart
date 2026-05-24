@@ -6,6 +6,18 @@ import 'package:flutter_komorebi/src/core/domain/history_entity.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 
 extension MockDataSeeder on AppDatabase {
+  Future<void> clearAllData() async {
+    await batch((batch) {
+      batch.deleteWhere(historyTable, (_) => const Constant(true));
+      batch.deleteWhere(collectionNoteRefTable, (_) => const Constant(true));
+      batch.deleteWhere(noteTable, (_) => const Constant(true));
+      batch.deleteWhere(collectionTable, (_) => const Constant(true));
+      batch.deleteWhere(noteCitationTable, (_) => const Constant(true));
+      batch.deleteWhere(collectionMediaTable, (_) => const Constant(true));
+    });
+    debugPrint('🧹 Cleared all data.');
+  }
+
   Future<void> insertSimpleMockData() async {
     final random = Random();
     final now = DateTime.now();
