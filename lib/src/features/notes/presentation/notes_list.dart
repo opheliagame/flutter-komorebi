@@ -5,6 +5,7 @@ import 'package:flutter_komorebi/src/core/extensions/datetime.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
+import 'package:flutter_komorebi/src/features/notes/presentation/note_tile.dart';
 import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -47,7 +48,12 @@ class NotesList extends ConsumerWidget {
             mainAxisSpacing: 2,
             children: [
               ...notes.map(
-                (note) => NoteTile(note: note),
+                (note) => NoteTile(
+                  note: note,
+                  onTap: () {
+                    context.pushRoute(NoteDetailRoute(noteId: note.id));
+                  },
+                ),
               ),
             ],
           );
@@ -58,46 +64,17 @@ class NotesList extends ConsumerWidget {
             mainAxisSpacing: 2,
             children: [
               ...notes.map(
-                (note) => NoteTile(note: note),
+                (note) => NoteTile(
+                  note: note,
+                  onTap: () {
+                    context.pushRoute(NoteDetailRoute(noteId: note.id));
+                  },
+                ),
               ),
             ],
           );
         }
       },
-    );
-  }
-}
-
-class NoteTile extends StatelessWidget {
-  const NoteTile({
-    super.key,
-    required this.note,
-  });
-
-  final NoteEntity note;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.pushRoute(NoteDetailRoute(noteId: note.id));
-      },
-      child: Stack(
-        children: [
-          if (note.content != null) Center(child: Text(note.randomWord!)),
-          Positioned.fill(
-            child: note.media != null
-                ? Image.memory(
-                    note.media!,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Text('error fetching image');
-                    },
-                  )
-                : SizedBox.shrink(),
-          )
-        ],
-      ),
     );
   }
 }

@@ -20,5 +20,5 @@ class NoteEntity {
     required this.modifiedAt,
   });
 
-  String? get randomWord => content?.split(' ').toList().sample(1).single;
+  String? get randomWord => content?.split(' ').where((e) => e.isNotEmpty).toList().sample(1).single;
 }

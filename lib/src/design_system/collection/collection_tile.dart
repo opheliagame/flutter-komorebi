@@ -23,7 +23,7 @@ class CollectionTile extends HookConsumerWidget {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          context.pushRoute(CollectionListRoute(collectionId: collection.id));
+          context.replaceRoute(CollectionListRoute(collectionId: collection.id));
         },
         onLongPress: () {
           isEdit.value = true;
@@ -31,21 +31,20 @@ class CollectionTile extends HookConsumerWidget {
         child: AspectRatio(
           aspectRatio: 1,
           child: Container(
-            color: Theme.of(context).buttonTheme.colorScheme?.primaryContainer,
+            decoration: ShapeDecoration(
+              shape: CircleBorder(side: BorderSide(color: Colors.black)),
+            ),
             child: !isEdit.value
                 ? Stack(
                     children: [
                       if (collection.media != null)
                         Positioned.fill(
-                          child: Opacity(
-                            opacity: 0.3,
-                            child: Image.memory(
-                              collection.media!,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Text('error fetching image');
-                              },
-                            ),
+                          child: Image.memory(
+                            collection.media!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Text('error fetching image');
+                            },
                           ),
                         ),
                       Padding(

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/more_options_action_button.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
@@ -21,7 +22,9 @@ class CollectionListPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-            '${collectionFutureValue.value?.name} ${collectionFutureValue.value?.id}',
+            kDebugMode
+                ? '${collectionFutureValue.value?.name} ${collectionFutureValue.value?.id}'
+                : collectionFutureValue.value?.name ?? '',
           ),
           actions: [
             MoreOptionsActionButton(
