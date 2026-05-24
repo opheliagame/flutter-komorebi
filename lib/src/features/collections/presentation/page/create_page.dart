@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
-import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_notifier.dart';
 import 'package:flutter_komorebi/src/features/connection/usecase/connection_usecase.dart';
@@ -29,15 +29,13 @@ class CreatePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collectionListStream = ref.watch(collectionsListStreamProvider);
-    final prevConnectedCollections = useState<List<CollectionEntity>>([]);
-    final newConnectedCollections = useState<List<CollectionEntity>>([]);
-    final allConnectedCollections = [...prevConnectedCollections.value, ...newConnectedCollections.value];
+    final selectedCollections = useState<List<CollectionEntity>>([]);
+    final dropdownKey = useMemoized(() => GlobalKey<DropdownSearchState<CollectionEntity>>());
 
     final inputTextEditingController = useTextEditingController();
+    final collectionSearchController = useTextEditingController();
     final dropdownValue = useState<EntityType?>(entityType);
     final pickedImage = useState<Uint8List?>(null);
-    final dropdownButtonCollection = useState<CollectionEntity?>(null);
 
     final isEdit = collectionId != null || noteId != null ? true : false;
     final isCompleted = useState(false);
@@ -49,28 +47,27 @@ class CreatePage extends HookConsumerWidget {
           pickedImage.value = collection.media;
         });
       }
-
       return () {};
     }, [collectionId]);
 
     useEffect(() {
       if (noteId != null) {
-        ref.watch(notesRepositoryProvider).getNote(noteId!).then((note) {
+        ref.read(notesRepositoryProvider).getNote(noteId!).then((note) {
           inputTextEditingController.text = note.content ?? '';
           pickedImage.value = note.media;
         });
 
         ref.read(collectionsRepositoryProvider).getCollectionsOfNote(noteId!).then((result) {
-          prevConnectedCollections.value = result;
+          selectedCollections.value = result;
         });
       }
-
       return () {};
     }, [noteId]);
 
     // pop page once editing or creation task is complete
     useEffect(() {
       if (isCompleted.value == true) {
+        selectedCollections.value = [];
         context.router.back();
       }
       return () {};
@@ -85,53 +82,61 @@ class CreatePage extends HookConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (entityType == EntityType.note)
-              SizedBox(
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                  child: AsyncValueWidget(
-                    value: collectionListStream,
-                    data: (collections) {
-                      return DropdownButton(
-                        isExpanded: true,
-                        value: dropdownButtonCollection.value,
-                        items: collections
-                            .map(
-                              (c) => DropdownMenuItem(
-                                value: c,
-                                child: Text(
-                                  c.name,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: (value) {
-                          if (value == null) return;
-                          dropdownButtonCollection.value = value;
-                          newConnectedCollections.value.add(value);
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                child: DropdownSearch<CollectionEntity>.multiSelection(
+                  key: dropdownKey,
+                  items: (filter, _) async {
+                    final all = await ref.read(collectionsListStreamProvider.future);
+                    return filter.isEmpty
+                        ? all
+                        : all.where((c) => c.name.toLowerCase().contains(filter.toLowerCase())).toList();
+                  },
+                  selectedItems: selectedCollections.value,
+                  itemAsString: (c) => c.name,
+                  compareFn: (a, b) => a.id == b.id,
+                  onSelected: (items) => selectedCollections.value = items,
+                  popupProps: MultiSelectionPopupProps.modalBottomSheet(
+                    showSearchBox: true,
+                    searchFieldProps: TextFieldProps(
+                      controller: collectionSearchController,
+                      decoration: const InputDecoration(hintText: 'search or create a collection…'),
+                    ),
+                    emptyBuilder: (ctx, searchEntry) {
+                      final name = searchEntry.trim();
+                      if (name.isEmpty) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Text('start typing to create a new collection'),
+                        );
+                      }
+                      return ListTile(
+                        leading: const Icon(Icons.add),
+                        title: Text('create "$name"'),
+                        onTap: () async {
+                          await ref
+                              .read(collectionsNotifierProvider.notifier)
+                              .createCollection(collectionName: name, media: null);
+                          final updated = await ref.read(collectionsRepositoryProvider).getAllCollections();
+                          final match = updated.where((c) => c.name == name).toList();
+                          final created = match.isNotEmpty ? match.last : null;
+                          if (created != null && !selectedCollections.value.any((c) => c.id == created.id)) {
+                            final updated = [...selectedCollections.value, created];
+                            selectedCollections.value = updated;
+                            dropdownKey.currentState?.changeSelectedItems(updated);
+                          }
+                          collectionSearchController.clear();
                         },
                       );
                     },
                   ),
+                  decoratorProps: const DropDownDecoratorProps(
+                    decoration: InputDecoration(
+                      labelText: 'collections',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
                 ),
-              ),
-
-            if (allConnectedCollections.isNotEmpty)
-              Wrap(
-                runSpacing: 10,
-                spacing: 10,
-                children: allConnectedCollections
-                    .map(
-                      (c) => InputChip(
-                        label: Text(c.name),
-                        selected: allConnectedCollections.contains(c),
-                        onDeleted: () {
-                          allConnectedCollections.remove(c);
-                        },
-                      ),
-                    )
-                    .toList(),
               ),
 
             // input area
@@ -176,7 +181,6 @@ class CreatePage extends HookConsumerWidget {
                       }
                     });
                   } else {
-                    // create collection
                     ref
                         .read(collectionsNotifierProvider.notifier)
                         .createCollection(
@@ -202,18 +206,17 @@ class CreatePage extends HookConsumerWidget {
                         .then((_) {
                       ref.read(connectionUsecaseProvider).addNoteToCollectionList(
                             noteId: noteId!,
-                            collectionIds: newConnectedCollections.value.map((c) => c.id).toList(),
+                            collectionIds: selectedCollections.value.map((c) => c.id).toList(),
                           );
 
                       inputTextEditingController.clear();
                       isCompleted.value = true;
                     });
                   } else {
-                    // create note in collection
                     final result = await ref.read(connectionUsecaseProvider).createNoteAndConnect(
                           content: value,
                           media: pickedImage.value,
-                          collectionIds: newConnectedCollections.value.map((c) => c.id).toList(),
+                          collectionIds: selectedCollections.value.map((c) => c.id).toList(),
                         );
 
                     if (result) {
