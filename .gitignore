@@ -55,3 +55,4 @@ app.*.map.json
 
 # temp files
 *.sqlite
+!komorebi_personal_archive.bkp.sqlite

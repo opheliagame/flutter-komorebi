@@ -169,8 +169,8 @@ class _BackupSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      alignment: WrapAlignment.center,
       children: [
         TextButton.icon(
           onPressed: () => ref.read(databaseBackupServiceProvider).exportDatabase(context),
@@ -182,6 +182,12 @@ class _BackupSection extends ConsumerWidget {
           onPressed: () => ref.read(databaseBackupServiceProvider).importDatabase(context),
           icon: const Icon(Icons.download),
           label: const Text('import db'),
+        ),
+        const SizedBox(width: 8),
+        TextButton.icon(
+          onPressed: () => ref.read(databaseBackupServiceProvider).loadSampleDatabase(context),
+          icon: const Icon(Icons.dataset),
+          label: const Text('load sample db'),
         ),
         const SizedBox(width: 8),
         TextButton.icon(
