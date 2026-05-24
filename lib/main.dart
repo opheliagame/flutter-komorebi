@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
 import 'package:flutter_komorebi/src/router/app_router.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,12 +12,12 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends HookConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final appRouter = AppRouter();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appRouter = useMemoized(() => AppRouter());
 
     return MaterialApp.router(
       title: S.of(context)?.app_name,
