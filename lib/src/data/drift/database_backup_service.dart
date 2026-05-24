@@ -14,7 +14,7 @@ class DatabaseBackupService {
   final AppDatabase db;
 
   // Must match the `name` passed to driftDatabase() in database.dart.
-  static const _dbFileName = 'komorebi_personal_archive.sqlite';
+  static const _dbFileName = 'my_database.sqlite';
   // Friendly name used when exporting.
   static const _exportFileName = 'komorebi_personal_archive.bkp.sqlite';
 
