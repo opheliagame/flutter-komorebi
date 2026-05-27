@@ -72,7 +72,24 @@ class _RoamPageState extends ConsumerState<RoamPage> {
                               ),
                             ),
                             const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                              padding: EdgeInsets.only(left: 20, right: 20, top: 16),
+                              child: Divider(
+                                thickness: 1,
+                                height: 1,
+                              ),
+                            ),
+                          ] else ...[
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                              child: Text(
+                                'roaming now',
+                                style: textTheme.displayLarge?.copyWith(
+                                  color: colorScheme.secondary,
+                                ),
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 20, right: 20, top: 16),
                               child: Divider(),
                             ),
                           ],
@@ -87,7 +104,7 @@ class _RoamPageState extends ConsumerState<RoamPage> {
                                 },
                                 child: Text(
                                   roam.currentNote!.content ?? '',
-                                  style: textTheme.displaySmall?.copyWith(
+                                  style: textTheme.titleLarge?.copyWith(
                                     color: colorScheme.primary,
                                   ),
                                 ),
@@ -98,8 +115,11 @@ class _RoamPageState extends ConsumerState<RoamPage> {
                           // ── Connections + shuffle (fixed bottom) ────────────
                           if (roam.currentCollections.isNotEmpty) ...[
                             const Padding(
-                              padding: EdgeInsets.fromLTRB(20, 16, 20, 4),
-                              child: Divider(),
+                              padding: EdgeInsets.only(left: 20, right: 20, bottom: 16),
+                              child: Divider(
+                                thickness: 1,
+                                height: 1,
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(20, 0, 20, 4),
