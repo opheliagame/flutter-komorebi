@@ -5,6 +5,7 @@ import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart'
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/data/drift/database_backup_service.dart';
 import 'package:flutter_komorebi/src/data/drift/database_extension.dart';
+import 'package:flutter_komorebi/src/design_system/app_color.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
@@ -46,6 +47,10 @@ class SamplePage extends HookConsumerWidget {
       _SamplePageTextButton(
         route: (_) => HomeRoute(),
         name: 'Home Page',
+      ),
+      _SamplePageTextButton(
+        route: (_) => AppColorThemeRoute(),
+        name: 'App Color Theme Page',
       ),
       _SamplePageTextButton(
         route: (_) => CollectionListRoute(
@@ -143,6 +148,8 @@ class SamplePage extends HookConsumerWidget {
       body: SafeArea(
         child: ListView(
           children: [
+            _SeedColorDropdown(),
+            const Divider(),
             _BackupSection(),
             const Divider(),
             Padding(
@@ -159,6 +166,68 @@ class SamplePage extends HookConsumerWidget {
             ...buttons.value,
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _SeedColorDropdown extends ConsumerWidget {
+  const _SeedColorDropdown();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    /// All named colors exposed by the [Colors] class, paired with their label.
+    final dropdownItems = Colors.primaries;
+
+    final current = ref.watch(appColorSchemeSeedProvider);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
+          const Text('seed color'),
+          const SizedBox(width: 12),
+          Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              color: current,
+              shape: BoxShape.circle,
+              border: Border.all(color: Theme.of(context).colorScheme.outline),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: DropdownButton<MaterialColor>(
+              value: current,
+              items: dropdownItems
+                  .map((e) => DropdownMenuItem(
+                        value: e,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: e,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Theme.of(context).colorScheme.outline),
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Text(e.shade500.hex),
+                          ],
+                        ),
+                      ))
+                  .toList(),
+              onChanged: (color) {
+                if (color != null) {
+                  ref.read(appColorSchemeSeedProvider.notifier).state = color;
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

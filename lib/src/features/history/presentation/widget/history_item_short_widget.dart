@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/core/domain/history_entity.dart';
+import 'package:flutter_komorebi/src/core/extensions/datetime.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HistoryItemShortWidget extends ConsumerWidget {
@@ -52,16 +53,19 @@ class HistoryItemCollectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final createdAt = historyItem.collectionEntity?.createdAt;
+    final modifiedAt = historyItem.collectionEntity?.modifiedAt;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Row(
         children: [
-          if (!isEdit && !isDelete)
-            Expanded(child: Text('created collection on ${historyItem.collectionEntity?.createdAt.toString()}'))
-          else if (isEdit)
-            Expanded(child: Text('updated collection on ${historyItem.collectionEntity?.modifiedAt.toString()}'))
-          else if (isDelete)
-            Expanded(child: Text('deleted collection on ${historyItem.collectionEntity?.modifiedAt.toString()}'))
+          if (!isEdit && !isDelete && createdAt != null)
+            Expanded(child: Text('created collection on ${dateFormatter.format(createdAt)}'))
+          else if (isEdit && modifiedAt != null)
+            Expanded(child: Text('updated collection on ${dateFormatter.format(modifiedAt)}'))
+          else if (isDelete && modifiedAt != null)
+            Expanded(child: Text('deleted collection on ${dateFormatter.format(modifiedAt)}'))
         ],
       ),
     );
@@ -82,16 +86,19 @@ class HistoryItemNoteWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final createdAt = historyItem.noteEntity?.createdAt;
+    final modifiedAt = historyItem.noteEntity?.modifiedAt;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Row(
         children: [
-          if (!isEdit && !isDelete)
-            Expanded(child: Text('created note on ${historyItem.noteEntity?.createdAt.toString()}'))
-          else if (isEdit)
-            Expanded(child: Text('updated note on ${historyItem.noteEntity?.modifiedAt.toString()}'))
-          else if (isDelete)
-            Expanded(child: Text('deleted note on ${historyItem.noteEntity?.modifiedAt.toString()}')),
+          if (!isEdit && !isDelete && createdAt != null)
+            Expanded(child: Text('created note on ${dateFormatter.format(createdAt)}'))
+          else if (isEdit && modifiedAt != null)
+            Expanded(child: Text('updated note on ${dateFormatter.format(modifiedAt)}'))
+          else if (isDelete && modifiedAt != null)
+            Expanded(child: Text('deleted note on ${dateFormatter.format(modifiedAt)}'))
         ],
       ),
     );

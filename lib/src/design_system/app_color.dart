@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/core/domain/history_entity.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final appColorSchemeSeedProvider = StateProvider<MaterialColor>((ref) => Colors.deepOrange);
 
 extension HistoryItemColorExtension on HistoryExpandedEntity {
   Color get tileBackgroundColor {
@@ -18,5 +21,15 @@ extension HistoryItemColorExtension on HistoryExpandedEntity {
       case HistoryType.addConnection:
         return Colors.green.shade100;
     }
+  }
+}
+
+/// extensions
+///
+///
+extension ColorExtension on Color {
+  // return a hex representation of the color with opacity information
+  String get hex {
+    return toARGB32().toRadixString(16).toUpperCase();
   }
 }

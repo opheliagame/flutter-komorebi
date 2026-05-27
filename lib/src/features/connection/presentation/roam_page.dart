@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
-import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
+import 'package:flutter_komorebi/src/design_system/collection/collection_tile.dart';
 import 'package:flutter_komorebi/src/features/connection/presentation/roam_notifier.dart';
 import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,24 +28,9 @@ class _RoamPageState extends ConsumerState<RoamPage> {
   Widget build(BuildContext context) {
     final roam = ref.watch(roamNotifierProvider);
     final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          S.of(context)?.app_name ?? 'キリトリ',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            tooltip: 'Search',
-            onPressed: () {
-              context.navigateTo(SearchRoute());
-            },
-          ),
-        ],
-      ),
       body: SafeArea(
         child: roam.isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -107,7 +92,9 @@ class _RoamPageState extends ConsumerState<RoamPage> {
                               ),
                               child: Text(
                                 roam.currentNote!.content ?? '',
-                                style: textTheme.bodyLarge?.copyWith(height: 1.6),
+                                style: textTheme.displaySmall?.copyWith(
+                                  color: colorScheme.primary,
+                                ),
                               ),
                             ),
                           ),
@@ -183,9 +170,9 @@ class _CollectionChips extends StatelessWidget {
             .map(
               (col) => Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: ActionChip(
-                  label: Text(col.name),
-                  onPressed: () => onTap(col),
+                child: CollectionTile(
+                  collection: col,
+                  onTap: () => onTap(col),
                 ),
               ),
             )

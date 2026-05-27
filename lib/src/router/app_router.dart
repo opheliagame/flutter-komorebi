@@ -75,5 +75,9 @@ class AppRouter extends RootStackRouter {
           path: '/recents-page',
           page: RecentsRoute.page,
         ),
+        AutoRoute(
+          path: '/app-color-theme',
+          page: AppColorThemeRoute.page,
+        ),
       ];
 }

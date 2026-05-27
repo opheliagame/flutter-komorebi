@@ -1,10 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/core/domain/note_entity.dart';
-import 'package:flutter_komorebi/src/core/extensions/datetime.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
+import 'package:flutter_komorebi/src/features/notes/presentation/note_list_item.dart';
 import 'package:flutter_komorebi/src/features/notes/presentation/note_tile.dart';
 import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -75,60 +74,6 @@ class NotesList extends ConsumerWidget {
           );
         }
       },
-    );
-  }
-}
-
-class NoteListItem extends StatelessWidget {
-  const NoteListItem({
-    super.key,
-    required this.note,
-    required this.onTap,
-  });
-
-  final NoteEntity note;
-  final Function()? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (note.content != null) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  note.content!,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-            ],
-            if (note.media != null) ...[
-              Image.memory(
-                note.media!,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return Text('error fetching image');
-                },
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-            ],
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(dateFormatter.format(note.modifiedAt)),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

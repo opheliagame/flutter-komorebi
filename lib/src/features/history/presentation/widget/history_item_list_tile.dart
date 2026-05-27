@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/core/domain/history_entity.dart';
 import 'package:flutter_komorebi/src/design_system/app_color.dart';
 import 'package:flutter_komorebi/src/design_system/collection/collection_text_button.dart';
-import 'package:flutter_komorebi/src/features/notes/presentation/notes_list.dart';
+import 'package:flutter_komorebi/src/features/notes/presentation/note_list_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HistoryItemListTile extends ConsumerWidget {

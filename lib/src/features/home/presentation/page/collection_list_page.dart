@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/floating_sliver_app_bar.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/more_options_action_button.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_row.dart';
@@ -21,49 +22,50 @@ class CollectionListPage extends ConsumerWidget {
     final collectionFutureValue = ref.watch(collectionSingleFutureProvider(collectionId));
 
     return Scaffold(
-      appBar: AppBar(
-          title: Text(
-            kDebugMode
-                ? '${collectionFutureValue.value?.name} ${collectionFutureValue.value?.id}'
-                : collectionFutureValue.value?.name ?? '',
-          ),
-          actions: [
-            MoreOptionsActionButton(
-              children: [
-                ListTile(
-                  title: Text('new collection'),
-                  onTap: () {
-                    context.pop();
-                    context.pushRoute(CreateRoute(entityType: EntityType.collection));
-                  },
-                ),
-                ListTile(
-                  title: Text('new note'),
-                  onTap: () {
-                    context.pop();
-                    context.pushRoute(CreateRoute(entityType: EntityType.note));
-                  },
+      body: SafeArea(
+        child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            FloatingSliverAppBar(
+              forceElevated: innerBoxIsScrolled,
+              title: Text(
+                kDebugMode
+                    ? '${collectionFutureValue.value?.name} ${collectionFutureValue.value?.id}'
+                    : collectionFutureValue.value?.name ?? '',
+              ),
+              actions: [
+                MoreOptionsActionButton(
+                  children: [
+                    ListTile(
+                      title: Text('new collection'),
+                      onTap: () {
+                        context.pop();
+                        context.pushRoute(CreateRoute(entityType: EntityType.collection));
+                      },
+                    ),
+                    ListTile(
+                      title: Text('new note'),
+                      onTap: () {
+                        context.pop();
+                        context.pushRoute(CreateRoute(entityType: EntityType.note));
+                      },
+                    )
+                  ],
                 )
               ],
-            )
-          ]),
-      body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 120,
-              child: RelatedCollectionsRow(collectionId: collectionId),
             ),
-            Flexible(
-              flex: 1,
-              child: AnimatedZoomLevelWidget(
-                childBuilder: (zoomLevel) => NotesList(
-                  collectionId: collectionId,
-                  zoomLevel: zoomLevel,
-                ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 120,
+                child: RelatedCollectionsRow(collectionId: collectionId),
               ),
             ),
           ],
+          body: AnimatedZoomLevelWidget(
+            childBuilder: (zoomLevel) => NotesList(
+              collectionId: collectionId,
+              zoomLevel: zoomLevel,
+            ),
+          ),
         ),
       ),
     );

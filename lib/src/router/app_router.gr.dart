@@ -9,47 +9,65 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i16;
-import 'package:flutter/foundation.dart' as _i17;
-import 'package:flutter/material.dart' as _i18;
+import 'package:auto_route/auto_route.dart' as _i17;
+import 'package:flutter/foundation.dart' as _i18;
+import 'package:flutter/material.dart' as _i19;
 import 'package:flutter_komorebi/src/features/collections/presentation/page/collections_list_page.dart'
-    as _i2;
-import 'package:flutter_komorebi/src/features/collections/presentation/page/create_page.dart'
-    as _i4;
-import 'package:flutter_komorebi/src/features/connection/presentation/roam_page.dart'
-    as _i13;
-import 'package:flutter_komorebi/src/features/history/presentation/page/history_list_page.dart'
-    as _i6;
-import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart'
-    as _i19;
-import 'package:flutter_komorebi/src/features/home/presentation/page/collection_list_page.dart'
-    as _i1;
-import 'package:flutter_komorebi/src/features/home/presentation/page/home_page.dart'
-    as _i7;
-import 'package:flutter_komorebi/src/features/home/presentation/page/main_tab_page.dart'
-    as _i9;
-import 'package:flutter_komorebi/src/features/notes/presentation/page/note_detail_page.dart'
-    as _i10;
-import 'package:flutter_komorebi/src/features/notes/presentation/page/note_list_page.dart'
-    as _i11;
-import 'package:flutter_komorebi/src/features/sample/connection_diagram_page.dart'
     as _i3;
-import 'package:flutter_komorebi/src/features/sample/grid_scale_test_page.dart'
+import 'package:flutter_komorebi/src/features/collections/presentation/page/create_page.dart'
     as _i5;
-import 'package:flutter_komorebi/src/features/sample/image_clipboard.dart'
+import 'package:flutter_komorebi/src/features/connection/presentation/roam_page.dart'
+    as _i14;
+import 'package:flutter_komorebi/src/features/history/presentation/page/history_list_page.dart'
+    as _i7;
+import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart'
+    as _i20;
+import 'package:flutter_komorebi/src/features/home/presentation/page/collection_list_page.dart'
+    as _i2;
+import 'package:flutter_komorebi/src/features/home/presentation/page/home_page.dart'
     as _i8;
-import 'package:flutter_komorebi/src/features/sample/recents_page.dart' as _i12;
-import 'package:flutter_komorebi/src/features/sample/sample_page.dart' as _i14;
+import 'package:flutter_komorebi/src/features/home/presentation/page/main_tab_page.dart'
+    as _i10;
+import 'package:flutter_komorebi/src/features/notes/presentation/page/note_detail_page.dart'
+    as _i11;
+import 'package:flutter_komorebi/src/features/notes/presentation/page/note_list_page.dart'
+    as _i12;
+import 'package:flutter_komorebi/src/features/sample/app_color_theme_page.dart'
+    as _i1;
+import 'package:flutter_komorebi/src/features/sample/connection_diagram_page.dart'
+    as _i4;
+import 'package:flutter_komorebi/src/features/sample/grid_scale_test_page.dart'
+    as _i6;
+import 'package:flutter_komorebi/src/features/sample/image_clipboard.dart'
+    as _i9;
+import 'package:flutter_komorebi/src/features/sample/recents_page.dart' as _i13;
+import 'package:flutter_komorebi/src/features/sample/sample_page.dart' as _i15;
 import 'package:flutter_komorebi/src/features/search/presentation/search_page.dart'
-    as _i15;
+    as _i16;
 
 /// generated route for
-/// [_i1.CollectionListPage]
-class CollectionListRoute extends _i16.PageRouteInfo<CollectionListRouteArgs> {
+/// [_i1.AppColorThemePage]
+class AppColorThemeRoute extends _i17.PageRouteInfo<void> {
+  const AppColorThemeRoute({List<_i17.PageRouteInfo>? children})
+      : super(AppColorThemeRoute.name, initialChildren: children);
+
+  static const String name = 'AppColorThemeRoute';
+
+  static _i17.PageInfo page = _i17.PageInfo(
+    name,
+    builder: (data) {
+      return const _i1.AppColorThemePage();
+    },
+  );
+}
+
+/// generated route for
+/// [_i2.CollectionListPage]
+class CollectionListRoute extends _i17.PageRouteInfo<CollectionListRouteArgs> {
   CollectionListRoute({
-    _i17.Key? key,
+    _i18.Key? key,
     required int collectionId,
-    List<_i16.PageRouteInfo>? children,
+    List<_i17.PageRouteInfo>? children,
   }) : super(
           CollectionListRoute.name,
           args: CollectionListRouteArgs(key: key, collectionId: collectionId),
@@ -58,11 +76,11 @@ class CollectionListRoute extends _i16.PageRouteInfo<CollectionListRouteArgs> {
 
   static const String name = 'CollectionListRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<CollectionListRouteArgs>();
-      return _i1.CollectionListPage(
+      return _i2.CollectionListPage(
         key: args.key,
         collectionId: args.collectionId,
       );
@@ -73,7 +91,7 @@ class CollectionListRoute extends _i16.PageRouteInfo<CollectionListRouteArgs> {
 class CollectionListRouteArgs {
   const CollectionListRouteArgs({this.key, required this.collectionId});
 
-  final _i17.Key? key;
+  final _i18.Key? key;
 
   final int collectionId;
 
@@ -94,13 +112,13 @@ class CollectionListRouteArgs {
 }
 
 /// generated route for
-/// [_i2.CollectionsListPage]
+/// [_i3.CollectionsListPage]
 class CollectionsListRoute
-    extends _i16.PageRouteInfo<CollectionsListRouteArgs> {
+    extends _i17.PageRouteInfo<CollectionsListRouteArgs> {
   CollectionsListRoute({
-    _i18.Key? key,
+    _i19.Key? key,
     int? collectionId,
-    List<_i16.PageRouteInfo>? children,
+    List<_i17.PageRouteInfo>? children,
   }) : super(
           CollectionsListRoute.name,
           args: CollectionsListRouteArgs(key: key, collectionId: collectionId),
@@ -109,13 +127,13 @@ class CollectionsListRoute
 
   static const String name = 'CollectionsListRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<CollectionsListRouteArgs>(
         orElse: () => const CollectionsListRouteArgs(),
       );
-      return _i2.CollectionsListPage(
+      return _i3.CollectionsListPage(
         key: args.key,
         collectionId: args.collectionId,
       );
@@ -126,7 +144,7 @@ class CollectionsListRoute
 class CollectionsListRouteArgs {
   const CollectionsListRouteArgs({this.key, this.collectionId});
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
   final int? collectionId;
 
@@ -147,30 +165,30 @@ class CollectionsListRouteArgs {
 }
 
 /// generated route for
-/// [_i3.ConnectionDiagramPage]
-class ConnectionDiagramRoute extends _i16.PageRouteInfo<void> {
-  const ConnectionDiagramRoute({List<_i16.PageRouteInfo>? children})
+/// [_i4.ConnectionDiagramPage]
+class ConnectionDiagramRoute extends _i17.PageRouteInfo<void> {
+  const ConnectionDiagramRoute({List<_i17.PageRouteInfo>? children})
       : super(ConnectionDiagramRoute.name, initialChildren: children);
 
   static const String name = 'ConnectionDiagramRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
-      return const _i3.ConnectionDiagramPage();
+      return const _i4.ConnectionDiagramPage();
     },
   );
 }
 
 /// generated route for
-/// [_i4.CreatePage]
-class CreateRoute extends _i16.PageRouteInfo<CreateRouteArgs> {
+/// [_i5.CreatePage]
+class CreateRoute extends _i17.PageRouteInfo<CreateRouteArgs> {
   CreateRoute({
-    _i18.Key? key,
-    required _i19.EntityType entityType,
+    _i19.Key? key,
+    required _i20.EntityType entityType,
     int? collectionId,
     int? noteId,
-    List<_i16.PageRouteInfo>? children,
+    List<_i17.PageRouteInfo>? children,
   }) : super(
           CreateRoute.name,
           args: CreateRouteArgs(
@@ -184,11 +202,11 @@ class CreateRoute extends _i16.PageRouteInfo<CreateRouteArgs> {
 
   static const String name = 'CreateRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<CreateRouteArgs>();
-      return _i4.CreatePage(
+      return _i5.CreatePage(
         key: args.key,
         entityType: args.entityType,
         collectionId: args.collectionId,
@@ -206,9 +224,9 @@ class CreateRouteArgs {
     this.noteId,
   });
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
-  final _i19.EntityType entityType;
+  final _i20.EntityType entityType;
 
   final int? collectionId;
 
@@ -238,13 +256,13 @@ class CreateRouteArgs {
 }
 
 /// generated route for
-/// [_i5.GridScaleTestPage]
-class GridScaleTestRoute extends _i16.PageRouteInfo<GridScaleTestRouteArgs> {
+/// [_i6.GridScaleTestPage]
+class GridScaleTestRoute extends _i17.PageRouteInfo<GridScaleTestRouteArgs> {
   GridScaleTestRoute({
-    _i18.Key? key,
+    _i19.Key? key,
     required bool isCollectionGrid,
     int? collectionId,
-    List<_i16.PageRouteInfo>? children,
+    List<_i17.PageRouteInfo>? children,
   }) : super(
           GridScaleTestRoute.name,
           args: GridScaleTestRouteArgs(
@@ -257,11 +275,11 @@ class GridScaleTestRoute extends _i16.PageRouteInfo<GridScaleTestRouteArgs> {
 
   static const String name = 'GridScaleTestRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<GridScaleTestRouteArgs>();
-      return _i5.GridScaleTestPage(
+      return _i6.GridScaleTestPage(
         key: args.key,
         isCollectionGrid: args.isCollectionGrid,
         collectionId: args.collectionId,
@@ -277,7 +295,7 @@ class GridScaleTestRouteArgs {
     this.collectionId,
   });
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
   final bool isCollectionGrid;
 
@@ -303,45 +321,45 @@ class GridScaleTestRouteArgs {
 }
 
 /// generated route for
-/// [_i6.HistoryListPage]
-class HistoryListRoute extends _i16.PageRouteInfo<void> {
-  const HistoryListRoute({List<_i16.PageRouteInfo>? children})
+/// [_i7.HistoryListPage]
+class HistoryListRoute extends _i17.PageRouteInfo<void> {
+  const HistoryListRoute({List<_i17.PageRouteInfo>? children})
       : super(HistoryListRoute.name, initialChildren: children);
 
   static const String name = 'HistoryListRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
-      return const _i6.HistoryListPage();
+      return const _i7.HistoryListPage();
     },
   );
 }
 
 /// generated route for
-/// [_i7.HomePage]
-class HomeRoute extends _i16.PageRouteInfo<void> {
-  const HomeRoute({List<_i16.PageRouteInfo>? children})
+/// [_i8.HomePage]
+class HomeRoute extends _i17.PageRouteInfo<void> {
+  const HomeRoute({List<_i17.PageRouteInfo>? children})
       : super(HomeRoute.name, initialChildren: children);
 
   static const String name = 'HomeRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
-      return const _i7.HomePage();
+      return const _i8.HomePage();
     },
   );
 }
 
 /// generated route for
-/// [_i8.ImageClipboardSamplePage]
+/// [_i9.ImageClipboardSamplePage]
 class ImageClipboardSampleRoute
-    extends _i16.PageRouteInfo<ImageClipboardSampleRouteArgs> {
+    extends _i17.PageRouteInfo<ImageClipboardSampleRouteArgs> {
   ImageClipboardSampleRoute({
-    _i18.Key? key,
+    _i19.Key? key,
     required bool isDebug,
-    List<_i16.PageRouteInfo>? children,
+    List<_i17.PageRouteInfo>? children,
   }) : super(
           ImageClipboardSampleRoute.name,
           args: ImageClipboardSampleRouteArgs(key: key, isDebug: isDebug),
@@ -350,11 +368,11 @@ class ImageClipboardSampleRoute
 
   static const String name = 'ImageClipboardSampleRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ImageClipboardSampleRouteArgs>();
-      return _i8.ImageClipboardSamplePage(key: args.key, isDebug: args.isDebug);
+      return _i9.ImageClipboardSamplePage(key: args.key, isDebug: args.isDebug);
     },
   );
 }
@@ -362,7 +380,7 @@ class ImageClipboardSampleRoute
 class ImageClipboardSampleRouteArgs {
   const ImageClipboardSampleRouteArgs({this.key, required this.isDebug});
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
   final bool isDebug;
 
@@ -383,28 +401,28 @@ class ImageClipboardSampleRouteArgs {
 }
 
 /// generated route for
-/// [_i9.MainTabPage]
-class MainTabRoute extends _i16.PageRouteInfo<void> {
-  const MainTabRoute({List<_i16.PageRouteInfo>? children})
+/// [_i10.MainTabPage]
+class MainTabRoute extends _i17.PageRouteInfo<void> {
+  const MainTabRoute({List<_i17.PageRouteInfo>? children})
       : super(MainTabRoute.name, initialChildren: children);
 
   static const String name = 'MainTabRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
-      return const _i9.MainTabPage();
+      return const _i10.MainTabPage();
     },
   );
 }
 
 /// generated route for
-/// [_i10.NoteDetailPage]
-class NoteDetailRoute extends _i16.PageRouteInfo<NoteDetailRouteArgs> {
+/// [_i11.NoteDetailPage]
+class NoteDetailRoute extends _i17.PageRouteInfo<NoteDetailRouteArgs> {
   NoteDetailRoute({
-    _i18.Key? key,
+    _i19.Key? key,
     required int noteId,
-    List<_i16.PageRouteInfo>? children,
+    List<_i17.PageRouteInfo>? children,
   }) : super(
           NoteDetailRoute.name,
           args: NoteDetailRouteArgs(key: key, noteId: noteId),
@@ -413,11 +431,11 @@ class NoteDetailRoute extends _i16.PageRouteInfo<NoteDetailRouteArgs> {
 
   static const String name = 'NoteDetailRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<NoteDetailRouteArgs>();
-      return _i10.NoteDetailPage(key: args.key, noteId: args.noteId);
+      return _i11.NoteDetailPage(key: args.key, noteId: args.noteId);
     },
   );
 }
@@ -425,7 +443,7 @@ class NoteDetailRoute extends _i16.PageRouteInfo<NoteDetailRouteArgs> {
 class NoteDetailRouteArgs {
   const NoteDetailRouteArgs({this.key, required this.noteId});
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
   final int noteId;
 
@@ -446,12 +464,12 @@ class NoteDetailRouteArgs {
 }
 
 /// generated route for
-/// [_i11.NoteListPage]
-class NoteListRoute extends _i16.PageRouteInfo<NoteListRouteArgs> {
+/// [_i12.NoteListPage]
+class NoteListRoute extends _i17.PageRouteInfo<NoteListRouteArgs> {
   NoteListRoute({
-    _i18.Key? key,
+    _i19.Key? key,
     required int collectionId,
-    List<_i16.PageRouteInfo>? children,
+    List<_i17.PageRouteInfo>? children,
   }) : super(
           NoteListRoute.name,
           args: NoteListRouteArgs(key: key, collectionId: collectionId),
@@ -460,11 +478,11 @@ class NoteListRoute extends _i16.PageRouteInfo<NoteListRouteArgs> {
 
   static const String name = 'NoteListRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<NoteListRouteArgs>();
-      return _i11.NoteListPage(key: args.key, collectionId: args.collectionId);
+      return _i12.NoteListPage(key: args.key, collectionId: args.collectionId);
     },
   );
 }
@@ -472,7 +490,7 @@ class NoteListRoute extends _i16.PageRouteInfo<NoteListRouteArgs> {
 class NoteListRouteArgs {
   const NoteListRouteArgs({this.key, required this.collectionId});
 
-  final _i18.Key? key;
+  final _i19.Key? key;
 
   final int collectionId;
 
@@ -493,65 +511,65 @@ class NoteListRouteArgs {
 }
 
 /// generated route for
-/// [_i12.RecentsPage]
-class RecentsRoute extends _i16.PageRouteInfo<void> {
-  const RecentsRoute({List<_i16.PageRouteInfo>? children})
+/// [_i13.RecentsPage]
+class RecentsRoute extends _i17.PageRouteInfo<void> {
+  const RecentsRoute({List<_i17.PageRouteInfo>? children})
       : super(RecentsRoute.name, initialChildren: children);
 
   static const String name = 'RecentsRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
-      return const _i12.RecentsPage();
+      return const _i13.RecentsPage();
     },
   );
 }
 
 /// generated route for
-/// [_i13.RoamPage]
-class RoamRoute extends _i16.PageRouteInfo<void> {
-  const RoamRoute({List<_i16.PageRouteInfo>? children})
+/// [_i14.RoamPage]
+class RoamRoute extends _i17.PageRouteInfo<void> {
+  const RoamRoute({List<_i17.PageRouteInfo>? children})
       : super(RoamRoute.name, initialChildren: children);
 
   static const String name = 'RoamRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
-      return const _i13.RoamPage();
+      return const _i14.RoamPage();
     },
   );
 }
 
 /// generated route for
-/// [_i14.SamplePage]
-class SampleRoute extends _i16.PageRouteInfo<void> {
-  const SampleRoute({List<_i16.PageRouteInfo>? children})
+/// [_i15.SamplePage]
+class SampleRoute extends _i17.PageRouteInfo<void> {
+  const SampleRoute({List<_i17.PageRouteInfo>? children})
       : super(SampleRoute.name, initialChildren: children);
 
   static const String name = 'SampleRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
-      return const _i14.SamplePage();
+      return const _i15.SamplePage();
     },
   );
 }
 
 /// generated route for
-/// [_i15.SearchPage]
-class SearchRoute extends _i16.PageRouteInfo<void> {
-  const SearchRoute({List<_i16.PageRouteInfo>? children})
+/// [_i16.SearchPage]
+class SearchRoute extends _i17.PageRouteInfo<void> {
+  const SearchRoute({List<_i17.PageRouteInfo>? children})
       : super(SearchRoute.name, initialChildren: children);
 
   static const String name = 'SearchRoute';
 
-  static _i16.PageInfo page = _i16.PageInfo(
+  static _i17.PageInfo page = _i17.PageInfo(
     name,
     builder: (data) {
-      return const _i15.SearchPage();
+      return const _i16.SearchPage();
     },
   );
 }

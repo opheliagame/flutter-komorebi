@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
+import 'package:flutter_komorebi/src/design_system/app_color.dart';
 import 'package:flutter_komorebi/src/router/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -19,11 +20,16 @@ class MyApp extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appRouter = useMemoized(() => AppRouter());
 
+    final seedColor = ref.watch(appColorSchemeSeedProvider);
+
     return MaterialApp.router(
       title: S.of(context)?.app_name,
       theme: ThemeData(
         // This is the theme of your application.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: seedColor,
+          dynamicSchemeVariant: DynamicSchemeVariant.expressive,
+        ),
         useMaterial3: true,
       ),
       localizationsDelegates: S.localizationsDelegates,
