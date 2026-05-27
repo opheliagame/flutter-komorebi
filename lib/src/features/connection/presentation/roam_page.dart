@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/design_system/collection/collection_tile.dart';
 import 'package:flutter_komorebi/src/features/connection/presentation/roam_notifier.dart';
-import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @RoutePage()
@@ -32,118 +31,131 @@ class _RoamPageState extends ConsumerState<RoamPage> {
 
     return Scaffold(
       body: SafeArea(
-        child: roam.isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : roam.currentNote == null
-                ? _EmptyRoam(onRetry: () => ref.read(roamNotifierProvider.notifier).startRoam())
-                : CustomScrollView(
-                    slivers: [
-                      // ── Trail section ───────────────────────────────────
-                      if (roam.previousNote != null) ...[
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 24, 20, 4),
-                            child: Text(
-                              'you came from',
-                              style: textTheme.labelSmall?.copyWith(
-                                color: Colors.black45,
-                                letterSpacing: 1.1,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SliverToBoxAdapter(
-                          child: _CollectionChips(
-                            collections: roam.previousCollections,
-                            onTap: (col) => ref.read(roamNotifierProvider.notifier).roamIntoCollection(col),
-                          ),
-                        ),
-                        const SliverToBoxAdapter(child: SizedBox(height: 8)),
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Text(
-                              _preview(roam.previousNote!.content),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: textTheme.bodySmall?.copyWith(
-                                color: Colors.black38,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                            child: Divider(),
-                          ),
-                        ),
-                      ],
-
-                      // ── Current note body ───────────────────────────────
-                      SliverList.list(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: GestureDetector(
-                              onTap: () => context.navigateTo(
-                                NoteDetailRoute(noteId: roam.currentNote!.id),
-                              ),
-                              child: Text(
-                                roam.currentNote!.content ?? '',
-                                style: textTheme.displaySmall?.copyWith(
-                                  color: colorScheme.primary,
+        bottom: false,
+        child: Stack(
+          children: [
+            roam.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : roam.currentNote == null
+                    ? _EmptyRoam(onRetry: () => ref.read(roamNotifierProvider.notifier).startRoam())
+                    : CustomScrollView(
+                        slivers: [
+                          // ── Trail section ───────────────────────────────────
+                          if (roam.previousNote != null) ...[
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(20, 24, 20, 4),
+                                child: Text(
+                                  'you came from',
+                                  style: textTheme.labelSmall?.copyWith(
+                                    color: Colors.black45,
+                                    letterSpacing: 1.1,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
+                            SliverToBoxAdapter(
+                              child: _CollectionChips(
+                                collections: roam.previousCollections,
+                                onTap: (col) => ref.read(roamNotifierProvider.notifier).roamIntoCollection(col),
+                              ),
+                            ),
+                            const SliverToBoxAdapter(child: SizedBox(height: 8)),
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                child: Text(
+                                  _preview(roam.previousNote!.content),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  style: textTheme.bodySmall?.copyWith(
+                                    color: Colors.black38,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SliverToBoxAdapter(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                                child: Divider(),
+                              ),
+                            ),
+                          ],
 
-                      // ── Connections section ─────────────────────────────
-                      if (roam.currentCollections.isNotEmpty) ...[
-                        const SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(20, 32, 20, 4),
-                            child: Divider(),
+                          // ── Current note body ───────────────────────────────
+                          SliverList.list(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                child: Text(
+                                  roam.currentNote!.content ?? '',
+                                  style: textTheme.displaySmall?.copyWith(
+                                    color: colorScheme.primary,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 4),
-                            child: Text(
-                              'connections',
-                              style: textTheme.labelSmall?.copyWith(
-                                color: Colors.black45,
-                                letterSpacing: 1.1,
+
+                          // ── Connections section ─────────────────────────────
+                          if (roam.currentCollections.isNotEmpty) ...[
+                            const SliverToBoxAdapter(
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(20, 32, 20, 4),
+                                child: Divider(),
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(20, 0, 20, 4),
+                                child: Text(
+                                  'connections',
+                                  style: textTheme.labelSmall?.copyWith(
+                                    color: Colors.black45,
+                                    letterSpacing: 1.1,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SliverToBoxAdapter(
+                              child: _CollectionChips(
+                                collections: roam.currentCollections,
+                                onTap: (col) => ref.read(roamNotifierProvider.notifier).roamIntoCollection(col),
+                              ),
+                            ),
+                          ],
+
+                          const SliverToBoxAdapter(child: SizedBox(height: 32)),
+
+                          // ── Shuffle button ──────────────────────────────────
+                          SliverToBoxAdapter(
+                            child: Center(
+                              child: TextButton.icon(
+                                onPressed: () => ref.read(roamNotifierProvider.notifier).startRoam(),
+                                icon: const Icon(Icons.shuffle, size: 18),
+                                label: const Text('random note'),
                               ),
                             ),
                           ),
-                        ),
-                        SliverToBoxAdapter(
-                          child: _CollectionChips(
-                            collections: roam.currentCollections,
-                            onTap: (col) => ref.read(roamNotifierProvider.notifier).roamIntoCollection(col),
-                          ),
-                        ),
-                      ],
-
-                      const SliverToBoxAdapter(child: SizedBox(height: 32)),
-
-                      // ── Shuffle button ──────────────────────────────────
-                      SliverToBoxAdapter(
-                        child: Center(
-                          child: TextButton.icon(
-                            onPressed: () => ref.read(roamNotifierProvider.notifier).startRoam(),
-                            icon: const Icon(Icons.shuffle, size: 18),
-                            label: const Text('random note'),
-                          ),
-                        ),
+                          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+                        ],
                       ),
-                      const SliverToBoxAdapter(child: SizedBox(height: 24)),
-                    ],
-                  ),
+
+            // close button
+            Positioned(
+              top: 8,
+              right: 8,
+              child: GestureDetector(
+                onTap: () => context.router.popUntilRoot(),
+                child: IconButton(
+                  icon: const Icon(Icons.close, size: 48),
+                  onPressed: () => context.router.back(),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

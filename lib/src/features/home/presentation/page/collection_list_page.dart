@@ -23,6 +23,7 @@ class CollectionListPage extends ConsumerWidget {
 
     return Scaffold(
       body: SafeArea(
+        bottom: false,
         child: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             FloatingSliverAppBar(

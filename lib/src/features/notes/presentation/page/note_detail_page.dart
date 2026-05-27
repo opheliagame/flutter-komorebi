@@ -26,6 +26,7 @@ class NoteDetailPage extends HookConsumerWidget {
 
     return Scaffold(
       body: SafeArea(
+        bottom: false,
         child: CustomScrollView(
           slivers: [
             FloatingSliverAppBar(

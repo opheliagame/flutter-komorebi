@@ -30,18 +30,20 @@ class MainTabPage extends StatelessWidget {
         // alternatively, you could use a global key
         return Scaffold(
           body: child,
-          bottomNavigationBar: NavigationBar(
-            selectedIndex: tabsRouter.activeIndex,
-            destinations: const [
-              NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-              NavigationDestination(icon: Icon(Icons.search), label: 'Search'),
-              NavigationDestination(icon: Icon(Icons.shuffle), label: 'Roam'),
-              NavigationDestination(icon: Icon(Icons.add), label: 'Create'),
-            ],
-            onDestinationSelected: (index) {
-              tabsRouter.setActiveIndex(index);
-            },
-          ),
+          bottomNavigationBar: tabsRouter.activeIndex == 2
+              ? null
+              : NavigationBar(
+                  selectedIndex: tabsRouter.activeIndex,
+                  destinations: const [
+                    NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
+                    NavigationDestination(icon: Icon(Icons.search), label: 'Search'),
+                    NavigationDestination(icon: Icon(Icons.shuffle), label: 'Roam'),
+                    NavigationDestination(icon: Icon(Icons.add), label: 'Create'),
+                  ],
+                  onDestinationSelected: (index) {
+                    tabsRouter.setActiveIndex(index);
+                  },
+                ),
         );
       },
     );
