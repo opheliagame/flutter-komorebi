@@ -136,7 +136,7 @@ class _RoamPageState extends ConsumerState<RoamPage> {
                 onTap: () => context.router.popUntilRoot(),
                 child: IconButton(
                   icon: const Icon(Icons.close, size: 48),
-                  onPressed: () => context.router.back(),
+                  onPressed: () => context.router.popUntilRouteWithName(MainTabRoute.name),
                 ),
               ),
             ),

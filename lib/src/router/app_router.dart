@@ -26,14 +26,14 @@ class AppRouter extends RootStackRouter {
               page: SearchRoute.page,
             ),
             AutoRoute(
-              path: 'roam',
-              page: RoamRoute.page,
-            ),
-            AutoRoute(
               path: 'create',
               page: CreateRoute.page,
             ),
           ],
+        ),
+        AutoRoute(
+          path: '/roam',
+          page: RoamRoute.page,
         ),
         AutoRoute(
           path: '/collectionslist',

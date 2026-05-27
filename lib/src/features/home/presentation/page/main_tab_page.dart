@@ -13,7 +13,6 @@ class MainTabPage extends StatelessWidget {
       routes: [
         HomeRoute(),
         SearchRoute(),
-        RoamRoute(),
         CreateRoute(entityType: EntityType.note),
       ],
       transitionBuilder: (context, child, animation) => FadeTransition(
@@ -30,20 +29,22 @@ class MainTabPage extends StatelessWidget {
         // alternatively, you could use a global key
         return Scaffold(
           body: child,
-          bottomNavigationBar: tabsRouter.activeIndex == 2
-              ? null
-              : NavigationBar(
-                  selectedIndex: tabsRouter.activeIndex,
-                  destinations: const [
-                    NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-                    NavigationDestination(icon: Icon(Icons.search), label: 'Search'),
-                    NavigationDestination(icon: Icon(Icons.shuffle), label: 'Roam'),
-                    NavigationDestination(icon: Icon(Icons.add), label: 'Create'),
-                  ],
-                  onDestinationSelected: (index) {
-                    tabsRouter.setActiveIndex(index);
-                  },
-                ),
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: tabsRouter.activeIndex,
+            destinations: const [
+              NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
+              NavigationDestination(icon: Icon(Icons.search), label: 'Search'),
+              NavigationDestination(icon: Icon(Icons.shuffle), label: 'Roam'),
+              NavigationDestination(icon: Icon(Icons.add), label: 'Create'),
+            ],
+            onDestinationSelected: (index) {
+              if (index == 2) {
+                context.pushRoute(RoamRoute());
+              } else {
+                tabsRouter.setActiveIndex(index < 2 ? index : index - 1);
+              }
+            },
+          ),
         );
       },
     );
