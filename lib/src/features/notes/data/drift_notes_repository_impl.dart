@@ -3,12 +3,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_komorebi/src/core/domain/note_entity.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/note_table.dart';
+import 'package:flutter_komorebi/src/data/drift/sync/sync_change_tracker.dart';
+import 'package:flutter_komorebi/src/data/drift/sync/sync_entity_adapters.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 
 class DriftNotesRepository implements NotesRepository {
-  DriftNotesRepository(this.database);
+  DriftNotesRepository(this.database) : _syncTracker = SyncChangeTracker(database);
 
   final AppDatabase database;
+  final SyncChangeTracker _syncTracker;
 
   @override
   Future<List<NoteEntity>> getAllNotes() async {
@@ -50,16 +53,19 @@ class DriftNotesRepository implements NotesRepository {
   @override
   Future<int> createNote({required String? content, required Uint8List? media}) async {
     try {
-      final noteId = await database.into(database.noteTable).insert(
-            NoteTableCompanion.insert(
-              content: Value.absentIfNull(content),
-              media: Value.absentIfNull(media),
-              createdAt: DateTime.now(),
-              modifiedAt: DateTime.now(),
-            ),
-          );
-
-      return noteId;
+      return await database.transaction(() async {
+        final noteId = await database.into(database.noteTable).insert(
+              NoteTableCompanion.insert(
+                content: Value.absentIfNull(content),
+                media: Value.absentIfNull(media),
+                createdAt: DateTime.now(),
+                modifiedAt: DateTime.now(),
+              ),
+            );
+        final row = await (database.select(database.noteTable)..where((t) => t.id.equals(noteId))).getSingle();
+        await _syncTracker.recordUpsert(entityType: noteEntityType, localId: noteId, rowJson: noteToJson(row));
+        return noteId;
+      });
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -73,15 +79,18 @@ class DriftNotesRepository implements NotesRepository {
     required Uint8List? media,
   }) async {
     try {
-      final newNoteId = await (database.update(database.noteTable)..where((q) => q.id.equals(noteId))).write(
-        NoteTableCompanion(
-          content: Value.absentIfNull(content),
-          media: Value.absentIfNull(media),
-          modifiedAt: Value(DateTime.now()),
-        ),
-      );
-
-      return newNoteId;
+      return await database.transaction(() async {
+        final newNoteId = await (database.update(database.noteTable)..where((q) => q.id.equals(noteId))).write(
+          NoteTableCompanion(
+            content: Value.absentIfNull(content),
+            media: Value.absentIfNull(media),
+            modifiedAt: Value(DateTime.now()),
+          ),
+        );
+        final row = await (database.select(database.noteTable)..where((t) => t.id.equals(noteId))).getSingle();
+        await _syncTracker.recordUpsert(entityType: noteEntityType, localId: noteId, rowJson: noteToJson(row));
+        return newNoteId;
+      });
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
@@ -90,9 +99,11 @@ class DriftNotesRepository implements NotesRepository {
 
   @override
   Future<bool> deleteNote(int noteId) async {
-    final query = (database.delete(database.noteTable)..where((q) => q.id.equals(noteId))).go();
     try {
-      await query;
+      await database.transaction(() async {
+        await (database.delete(database.noteTable)..where((q) => q.id.equals(noteId))).go();
+        await _syncTracker.recordDelete(entityType: noteEntityType, localId: noteId);
+      });
       return true;
     } catch (e) {
       return false;

@@ -49,5 +49,11 @@
 	<string>This app needs access to your photo library to select images.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs access to your camera to take photos.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Kiritori uses your local network to sync notes directly between your own devices.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_komorebi-sync._tcp</string>
+	</array>
 </dict>
 </plist>

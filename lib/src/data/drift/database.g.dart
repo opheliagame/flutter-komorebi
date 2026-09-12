@@ -1928,6 +1928,1375 @@ class HistoryTableCompanion extends UpdateCompanion<HistoryTableData> {
   }
 }
 
+class $SyncEntityTableTable extends SyncEntityTable
+    with TableInfo<$SyncEntityTableTable, SyncEntityTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SyncEntityTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _entityTypeMeta =
+      const VerificationMeta('entityType');
+  @override
+  late final GeneratedColumn<String> entityType = GeneratedColumn<String>(
+      'entity_type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _uuidMeta = const VerificationMeta('uuid');
+  @override
+  late final GeneratedColumn<String> uuid = GeneratedColumn<String>(
+      'uuid', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _localIdMeta =
+      const VerificationMeta('localId');
+  @override
+  late final GeneratedColumn<int> localId = GeneratedColumn<int>(
+      'local_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _originDeviceIdMeta =
+      const VerificationMeta('originDeviceId');
+  @override
+  late final GeneratedColumn<String> originDeviceId = GeneratedColumn<String>(
+      'origin_device_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _isDeletedMeta =
+      const VerificationMeta('isDeleted');
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+      'is_deleted', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_deleted" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, entityType, uuid, localId, originDeviceId, updatedAt, isDeleted];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sync_entity';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<SyncEntityTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('entity_type')) {
+      context.handle(
+          _entityTypeMeta,
+          entityType.isAcceptableOrUnknown(
+              data['entity_type']!, _entityTypeMeta));
+    } else if (isInserting) {
+      context.missing(_entityTypeMeta);
+    }
+    if (data.containsKey('uuid')) {
+      context.handle(
+          _uuidMeta, uuid.isAcceptableOrUnknown(data['uuid']!, _uuidMeta));
+    } else if (isInserting) {
+      context.missing(_uuidMeta);
+    }
+    if (data.containsKey('local_id')) {
+      context.handle(_localIdMeta,
+          localId.isAcceptableOrUnknown(data['local_id']!, _localIdMeta));
+    } else if (isInserting) {
+      context.missing(_localIdMeta);
+    }
+    if (data.containsKey('origin_device_id')) {
+      context.handle(
+          _originDeviceIdMeta,
+          originDeviceId.isAcceptableOrUnknown(
+              data['origin_device_id']!, _originDeviceIdMeta));
+    } else if (isInserting) {
+      context.missing(_originDeviceIdMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(_isDeletedMeta,
+          isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+        {entityType, uuid},
+        {entityType, localId},
+      ];
+  @override
+  SyncEntityTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SyncEntityTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      entityType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}entity_type'])!,
+      uuid: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}uuid'])!,
+      localId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}local_id'])!,
+      originDeviceId: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}origin_device_id'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      isDeleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_deleted'])!,
+    );
+  }
+
+  @override
+  $SyncEntityTableTable createAlias(String alias) {
+    return $SyncEntityTableTable(attachedDatabase, alias);
+  }
+}
+
+class SyncEntityTableData extends DataClass
+    implements Insertable<SyncEntityTableData> {
+  final int id;
+  final String entityType;
+  final String uuid;
+  final int localId;
+  final String originDeviceId;
+  final DateTime updatedAt;
+  final bool isDeleted;
+  const SyncEntityTableData(
+      {required this.id,
+      required this.entityType,
+      required this.uuid,
+      required this.localId,
+      required this.originDeviceId,
+      required this.updatedAt,
+      required this.isDeleted});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['entity_type'] = Variable<String>(entityType);
+    map['uuid'] = Variable<String>(uuid);
+    map['local_id'] = Variable<int>(localId);
+    map['origin_device_id'] = Variable<String>(originDeviceId);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    return map;
+  }
+
+  SyncEntityTableCompanion toCompanion(bool nullToAbsent) {
+    return SyncEntityTableCompanion(
+      id: Value(id),
+      entityType: Value(entityType),
+      uuid: Value(uuid),
+      localId: Value(localId),
+      originDeviceId: Value(originDeviceId),
+      updatedAt: Value(updatedAt),
+      isDeleted: Value(isDeleted),
+    );
+  }
+
+  factory SyncEntityTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SyncEntityTableData(
+      id: serializer.fromJson<int>(json['id']),
+      entityType: serializer.fromJson<String>(json['entityType']),
+      uuid: serializer.fromJson<String>(json['uuid']),
+      localId: serializer.fromJson<int>(json['localId']),
+      originDeviceId: serializer.fromJson<String>(json['originDeviceId']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'entityType': serializer.toJson<String>(entityType),
+      'uuid': serializer.toJson<String>(uuid),
+      'localId': serializer.toJson<int>(localId),
+      'originDeviceId': serializer.toJson<String>(originDeviceId),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+    };
+  }
+
+  SyncEntityTableData copyWith(
+          {int? id,
+          String? entityType,
+          String? uuid,
+          int? localId,
+          String? originDeviceId,
+          DateTime? updatedAt,
+          bool? isDeleted}) =>
+      SyncEntityTableData(
+        id: id ?? this.id,
+        entityType: entityType ?? this.entityType,
+        uuid: uuid ?? this.uuid,
+        localId: localId ?? this.localId,
+        originDeviceId: originDeviceId ?? this.originDeviceId,
+        updatedAt: updatedAt ?? this.updatedAt,
+        isDeleted: isDeleted ?? this.isDeleted,
+      );
+  SyncEntityTableData copyWithCompanion(SyncEntityTableCompanion data) {
+    return SyncEntityTableData(
+      id: data.id.present ? data.id.value : this.id,
+      entityType:
+          data.entityType.present ? data.entityType.value : this.entityType,
+      uuid: data.uuid.present ? data.uuid.value : this.uuid,
+      localId: data.localId.present ? data.localId.value : this.localId,
+      originDeviceId: data.originDeviceId.present
+          ? data.originDeviceId.value
+          : this.originDeviceId,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncEntityTableData(')
+          ..write('id: $id, ')
+          ..write('entityType: $entityType, ')
+          ..write('uuid: $uuid, ')
+          ..write('localId: $localId, ')
+          ..write('originDeviceId: $originDeviceId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('isDeleted: $isDeleted')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id, entityType, uuid, localId, originDeviceId, updatedAt, isDeleted);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SyncEntityTableData &&
+          other.id == this.id &&
+          other.entityType == this.entityType &&
+          other.uuid == this.uuid &&
+          other.localId == this.localId &&
+          other.originDeviceId == this.originDeviceId &&
+          other.updatedAt == this.updatedAt &&
+          other.isDeleted == this.isDeleted);
+}
+
+class SyncEntityTableCompanion extends UpdateCompanion<SyncEntityTableData> {
+  final Value<int> id;
+  final Value<String> entityType;
+  final Value<String> uuid;
+  final Value<int> localId;
+  final Value<String> originDeviceId;
+  final Value<DateTime> updatedAt;
+  final Value<bool> isDeleted;
+  const SyncEntityTableCompanion({
+    this.id = const Value.absent(),
+    this.entityType = const Value.absent(),
+    this.uuid = const Value.absent(),
+    this.localId = const Value.absent(),
+    this.originDeviceId = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+  });
+  SyncEntityTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String entityType,
+    required String uuid,
+    required int localId,
+    required String originDeviceId,
+    required DateTime updatedAt,
+    this.isDeleted = const Value.absent(),
+  })  : entityType = Value(entityType),
+        uuid = Value(uuid),
+        localId = Value(localId),
+        originDeviceId = Value(originDeviceId),
+        updatedAt = Value(updatedAt);
+  static Insertable<SyncEntityTableData> custom({
+    Expression<int>? id,
+    Expression<String>? entityType,
+    Expression<String>? uuid,
+    Expression<int>? localId,
+    Expression<String>? originDeviceId,
+    Expression<DateTime>? updatedAt,
+    Expression<bool>? isDeleted,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (entityType != null) 'entity_type': entityType,
+      if (uuid != null) 'uuid': uuid,
+      if (localId != null) 'local_id': localId,
+      if (originDeviceId != null) 'origin_device_id': originDeviceId,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+    });
+  }
+
+  SyncEntityTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? entityType,
+      Value<String>? uuid,
+      Value<int>? localId,
+      Value<String>? originDeviceId,
+      Value<DateTime>? updatedAt,
+      Value<bool>? isDeleted}) {
+    return SyncEntityTableCompanion(
+      id: id ?? this.id,
+      entityType: entityType ?? this.entityType,
+      uuid: uuid ?? this.uuid,
+      localId: localId ?? this.localId,
+      originDeviceId: originDeviceId ?? this.originDeviceId,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isDeleted: isDeleted ?? this.isDeleted,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (entityType.present) {
+      map['entity_type'] = Variable<String>(entityType.value);
+    }
+    if (uuid.present) {
+      map['uuid'] = Variable<String>(uuid.value);
+    }
+    if (localId.present) {
+      map['local_id'] = Variable<int>(localId.value);
+    }
+    if (originDeviceId.present) {
+      map['origin_device_id'] = Variable<String>(originDeviceId.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncEntityTableCompanion(')
+          ..write('id: $id, ')
+          ..write('entityType: $entityType, ')
+          ..write('uuid: $uuid, ')
+          ..write('localId: $localId, ')
+          ..write('originDeviceId: $originDeviceId, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('isDeleted: $isDeleted')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SyncChangeLogTableTable extends SyncChangeLogTable
+    with TableInfo<$SyncChangeLogTableTable, SyncChangeLogTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SyncChangeLogTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _entityTypeMeta =
+      const VerificationMeta('entityType');
+  @override
+  late final GeneratedColumn<String> entityType = GeneratedColumn<String>(
+      'entity_type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _uuidMeta = const VerificationMeta('uuid');
+  @override
+  late final GeneratedColumn<String> uuid = GeneratedColumn<String>(
+      'uuid', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _operationMeta =
+      const VerificationMeta('operation');
+  @override
+  late final GeneratedColumn<String> operation = GeneratedColumn<String>(
+      'operation', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _payloadMeta =
+      const VerificationMeta('payload');
+  @override
+  late final GeneratedColumn<String> payload = GeneratedColumn<String>(
+      'payload', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _deviceIdMeta =
+      const VerificationMeta('deviceId');
+  @override
+  late final GeneratedColumn<String> deviceId = GeneratedColumn<String>(
+      'device_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, entityType, uuid, operation, payload, updatedAt, deviceId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sync_change_log';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<SyncChangeLogTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('entity_type')) {
+      context.handle(
+          _entityTypeMeta,
+          entityType.isAcceptableOrUnknown(
+              data['entity_type']!, _entityTypeMeta));
+    } else if (isInserting) {
+      context.missing(_entityTypeMeta);
+    }
+    if (data.containsKey('uuid')) {
+      context.handle(
+          _uuidMeta, uuid.isAcceptableOrUnknown(data['uuid']!, _uuidMeta));
+    } else if (isInserting) {
+      context.missing(_uuidMeta);
+    }
+    if (data.containsKey('operation')) {
+      context.handle(_operationMeta,
+          operation.isAcceptableOrUnknown(data['operation']!, _operationMeta));
+    } else if (isInserting) {
+      context.missing(_operationMeta);
+    }
+    if (data.containsKey('payload')) {
+      context.handle(_payloadMeta,
+          payload.isAcceptableOrUnknown(data['payload']!, _payloadMeta));
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('device_id')) {
+      context.handle(_deviceIdMeta,
+          deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta));
+    } else if (isInserting) {
+      context.missing(_deviceIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SyncChangeLogTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SyncChangeLogTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      entityType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}entity_type'])!,
+      uuid: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}uuid'])!,
+      operation: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}operation'])!,
+      payload: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}payload']),
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      deviceId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}device_id'])!,
+    );
+  }
+
+  @override
+  $SyncChangeLogTableTable createAlias(String alias) {
+    return $SyncChangeLogTableTable(attachedDatabase, alias);
+  }
+}
+
+class SyncChangeLogTableData extends DataClass
+    implements Insertable<SyncChangeLogTableData> {
+  final int id;
+  final String entityType;
+  final String uuid;
+  final String operation;
+  final String? payload;
+  final DateTime updatedAt;
+  final String deviceId;
+  const SyncChangeLogTableData(
+      {required this.id,
+      required this.entityType,
+      required this.uuid,
+      required this.operation,
+      this.payload,
+      required this.updatedAt,
+      required this.deviceId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['entity_type'] = Variable<String>(entityType);
+    map['uuid'] = Variable<String>(uuid);
+    map['operation'] = Variable<String>(operation);
+    if (!nullToAbsent || payload != null) {
+      map['payload'] = Variable<String>(payload);
+    }
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['device_id'] = Variable<String>(deviceId);
+    return map;
+  }
+
+  SyncChangeLogTableCompanion toCompanion(bool nullToAbsent) {
+    return SyncChangeLogTableCompanion(
+      id: Value(id),
+      entityType: Value(entityType),
+      uuid: Value(uuid),
+      operation: Value(operation),
+      payload: payload == null && nullToAbsent
+          ? const Value.absent()
+          : Value(payload),
+      updatedAt: Value(updatedAt),
+      deviceId: Value(deviceId),
+    );
+  }
+
+  factory SyncChangeLogTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SyncChangeLogTableData(
+      id: serializer.fromJson<int>(json['id']),
+      entityType: serializer.fromJson<String>(json['entityType']),
+      uuid: serializer.fromJson<String>(json['uuid']),
+      operation: serializer.fromJson<String>(json['operation']),
+      payload: serializer.fromJson<String?>(json['payload']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      deviceId: serializer.fromJson<String>(json['deviceId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'entityType': serializer.toJson<String>(entityType),
+      'uuid': serializer.toJson<String>(uuid),
+      'operation': serializer.toJson<String>(operation),
+      'payload': serializer.toJson<String?>(payload),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'deviceId': serializer.toJson<String>(deviceId),
+    };
+  }
+
+  SyncChangeLogTableData copyWith(
+          {int? id,
+          String? entityType,
+          String? uuid,
+          String? operation,
+          Value<String?> payload = const Value.absent(),
+          DateTime? updatedAt,
+          String? deviceId}) =>
+      SyncChangeLogTableData(
+        id: id ?? this.id,
+        entityType: entityType ?? this.entityType,
+        uuid: uuid ?? this.uuid,
+        operation: operation ?? this.operation,
+        payload: payload.present ? payload.value : this.payload,
+        updatedAt: updatedAt ?? this.updatedAt,
+        deviceId: deviceId ?? this.deviceId,
+      );
+  SyncChangeLogTableData copyWithCompanion(SyncChangeLogTableCompanion data) {
+    return SyncChangeLogTableData(
+      id: data.id.present ? data.id.value : this.id,
+      entityType:
+          data.entityType.present ? data.entityType.value : this.entityType,
+      uuid: data.uuid.present ? data.uuid.value : this.uuid,
+      operation: data.operation.present ? data.operation.value : this.operation,
+      payload: data.payload.present ? data.payload.value : this.payload,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncChangeLogTableData(')
+          ..write('id: $id, ')
+          ..write('entityType: $entityType, ')
+          ..write('uuid: $uuid, ')
+          ..write('operation: $operation, ')
+          ..write('payload: $payload, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deviceId: $deviceId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id, entityType, uuid, operation, payload, updatedAt, deviceId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SyncChangeLogTableData &&
+          other.id == this.id &&
+          other.entityType == this.entityType &&
+          other.uuid == this.uuid &&
+          other.operation == this.operation &&
+          other.payload == this.payload &&
+          other.updatedAt == this.updatedAt &&
+          other.deviceId == this.deviceId);
+}
+
+class SyncChangeLogTableCompanion
+    extends UpdateCompanion<SyncChangeLogTableData> {
+  final Value<int> id;
+  final Value<String> entityType;
+  final Value<String> uuid;
+  final Value<String> operation;
+  final Value<String?> payload;
+  final Value<DateTime> updatedAt;
+  final Value<String> deviceId;
+  const SyncChangeLogTableCompanion({
+    this.id = const Value.absent(),
+    this.entityType = const Value.absent(),
+    this.uuid = const Value.absent(),
+    this.operation = const Value.absent(),
+    this.payload = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deviceId = const Value.absent(),
+  });
+  SyncChangeLogTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String entityType,
+    required String uuid,
+    required String operation,
+    this.payload = const Value.absent(),
+    required DateTime updatedAt,
+    required String deviceId,
+  })  : entityType = Value(entityType),
+        uuid = Value(uuid),
+        operation = Value(operation),
+        updatedAt = Value(updatedAt),
+        deviceId = Value(deviceId);
+  static Insertable<SyncChangeLogTableData> custom({
+    Expression<int>? id,
+    Expression<String>? entityType,
+    Expression<String>? uuid,
+    Expression<String>? operation,
+    Expression<String>? payload,
+    Expression<DateTime>? updatedAt,
+    Expression<String>? deviceId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (entityType != null) 'entity_type': entityType,
+      if (uuid != null) 'uuid': uuid,
+      if (operation != null) 'operation': operation,
+      if (payload != null) 'payload': payload,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deviceId != null) 'device_id': deviceId,
+    });
+  }
+
+  SyncChangeLogTableCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? entityType,
+      Value<String>? uuid,
+      Value<String>? operation,
+      Value<String?>? payload,
+      Value<DateTime>? updatedAt,
+      Value<String>? deviceId}) {
+    return SyncChangeLogTableCompanion(
+      id: id ?? this.id,
+      entityType: entityType ?? this.entityType,
+      uuid: uuid ?? this.uuid,
+      operation: operation ?? this.operation,
+      payload: payload ?? this.payload,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deviceId: deviceId ?? this.deviceId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (entityType.present) {
+      map['entity_type'] = Variable<String>(entityType.value);
+    }
+    if (uuid.present) {
+      map['uuid'] = Variable<String>(uuid.value);
+    }
+    if (operation.present) {
+      map['operation'] = Variable<String>(operation.value);
+    }
+    if (payload.present) {
+      map['payload'] = Variable<String>(payload.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deviceId.present) {
+      map['device_id'] = Variable<String>(deviceId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncChangeLogTableCompanion(')
+          ..write('id: $id, ')
+          ..write('entityType: $entityType, ')
+          ..write('uuid: $uuid, ')
+          ..write('operation: $operation, ')
+          ..write('payload: $payload, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deviceId: $deviceId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SyncPeerStateTableTable extends SyncPeerStateTable
+    with TableInfo<$SyncPeerStateTableTable, SyncPeerStateTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SyncPeerStateTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _peerDeviceIdMeta =
+      const VerificationMeta('peerDeviceId');
+  @override
+  late final GeneratedColumn<String> peerDeviceId = GeneratedColumn<String>(
+      'peer_device_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _peerNameMeta =
+      const VerificationMeta('peerName');
+  @override
+  late final GeneratedColumn<String> peerName = GeneratedColumn<String>(
+      'peer_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _lastSentChangeIdMeta =
+      const VerificationMeta('lastSentChangeId');
+  @override
+  late final GeneratedColumn<int> lastSentChangeId = GeneratedColumn<int>(
+      'last_sent_change_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _lastReceivedChangeIdMeta =
+      const VerificationMeta('lastReceivedChangeId');
+  @override
+  late final GeneratedColumn<int> lastReceivedChangeId = GeneratedColumn<int>(
+      'last_received_change_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _lastSyncedAtMeta =
+      const VerificationMeta('lastSyncedAt');
+  @override
+  late final GeneratedColumn<DateTime> lastSyncedAt = GeneratedColumn<DateTime>(
+      'last_synced_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _isTrustedMeta =
+      const VerificationMeta('isTrusted');
+  @override
+  late final GeneratedColumn<bool> isTrusted = GeneratedColumn<bool>(
+      'is_trusted', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_trusted" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  @override
+  List<GeneratedColumn> get $columns => [
+        peerDeviceId,
+        peerName,
+        lastSentChangeId,
+        lastReceivedChangeId,
+        lastSyncedAt,
+        isTrusted
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sync_peer_state';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<SyncPeerStateTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('peer_device_id')) {
+      context.handle(
+          _peerDeviceIdMeta,
+          peerDeviceId.isAcceptableOrUnknown(
+              data['peer_device_id']!, _peerDeviceIdMeta));
+    } else if (isInserting) {
+      context.missing(_peerDeviceIdMeta);
+    }
+    if (data.containsKey('peer_name')) {
+      context.handle(_peerNameMeta,
+          peerName.isAcceptableOrUnknown(data['peer_name']!, _peerNameMeta));
+    } else if (isInserting) {
+      context.missing(_peerNameMeta);
+    }
+    if (data.containsKey('last_sent_change_id')) {
+      context.handle(
+          _lastSentChangeIdMeta,
+          lastSentChangeId.isAcceptableOrUnknown(
+              data['last_sent_change_id']!, _lastSentChangeIdMeta));
+    }
+    if (data.containsKey('last_received_change_id')) {
+      context.handle(
+          _lastReceivedChangeIdMeta,
+          lastReceivedChangeId.isAcceptableOrUnknown(
+              data['last_received_change_id']!, _lastReceivedChangeIdMeta));
+    }
+    if (data.containsKey('last_synced_at')) {
+      context.handle(
+          _lastSyncedAtMeta,
+          lastSyncedAt.isAcceptableOrUnknown(
+              data['last_synced_at']!, _lastSyncedAtMeta));
+    }
+    if (data.containsKey('is_trusted')) {
+      context.handle(_isTrustedMeta,
+          isTrusted.isAcceptableOrUnknown(data['is_trusted']!, _isTrustedMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {peerDeviceId};
+  @override
+  SyncPeerStateTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SyncPeerStateTableData(
+      peerDeviceId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}peer_device_id'])!,
+      peerName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}peer_name'])!,
+      lastSentChangeId: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}last_sent_change_id'])!,
+      lastReceivedChangeId: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}last_received_change_id'])!,
+      lastSyncedAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}last_synced_at']),
+      isTrusted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_trusted'])!,
+    );
+  }
+
+  @override
+  $SyncPeerStateTableTable createAlias(String alias) {
+    return $SyncPeerStateTableTable(attachedDatabase, alias);
+  }
+}
+
+class SyncPeerStateTableData extends DataClass
+    implements Insertable<SyncPeerStateTableData> {
+  final String peerDeviceId;
+  final String peerName;
+  final int lastSentChangeId;
+  final int lastReceivedChangeId;
+  final DateTime? lastSyncedAt;
+  final bool isTrusted;
+  const SyncPeerStateTableData(
+      {required this.peerDeviceId,
+      required this.peerName,
+      required this.lastSentChangeId,
+      required this.lastReceivedChangeId,
+      this.lastSyncedAt,
+      required this.isTrusted});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['peer_device_id'] = Variable<String>(peerDeviceId);
+    map['peer_name'] = Variable<String>(peerName);
+    map['last_sent_change_id'] = Variable<int>(lastSentChangeId);
+    map['last_received_change_id'] = Variable<int>(lastReceivedChangeId);
+    if (!nullToAbsent || lastSyncedAt != null) {
+      map['last_synced_at'] = Variable<DateTime>(lastSyncedAt);
+    }
+    map['is_trusted'] = Variable<bool>(isTrusted);
+    return map;
+  }
+
+  SyncPeerStateTableCompanion toCompanion(bool nullToAbsent) {
+    return SyncPeerStateTableCompanion(
+      peerDeviceId: Value(peerDeviceId),
+      peerName: Value(peerName),
+      lastSentChangeId: Value(lastSentChangeId),
+      lastReceivedChangeId: Value(lastReceivedChangeId),
+      lastSyncedAt: lastSyncedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastSyncedAt),
+      isTrusted: Value(isTrusted),
+    );
+  }
+
+  factory SyncPeerStateTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SyncPeerStateTableData(
+      peerDeviceId: serializer.fromJson<String>(json['peerDeviceId']),
+      peerName: serializer.fromJson<String>(json['peerName']),
+      lastSentChangeId: serializer.fromJson<int>(json['lastSentChangeId']),
+      lastReceivedChangeId:
+          serializer.fromJson<int>(json['lastReceivedChangeId']),
+      lastSyncedAt: serializer.fromJson<DateTime?>(json['lastSyncedAt']),
+      isTrusted: serializer.fromJson<bool>(json['isTrusted']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'peerDeviceId': serializer.toJson<String>(peerDeviceId),
+      'peerName': serializer.toJson<String>(peerName),
+      'lastSentChangeId': serializer.toJson<int>(lastSentChangeId),
+      'lastReceivedChangeId': serializer.toJson<int>(lastReceivedChangeId),
+      'lastSyncedAt': serializer.toJson<DateTime?>(lastSyncedAt),
+      'isTrusted': serializer.toJson<bool>(isTrusted),
+    };
+  }
+
+  SyncPeerStateTableData copyWith(
+          {String? peerDeviceId,
+          String? peerName,
+          int? lastSentChangeId,
+          int? lastReceivedChangeId,
+          Value<DateTime?> lastSyncedAt = const Value.absent(),
+          bool? isTrusted}) =>
+      SyncPeerStateTableData(
+        peerDeviceId: peerDeviceId ?? this.peerDeviceId,
+        peerName: peerName ?? this.peerName,
+        lastSentChangeId: lastSentChangeId ?? this.lastSentChangeId,
+        lastReceivedChangeId: lastReceivedChangeId ?? this.lastReceivedChangeId,
+        lastSyncedAt:
+            lastSyncedAt.present ? lastSyncedAt.value : this.lastSyncedAt,
+        isTrusted: isTrusted ?? this.isTrusted,
+      );
+  SyncPeerStateTableData copyWithCompanion(SyncPeerStateTableCompanion data) {
+    return SyncPeerStateTableData(
+      peerDeviceId: data.peerDeviceId.present
+          ? data.peerDeviceId.value
+          : this.peerDeviceId,
+      peerName: data.peerName.present ? data.peerName.value : this.peerName,
+      lastSentChangeId: data.lastSentChangeId.present
+          ? data.lastSentChangeId.value
+          : this.lastSentChangeId,
+      lastReceivedChangeId: data.lastReceivedChangeId.present
+          ? data.lastReceivedChangeId.value
+          : this.lastReceivedChangeId,
+      lastSyncedAt: data.lastSyncedAt.present
+          ? data.lastSyncedAt.value
+          : this.lastSyncedAt,
+      isTrusted: data.isTrusted.present ? data.isTrusted.value : this.isTrusted,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncPeerStateTableData(')
+          ..write('peerDeviceId: $peerDeviceId, ')
+          ..write('peerName: $peerName, ')
+          ..write('lastSentChangeId: $lastSentChangeId, ')
+          ..write('lastReceivedChangeId: $lastReceivedChangeId, ')
+          ..write('lastSyncedAt: $lastSyncedAt, ')
+          ..write('isTrusted: $isTrusted')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(peerDeviceId, peerName, lastSentChangeId,
+      lastReceivedChangeId, lastSyncedAt, isTrusted);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SyncPeerStateTableData &&
+          other.peerDeviceId == this.peerDeviceId &&
+          other.peerName == this.peerName &&
+          other.lastSentChangeId == this.lastSentChangeId &&
+          other.lastReceivedChangeId == this.lastReceivedChangeId &&
+          other.lastSyncedAt == this.lastSyncedAt &&
+          other.isTrusted == this.isTrusted);
+}
+
+class SyncPeerStateTableCompanion
+    extends UpdateCompanion<SyncPeerStateTableData> {
+  final Value<String> peerDeviceId;
+  final Value<String> peerName;
+  final Value<int> lastSentChangeId;
+  final Value<int> lastReceivedChangeId;
+  final Value<DateTime?> lastSyncedAt;
+  final Value<bool> isTrusted;
+  final Value<int> rowid;
+  const SyncPeerStateTableCompanion({
+    this.peerDeviceId = const Value.absent(),
+    this.peerName = const Value.absent(),
+    this.lastSentChangeId = const Value.absent(),
+    this.lastReceivedChangeId = const Value.absent(),
+    this.lastSyncedAt = const Value.absent(),
+    this.isTrusted = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SyncPeerStateTableCompanion.insert({
+    required String peerDeviceId,
+    required String peerName,
+    this.lastSentChangeId = const Value.absent(),
+    this.lastReceivedChangeId = const Value.absent(),
+    this.lastSyncedAt = const Value.absent(),
+    this.isTrusted = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : peerDeviceId = Value(peerDeviceId),
+        peerName = Value(peerName);
+  static Insertable<SyncPeerStateTableData> custom({
+    Expression<String>? peerDeviceId,
+    Expression<String>? peerName,
+    Expression<int>? lastSentChangeId,
+    Expression<int>? lastReceivedChangeId,
+    Expression<DateTime>? lastSyncedAt,
+    Expression<bool>? isTrusted,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (peerDeviceId != null) 'peer_device_id': peerDeviceId,
+      if (peerName != null) 'peer_name': peerName,
+      if (lastSentChangeId != null) 'last_sent_change_id': lastSentChangeId,
+      if (lastReceivedChangeId != null)
+        'last_received_change_id': lastReceivedChangeId,
+      if (lastSyncedAt != null) 'last_synced_at': lastSyncedAt,
+      if (isTrusted != null) 'is_trusted': isTrusted,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SyncPeerStateTableCompanion copyWith(
+      {Value<String>? peerDeviceId,
+      Value<String>? peerName,
+      Value<int>? lastSentChangeId,
+      Value<int>? lastReceivedChangeId,
+      Value<DateTime?>? lastSyncedAt,
+      Value<bool>? isTrusted,
+      Value<int>? rowid}) {
+    return SyncPeerStateTableCompanion(
+      peerDeviceId: peerDeviceId ?? this.peerDeviceId,
+      peerName: peerName ?? this.peerName,
+      lastSentChangeId: lastSentChangeId ?? this.lastSentChangeId,
+      lastReceivedChangeId: lastReceivedChangeId ?? this.lastReceivedChangeId,
+      lastSyncedAt: lastSyncedAt ?? this.lastSyncedAt,
+      isTrusted: isTrusted ?? this.isTrusted,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (peerDeviceId.present) {
+      map['peer_device_id'] = Variable<String>(peerDeviceId.value);
+    }
+    if (peerName.present) {
+      map['peer_name'] = Variable<String>(peerName.value);
+    }
+    if (lastSentChangeId.present) {
+      map['last_sent_change_id'] = Variable<int>(lastSentChangeId.value);
+    }
+    if (lastReceivedChangeId.present) {
+      map['last_received_change_id'] =
+          Variable<int>(lastReceivedChangeId.value);
+    }
+    if (lastSyncedAt.present) {
+      map['last_synced_at'] = Variable<DateTime>(lastSyncedAt.value);
+    }
+    if (isTrusted.present) {
+      map['is_trusted'] = Variable<bool>(isTrusted.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SyncPeerStateTableCompanion(')
+          ..write('peerDeviceId: $peerDeviceId, ')
+          ..write('peerName: $peerName, ')
+          ..write('lastSentChangeId: $lastSentChangeId, ')
+          ..write('lastReceivedChangeId: $lastReceivedChangeId, ')
+          ..write('lastSyncedAt: $lastSyncedAt, ')
+          ..write('isTrusted: $isTrusted, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $DeviceIdentityTableTable extends DeviceIdentityTable
+    with TableInfo<$DeviceIdentityTableTable, DeviceIdentityTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DeviceIdentityTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _deviceIdMeta =
+      const VerificationMeta('deviceId');
+  @override
+  late final GeneratedColumn<String> deviceId = GeneratedColumn<String>(
+      'device_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _deviceNameMeta =
+      const VerificationMeta('deviceName');
+  @override
+  late final GeneratedColumn<String> deviceName = GeneratedColumn<String>(
+      'device_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, deviceId, deviceName];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'device_identity';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<DeviceIdentityTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('device_id')) {
+      context.handle(_deviceIdMeta,
+          deviceId.isAcceptableOrUnknown(data['device_id']!, _deviceIdMeta));
+    } else if (isInserting) {
+      context.missing(_deviceIdMeta);
+    }
+    if (data.containsKey('device_name')) {
+      context.handle(
+          _deviceNameMeta,
+          deviceName.isAcceptableOrUnknown(
+              data['device_name']!, _deviceNameMeta));
+    } else if (isInserting) {
+      context.missing(_deviceNameMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  DeviceIdentityTableData map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DeviceIdentityTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      deviceId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}device_id'])!,
+      deviceName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}device_name'])!,
+    );
+  }
+
+  @override
+  $DeviceIdentityTableTable createAlias(String alias) {
+    return $DeviceIdentityTableTable(attachedDatabase, alias);
+  }
+}
+
+class DeviceIdentityTableData extends DataClass
+    implements Insertable<DeviceIdentityTableData> {
+  final int id;
+  final String deviceId;
+  final String deviceName;
+  const DeviceIdentityTableData(
+      {required this.id, required this.deviceId, required this.deviceName});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['device_id'] = Variable<String>(deviceId);
+    map['device_name'] = Variable<String>(deviceName);
+    return map;
+  }
+
+  DeviceIdentityTableCompanion toCompanion(bool nullToAbsent) {
+    return DeviceIdentityTableCompanion(
+      id: Value(id),
+      deviceId: Value(deviceId),
+      deviceName: Value(deviceName),
+    );
+  }
+
+  factory DeviceIdentityTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DeviceIdentityTableData(
+      id: serializer.fromJson<int>(json['id']),
+      deviceId: serializer.fromJson<String>(json['deviceId']),
+      deviceName: serializer.fromJson<String>(json['deviceName']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'deviceId': serializer.toJson<String>(deviceId),
+      'deviceName': serializer.toJson<String>(deviceName),
+    };
+  }
+
+  DeviceIdentityTableData copyWith(
+          {int? id, String? deviceId, String? deviceName}) =>
+      DeviceIdentityTableData(
+        id: id ?? this.id,
+        deviceId: deviceId ?? this.deviceId,
+        deviceName: deviceName ?? this.deviceName,
+      );
+  DeviceIdentityTableData copyWithCompanion(DeviceIdentityTableCompanion data) {
+    return DeviceIdentityTableData(
+      id: data.id.present ? data.id.value : this.id,
+      deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
+      deviceName:
+          data.deviceName.present ? data.deviceName.value : this.deviceName,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DeviceIdentityTableData(')
+          ..write('id: $id, ')
+          ..write('deviceId: $deviceId, ')
+          ..write('deviceName: $deviceName')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, deviceId, deviceName);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DeviceIdentityTableData &&
+          other.id == this.id &&
+          other.deviceId == this.deviceId &&
+          other.deviceName == this.deviceName);
+}
+
+class DeviceIdentityTableCompanion
+    extends UpdateCompanion<DeviceIdentityTableData> {
+  final Value<int> id;
+  final Value<String> deviceId;
+  final Value<String> deviceName;
+  const DeviceIdentityTableCompanion({
+    this.id = const Value.absent(),
+    this.deviceId = const Value.absent(),
+    this.deviceName = const Value.absent(),
+  });
+  DeviceIdentityTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String deviceId,
+    required String deviceName,
+  })  : deviceId = Value(deviceId),
+        deviceName = Value(deviceName);
+  static Insertable<DeviceIdentityTableData> custom({
+    Expression<int>? id,
+    Expression<String>? deviceId,
+    Expression<String>? deviceName,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (deviceId != null) 'device_id': deviceId,
+      if (deviceName != null) 'device_name': deviceName,
+    });
+  }
+
+  DeviceIdentityTableCompanion copyWith(
+      {Value<int>? id, Value<String>? deviceId, Value<String>? deviceName}) {
+    return DeviceIdentityTableCompanion(
+      id: id ?? this.id,
+      deviceId: deviceId ?? this.deviceId,
+      deviceName: deviceName ?? this.deviceName,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (deviceId.present) {
+      map['device_id'] = Variable<String>(deviceId.value);
+    }
+    if (deviceName.present) {
+      map['device_name'] = Variable<String>(deviceName.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DeviceIdentityTableCompanion(')
+          ..write('id: $id, ')
+          ..write('deviceId: $deviceId, ')
+          ..write('deviceName: $deviceName')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1941,6 +3310,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CollectionMediaTableTable collectionMediaTable =
       $CollectionMediaTableTable(this);
   late final $HistoryTableTable historyTable = $HistoryTableTable(this);
+  late final $SyncEntityTableTable syncEntityTable =
+      $SyncEntityTableTable(this);
+  late final $SyncChangeLogTableTable syncChangeLogTable =
+      $SyncChangeLogTableTable(this);
+  late final $SyncPeerStateTableTable syncPeerStateTable =
+      $SyncPeerStateTableTable(this);
+  late final $DeviceIdentityTableTable deviceIdentityTable =
+      $DeviceIdentityTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1951,7 +3328,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         noteTable,
         collectionNoteRefTable,
         collectionMediaTable,
-        historyTable
+        historyTable,
+        syncEntityTable,
+        syncChangeLogTable,
+        syncPeerStateTable,
+        deviceIdentityTable
       ];
 }
 
@@ -3875,6 +5256,747 @@ typedef $$HistoryTableTableProcessedTableManager = ProcessedTableManager<
     (HistoryTableData, $$HistoryTableTableReferences),
     HistoryTableData,
     PrefetchHooks Function({bool noteId, bool collectionId})>;
+typedef $$SyncEntityTableTableCreateCompanionBuilder = SyncEntityTableCompanion
+    Function({
+  Value<int> id,
+  required String entityType,
+  required String uuid,
+  required int localId,
+  required String originDeviceId,
+  required DateTime updatedAt,
+  Value<bool> isDeleted,
+});
+typedef $$SyncEntityTableTableUpdateCompanionBuilder = SyncEntityTableCompanion
+    Function({
+  Value<int> id,
+  Value<String> entityType,
+  Value<String> uuid,
+  Value<int> localId,
+  Value<String> originDeviceId,
+  Value<DateTime> updatedAt,
+  Value<bool> isDeleted,
+});
+
+class $$SyncEntityTableTableFilterComposer
+    extends Composer<_$AppDatabase, $SyncEntityTableTable> {
+  $$SyncEntityTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get entityType => $composableBuilder(
+      column: $table.entityType, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get uuid => $composableBuilder(
+      column: $table.uuid, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get localId => $composableBuilder(
+      column: $table.localId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get originDeviceId => $composableBuilder(
+      column: $table.originDeviceId,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnFilters(column));
+}
+
+class $$SyncEntityTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $SyncEntityTableTable> {
+  $$SyncEntityTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get entityType => $composableBuilder(
+      column: $table.entityType, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get uuid => $composableBuilder(
+      column: $table.uuid, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get localId => $composableBuilder(
+      column: $table.localId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get originDeviceId => $composableBuilder(
+      column: $table.originDeviceId,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnOrderings(column));
+}
+
+class $$SyncEntityTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SyncEntityTableTable> {
+  $$SyncEntityTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get entityType => $composableBuilder(
+      column: $table.entityType, builder: (column) => column);
+
+  GeneratedColumn<String> get uuid =>
+      $composableBuilder(column: $table.uuid, builder: (column) => column);
+
+  GeneratedColumn<int> get localId =>
+      $composableBuilder(column: $table.localId, builder: (column) => column);
+
+  GeneratedColumn<String> get originDeviceId => $composableBuilder(
+      column: $table.originDeviceId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+}
+
+class $$SyncEntityTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SyncEntityTableTable,
+    SyncEntityTableData,
+    $$SyncEntityTableTableFilterComposer,
+    $$SyncEntityTableTableOrderingComposer,
+    $$SyncEntityTableTableAnnotationComposer,
+    $$SyncEntityTableTableCreateCompanionBuilder,
+    $$SyncEntityTableTableUpdateCompanionBuilder,
+    (
+      SyncEntityTableData,
+      BaseReferences<_$AppDatabase, $SyncEntityTableTable, SyncEntityTableData>
+    ),
+    SyncEntityTableData,
+    PrefetchHooks Function()> {
+  $$SyncEntityTableTableTableManager(
+      _$AppDatabase db, $SyncEntityTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SyncEntityTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SyncEntityTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SyncEntityTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> entityType = const Value.absent(),
+            Value<String> uuid = const Value.absent(),
+            Value<int> localId = const Value.absent(),
+            Value<String> originDeviceId = const Value.absent(),
+            Value<DateTime> updatedAt = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+          }) =>
+              SyncEntityTableCompanion(
+            id: id,
+            entityType: entityType,
+            uuid: uuid,
+            localId: localId,
+            originDeviceId: originDeviceId,
+            updatedAt: updatedAt,
+            isDeleted: isDeleted,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String entityType,
+            required String uuid,
+            required int localId,
+            required String originDeviceId,
+            required DateTime updatedAt,
+            Value<bool> isDeleted = const Value.absent(),
+          }) =>
+              SyncEntityTableCompanion.insert(
+            id: id,
+            entityType: entityType,
+            uuid: uuid,
+            localId: localId,
+            originDeviceId: originDeviceId,
+            updatedAt: updatedAt,
+            isDeleted: isDeleted,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$SyncEntityTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $SyncEntityTableTable,
+    SyncEntityTableData,
+    $$SyncEntityTableTableFilterComposer,
+    $$SyncEntityTableTableOrderingComposer,
+    $$SyncEntityTableTableAnnotationComposer,
+    $$SyncEntityTableTableCreateCompanionBuilder,
+    $$SyncEntityTableTableUpdateCompanionBuilder,
+    (
+      SyncEntityTableData,
+      BaseReferences<_$AppDatabase, $SyncEntityTableTable, SyncEntityTableData>
+    ),
+    SyncEntityTableData,
+    PrefetchHooks Function()>;
+typedef $$SyncChangeLogTableTableCreateCompanionBuilder
+    = SyncChangeLogTableCompanion Function({
+  Value<int> id,
+  required String entityType,
+  required String uuid,
+  required String operation,
+  Value<String?> payload,
+  required DateTime updatedAt,
+  required String deviceId,
+});
+typedef $$SyncChangeLogTableTableUpdateCompanionBuilder
+    = SyncChangeLogTableCompanion Function({
+  Value<int> id,
+  Value<String> entityType,
+  Value<String> uuid,
+  Value<String> operation,
+  Value<String?> payload,
+  Value<DateTime> updatedAt,
+  Value<String> deviceId,
+});
+
+class $$SyncChangeLogTableTableFilterComposer
+    extends Composer<_$AppDatabase, $SyncChangeLogTableTable> {
+  $$SyncChangeLogTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get entityType => $composableBuilder(
+      column: $table.entityType, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get uuid => $composableBuilder(
+      column: $table.uuid, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get operation => $composableBuilder(
+      column: $table.operation, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get payload => $composableBuilder(
+      column: $table.payload, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get deviceId => $composableBuilder(
+      column: $table.deviceId, builder: (column) => ColumnFilters(column));
+}
+
+class $$SyncChangeLogTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $SyncChangeLogTableTable> {
+  $$SyncChangeLogTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get entityType => $composableBuilder(
+      column: $table.entityType, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get uuid => $composableBuilder(
+      column: $table.uuid, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get operation => $composableBuilder(
+      column: $table.operation, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get payload => $composableBuilder(
+      column: $table.payload, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get deviceId => $composableBuilder(
+      column: $table.deviceId, builder: (column) => ColumnOrderings(column));
+}
+
+class $$SyncChangeLogTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SyncChangeLogTableTable> {
+  $$SyncChangeLogTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get entityType => $composableBuilder(
+      column: $table.entityType, builder: (column) => column);
+
+  GeneratedColumn<String> get uuid =>
+      $composableBuilder(column: $table.uuid, builder: (column) => column);
+
+  GeneratedColumn<String> get operation =>
+      $composableBuilder(column: $table.operation, builder: (column) => column);
+
+  GeneratedColumn<String> get payload =>
+      $composableBuilder(column: $table.payload, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get deviceId =>
+      $composableBuilder(column: $table.deviceId, builder: (column) => column);
+}
+
+class $$SyncChangeLogTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SyncChangeLogTableTable,
+    SyncChangeLogTableData,
+    $$SyncChangeLogTableTableFilterComposer,
+    $$SyncChangeLogTableTableOrderingComposer,
+    $$SyncChangeLogTableTableAnnotationComposer,
+    $$SyncChangeLogTableTableCreateCompanionBuilder,
+    $$SyncChangeLogTableTableUpdateCompanionBuilder,
+    (
+      SyncChangeLogTableData,
+      BaseReferences<_$AppDatabase, $SyncChangeLogTableTable,
+          SyncChangeLogTableData>
+    ),
+    SyncChangeLogTableData,
+    PrefetchHooks Function()> {
+  $$SyncChangeLogTableTableTableManager(
+      _$AppDatabase db, $SyncChangeLogTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SyncChangeLogTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SyncChangeLogTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SyncChangeLogTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> entityType = const Value.absent(),
+            Value<String> uuid = const Value.absent(),
+            Value<String> operation = const Value.absent(),
+            Value<String?> payload = const Value.absent(),
+            Value<DateTime> updatedAt = const Value.absent(),
+            Value<String> deviceId = const Value.absent(),
+          }) =>
+              SyncChangeLogTableCompanion(
+            id: id,
+            entityType: entityType,
+            uuid: uuid,
+            operation: operation,
+            payload: payload,
+            updatedAt: updatedAt,
+            deviceId: deviceId,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String entityType,
+            required String uuid,
+            required String operation,
+            Value<String?> payload = const Value.absent(),
+            required DateTime updatedAt,
+            required String deviceId,
+          }) =>
+              SyncChangeLogTableCompanion.insert(
+            id: id,
+            entityType: entityType,
+            uuid: uuid,
+            operation: operation,
+            payload: payload,
+            updatedAt: updatedAt,
+            deviceId: deviceId,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$SyncChangeLogTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $SyncChangeLogTableTable,
+    SyncChangeLogTableData,
+    $$SyncChangeLogTableTableFilterComposer,
+    $$SyncChangeLogTableTableOrderingComposer,
+    $$SyncChangeLogTableTableAnnotationComposer,
+    $$SyncChangeLogTableTableCreateCompanionBuilder,
+    $$SyncChangeLogTableTableUpdateCompanionBuilder,
+    (
+      SyncChangeLogTableData,
+      BaseReferences<_$AppDatabase, $SyncChangeLogTableTable,
+          SyncChangeLogTableData>
+    ),
+    SyncChangeLogTableData,
+    PrefetchHooks Function()>;
+typedef $$SyncPeerStateTableTableCreateCompanionBuilder
+    = SyncPeerStateTableCompanion Function({
+  required String peerDeviceId,
+  required String peerName,
+  Value<int> lastSentChangeId,
+  Value<int> lastReceivedChangeId,
+  Value<DateTime?> lastSyncedAt,
+  Value<bool> isTrusted,
+  Value<int> rowid,
+});
+typedef $$SyncPeerStateTableTableUpdateCompanionBuilder
+    = SyncPeerStateTableCompanion Function({
+  Value<String> peerDeviceId,
+  Value<String> peerName,
+  Value<int> lastSentChangeId,
+  Value<int> lastReceivedChangeId,
+  Value<DateTime?> lastSyncedAt,
+  Value<bool> isTrusted,
+  Value<int> rowid,
+});
+
+class $$SyncPeerStateTableTableFilterComposer
+    extends Composer<_$AppDatabase, $SyncPeerStateTableTable> {
+  $$SyncPeerStateTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get peerDeviceId => $composableBuilder(
+      column: $table.peerDeviceId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get peerName => $composableBuilder(
+      column: $table.peerName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get lastSentChangeId => $composableBuilder(
+      column: $table.lastSentChangeId,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get lastReceivedChangeId => $composableBuilder(
+      column: $table.lastReceivedChangeId,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastSyncedAt => $composableBuilder(
+      column: $table.lastSyncedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isTrusted => $composableBuilder(
+      column: $table.isTrusted, builder: (column) => ColumnFilters(column));
+}
+
+class $$SyncPeerStateTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $SyncPeerStateTableTable> {
+  $$SyncPeerStateTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get peerDeviceId => $composableBuilder(
+      column: $table.peerDeviceId,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get peerName => $composableBuilder(
+      column: $table.peerName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get lastSentChangeId => $composableBuilder(
+      column: $table.lastSentChangeId,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get lastReceivedChangeId => $composableBuilder(
+      column: $table.lastReceivedChangeId,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastSyncedAt => $composableBuilder(
+      column: $table.lastSyncedAt,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isTrusted => $composableBuilder(
+      column: $table.isTrusted, builder: (column) => ColumnOrderings(column));
+}
+
+class $$SyncPeerStateTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SyncPeerStateTableTable> {
+  $$SyncPeerStateTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get peerDeviceId => $composableBuilder(
+      column: $table.peerDeviceId, builder: (column) => column);
+
+  GeneratedColumn<String> get peerName =>
+      $composableBuilder(column: $table.peerName, builder: (column) => column);
+
+  GeneratedColumn<int> get lastSentChangeId => $composableBuilder(
+      column: $table.lastSentChangeId, builder: (column) => column);
+
+  GeneratedColumn<int> get lastReceivedChangeId => $composableBuilder(
+      column: $table.lastReceivedChangeId, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastSyncedAt => $composableBuilder(
+      column: $table.lastSyncedAt, builder: (column) => column);
+
+  GeneratedColumn<bool> get isTrusted =>
+      $composableBuilder(column: $table.isTrusted, builder: (column) => column);
+}
+
+class $$SyncPeerStateTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SyncPeerStateTableTable,
+    SyncPeerStateTableData,
+    $$SyncPeerStateTableTableFilterComposer,
+    $$SyncPeerStateTableTableOrderingComposer,
+    $$SyncPeerStateTableTableAnnotationComposer,
+    $$SyncPeerStateTableTableCreateCompanionBuilder,
+    $$SyncPeerStateTableTableUpdateCompanionBuilder,
+    (
+      SyncPeerStateTableData,
+      BaseReferences<_$AppDatabase, $SyncPeerStateTableTable,
+          SyncPeerStateTableData>
+    ),
+    SyncPeerStateTableData,
+    PrefetchHooks Function()> {
+  $$SyncPeerStateTableTableTableManager(
+      _$AppDatabase db, $SyncPeerStateTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SyncPeerStateTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SyncPeerStateTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SyncPeerStateTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> peerDeviceId = const Value.absent(),
+            Value<String> peerName = const Value.absent(),
+            Value<int> lastSentChangeId = const Value.absent(),
+            Value<int> lastReceivedChangeId = const Value.absent(),
+            Value<DateTime?> lastSyncedAt = const Value.absent(),
+            Value<bool> isTrusted = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SyncPeerStateTableCompanion(
+            peerDeviceId: peerDeviceId,
+            peerName: peerName,
+            lastSentChangeId: lastSentChangeId,
+            lastReceivedChangeId: lastReceivedChangeId,
+            lastSyncedAt: lastSyncedAt,
+            isTrusted: isTrusted,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String peerDeviceId,
+            required String peerName,
+            Value<int> lastSentChangeId = const Value.absent(),
+            Value<int> lastReceivedChangeId = const Value.absent(),
+            Value<DateTime?> lastSyncedAt = const Value.absent(),
+            Value<bool> isTrusted = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SyncPeerStateTableCompanion.insert(
+            peerDeviceId: peerDeviceId,
+            peerName: peerName,
+            lastSentChangeId: lastSentChangeId,
+            lastReceivedChangeId: lastReceivedChangeId,
+            lastSyncedAt: lastSyncedAt,
+            isTrusted: isTrusted,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$SyncPeerStateTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $SyncPeerStateTableTable,
+    SyncPeerStateTableData,
+    $$SyncPeerStateTableTableFilterComposer,
+    $$SyncPeerStateTableTableOrderingComposer,
+    $$SyncPeerStateTableTableAnnotationComposer,
+    $$SyncPeerStateTableTableCreateCompanionBuilder,
+    $$SyncPeerStateTableTableUpdateCompanionBuilder,
+    (
+      SyncPeerStateTableData,
+      BaseReferences<_$AppDatabase, $SyncPeerStateTableTable,
+          SyncPeerStateTableData>
+    ),
+    SyncPeerStateTableData,
+    PrefetchHooks Function()>;
+typedef $$DeviceIdentityTableTableCreateCompanionBuilder
+    = DeviceIdentityTableCompanion Function({
+  Value<int> id,
+  required String deviceId,
+  required String deviceName,
+});
+typedef $$DeviceIdentityTableTableUpdateCompanionBuilder
+    = DeviceIdentityTableCompanion Function({
+  Value<int> id,
+  Value<String> deviceId,
+  Value<String> deviceName,
+});
+
+class $$DeviceIdentityTableTableFilterComposer
+    extends Composer<_$AppDatabase, $DeviceIdentityTableTable> {
+  $$DeviceIdentityTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get deviceId => $composableBuilder(
+      column: $table.deviceId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get deviceName => $composableBuilder(
+      column: $table.deviceName, builder: (column) => ColumnFilters(column));
+}
+
+class $$DeviceIdentityTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $DeviceIdentityTableTable> {
+  $$DeviceIdentityTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get deviceId => $composableBuilder(
+      column: $table.deviceId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get deviceName => $composableBuilder(
+      column: $table.deviceName, builder: (column) => ColumnOrderings(column));
+}
+
+class $$DeviceIdentityTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DeviceIdentityTableTable> {
+  $$DeviceIdentityTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get deviceId =>
+      $composableBuilder(column: $table.deviceId, builder: (column) => column);
+
+  GeneratedColumn<String> get deviceName => $composableBuilder(
+      column: $table.deviceName, builder: (column) => column);
+}
+
+class $$DeviceIdentityTableTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $DeviceIdentityTableTable,
+    DeviceIdentityTableData,
+    $$DeviceIdentityTableTableFilterComposer,
+    $$DeviceIdentityTableTableOrderingComposer,
+    $$DeviceIdentityTableTableAnnotationComposer,
+    $$DeviceIdentityTableTableCreateCompanionBuilder,
+    $$DeviceIdentityTableTableUpdateCompanionBuilder,
+    (
+      DeviceIdentityTableData,
+      BaseReferences<_$AppDatabase, $DeviceIdentityTableTable,
+          DeviceIdentityTableData>
+    ),
+    DeviceIdentityTableData,
+    PrefetchHooks Function()> {
+  $$DeviceIdentityTableTableTableManager(
+      _$AppDatabase db, $DeviceIdentityTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DeviceIdentityTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DeviceIdentityTableTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DeviceIdentityTableTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> deviceId = const Value.absent(),
+            Value<String> deviceName = const Value.absent(),
+          }) =>
+              DeviceIdentityTableCompanion(
+            id: id,
+            deviceId: deviceId,
+            deviceName: deviceName,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String deviceId,
+            required String deviceName,
+          }) =>
+              DeviceIdentityTableCompanion.insert(
+            id: id,
+            deviceId: deviceId,
+            deviceName: deviceName,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$DeviceIdentityTableTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $DeviceIdentityTableTable,
+    DeviceIdentityTableData,
+    $$DeviceIdentityTableTableFilterComposer,
+    $$DeviceIdentityTableTableOrderingComposer,
+    $$DeviceIdentityTableTableAnnotationComposer,
+    $$DeviceIdentityTableTableCreateCompanionBuilder,
+    $$DeviceIdentityTableTableUpdateCompanionBuilder,
+    (
+      DeviceIdentityTableData,
+      BaseReferences<_$AppDatabase, $DeviceIdentityTableTable,
+          DeviceIdentityTableData>
+    ),
+    DeviceIdentityTableData,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3892,4 +6014,12 @@ class $AppDatabaseManager {
       $$CollectionMediaTableTableTableManager(_db, _db.collectionMediaTable);
   $$HistoryTableTableTableManager get historyTable =>
       $$HistoryTableTableTableManager(_db, _db.historyTable);
+  $$SyncEntityTableTableTableManager get syncEntityTable =>
+      $$SyncEntityTableTableTableManager(_db, _db.syncEntityTable);
+  $$SyncChangeLogTableTableTableManager get syncChangeLogTable =>
+      $$SyncChangeLogTableTableTableManager(_db, _db.syncChangeLogTable);
+  $$SyncPeerStateTableTableTableManager get syncPeerStateTable =>
+      $$SyncPeerStateTableTableTableManager(_db, _db.syncPeerStateTable);
+  $$DeviceIdentityTableTableTableManager get deviceIdentityTable =>
+      $$DeviceIdentityTableTableTableManager(_db, _db.deviceIdentityTable);
 }
