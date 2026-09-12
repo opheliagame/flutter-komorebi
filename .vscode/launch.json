@@ -4,8 +4,9 @@
       "name": "Flutter (staging)",
       "type": "dart",
       "request": "launch",
-      "program": "lib/main.dart",
-      "args": ["--flavor", "staging"]
+      "program": "lib/main.dart"
+      // TODO(dev): xcode build fails cos ios flavor is not setup yet
+      // "args": ["--flavor", "staging"]
     },
     {
       "name": "Flutter (Release)",

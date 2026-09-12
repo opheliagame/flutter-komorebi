@@ -6,7 +6,7 @@ A "second brain" for collecting and connecting ideas, balancing professional cit
 
 ## Core Tenets: Privacy & Offline-First
 
-**Offline-First**: Kiritori is a purely local application. No data is synced to the cloud.
+**Offline-First**: Kiritori is a purely local application. No data is synced to the cloud. Any device-to-device sync is peer-to-peer and local-only, never routed through the internet or a third-party server.
 
 **No Avatars/Accounts**: There are no user profiles, avatars, or login systems. The focus is entirely on the content.
 
@@ -41,6 +41,8 @@ A "second brain" for collecting and connecting ideas, balancing professional cit
 **Analytics**: Visualizing the "ecology"—most used collections, media types, and activity frequency.
 
 **Citation Management**: Local citation saving and export.
+
+**Local Peer-to-Peer Sync**: Sync notes and collections directly between a user's own devices with no internet connection required. Sync is initiated locally (e.g., by scanning for or pairing with a nearby device) and transferred over on-device capabilities such as Bluetooth Low Energy (BLE) or local WebSockets (e.g., over Wi-Fi Direct/local network). No account, server, or cloud relay is involved.
 
 ## Design Themes
 

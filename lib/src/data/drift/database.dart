@@ -3,9 +3,13 @@ import 'package:drift_flutter/drift_flutter.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/collection_media_table.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/collection_note_ref_table.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/collection_table.dart';
+import 'package:flutter_komorebi/src/data/drift/domain/device_identity_table.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/history_table.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/note_citation_table.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/note_table.dart';
+import 'package:flutter_komorebi/src/data/drift/domain/sync_change_log_table.dart';
+import 'package:flutter_komorebi/src/data/drift/domain/sync_entity_table.dart';
+import 'package:flutter_komorebi/src/data/drift/domain/sync_peer_state_table.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -20,6 +24,10 @@ part 'database.g.dart';
     CollectionMediaTable,
     NoteCitationTable,
     HistoryTable,
+    SyncEntityTable,
+    SyncChangeLogTable,
+    SyncPeerStateTable,
+    DeviceIdentityTable,
   ],
   views: [],
 )
@@ -30,7 +38,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   static QueryExecutor _openConnection() {
     return driftDatabase(
@@ -44,16 +52,22 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  // @override
-  // MigrationStrategy get migration {
-  //   return MigrationStrategy(
-  //     onUpgrade: _schemaUpgrade,
-  //     onCreate: (m) async {
-  //       await m.createAll();
-  //       await insertMeaningfulMockData();
-  //     },
-  //   );
-  // }
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (m) async {
+        await m.createAll();
+      },
+      onUpgrade: (m, from, to) async {
+        if (from < 2) {
+          await m.createTable(syncEntityTable);
+          await m.createTable(syncChangeLogTable);
+          await m.createTable(syncPeerStateTable);
+          await m.createTable(deviceIdentityTable);
+        }
+      },
+    );
+  }
 }
 
 // TODO(db): insert extension after a final initial release

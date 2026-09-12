@@ -36,6 +36,10 @@ class AppRouter extends RootStackRouter {
           page: RoamRoute.page,
         ),
         AutoRoute(
+          path: '/device-sync',
+          page: DeviceSyncRoute.page,
+        ),
+        AutoRoute(
           path: '/collectionslist',
           page: CollectionsListRoute.page,
         ),

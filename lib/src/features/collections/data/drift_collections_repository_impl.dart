@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/collection_table.dart';
+import 'package:flutter_komorebi/src/data/drift/sync/sync_change_tracker.dart';
+import 'package:flutter_komorebi/src/data/drift/sync/sync_entity_adapters.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 
 class DriftCollectionsRepository implements CollectionsRepository {
-  DriftCollectionsRepository(this.database);
+  DriftCollectionsRepository(this.database) : _syncTracker = SyncChangeTracker(database);
 
   final AppDatabase database;
+  final SyncChangeTracker _syncTracker;
 
   @override
   Future<List<CollectionEntity>> getAllCollections() async {
@@ -49,18 +52,24 @@ class DriftCollectionsRepository implements CollectionsRepository {
     required String? description,
     required Uint8List? media,
   }) async {
-    final query = database.into(database.collectionTable).insert(
-          CollectionTableCompanion.insert(
-            name: collectionName,
-            description: Value.absentIfNull(description),
-            media: Value.absentIfNull(media),
-            createdAt: DateTime.now(),
-            modifiedAt: DateTime.now(),
-          ),
-        );
-
     try {
-      await query;
+      await database.transaction(() async {
+        final id = await database.into(database.collectionTable).insert(
+              CollectionTableCompanion.insert(
+                name: collectionName,
+                description: Value.absentIfNull(description),
+                media: Value.absentIfNull(media),
+                createdAt: DateTime.now(),
+                modifiedAt: DateTime.now(),
+              ),
+            );
+        final row = await (database.select(database.collectionTable)..where((t) => t.id.equals(id))).getSingle();
+        await _syncTracker.recordUpsert(
+          entityType: collectionEntityType,
+          localId: id,
+          rowJson: collectionToJson(row),
+        );
+      });
       return true;
     } catch (e) {
       debugPrint(e.toString());
@@ -75,17 +84,24 @@ class DriftCollectionsRepository implements CollectionsRepository {
     required String? description,
     required Uint8List? media,
   }) async {
-    final query = (database.update(database.collectionTable)..where((q) => q.id.equals(collectionId))).write(
-      CollectionTableCompanion(
-        name: Value(collectionName),
-        description: Value.absentIfNull(description),
-        media: Value.absentIfNull(media),
-        modifiedAt: Value(DateTime.now()),
-      ),
-    );
-
     try {
-      await query;
+      await database.transaction(() async {
+        await (database.update(database.collectionTable)..where((q) => q.id.equals(collectionId))).write(
+          CollectionTableCompanion(
+            name: Value(collectionName),
+            description: Value.absentIfNull(description),
+            media: Value.absentIfNull(media),
+            modifiedAt: Value(DateTime.now()),
+          ),
+        );
+        final row =
+            await (database.select(database.collectionTable)..where((t) => t.id.equals(collectionId))).getSingle();
+        await _syncTracker.recordUpsert(
+          entityType: collectionEntityType,
+          localId: collectionId,
+          rowJson: collectionToJson(row),
+        );
+      });
       return true;
     } catch (e) {
       debugPrint(e.toString());
@@ -95,9 +111,11 @@ class DriftCollectionsRepository implements CollectionsRepository {
 
   @override
   Future<bool> deleteCollection(int collectionId) async {
-    final query = database.delete(database.collectionTable)..where((q) => q.id.equals(collectionId));
     try {
-      await query.go();
+      await database.transaction(() async {
+        await (database.delete(database.collectionTable)..where((q) => q.id.equals(collectionId))).go();
+        await _syncTracker.recordDelete(entityType: collectionEntityType, localId: collectionId);
+      });
       return true;
     } catch (e) {
       debugPrint(e.toString());
