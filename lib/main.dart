@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
@@ -21,6 +23,25 @@ class MyApp extends HookConsumerWidget {
     final appRouter = useMemoized(() => AppRouter());
 
     final seedColor = ref.watch(appColorSchemeSeedProvider);
+
+    final isApplePlatform =
+        defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS;
+
+    if (isApplePlatform) {
+      return CupertinoApp.router(
+        title: S.of(context)?.app_name ?? 'Kiritori',
+        theme: CupertinoThemeData(
+          // Design system rule: no shadows, no blurs, no glass styling.
+          primaryColor: seedColor,
+          barBackgroundColor: CupertinoColors.systemBackground,
+          scaffoldBackgroundColor: CupertinoColors.systemBackground,
+        ),
+        localizationsDelegates: S.localizationsDelegates,
+        supportedLocales: S.supportedLocales,
+        locale: const Locale('en'),
+        routerConfig: appRouter.config(),
+      );
+    }
 
     return MaterialApp.router(
       title: S.of(context)?.app_name,
@@ -52,7 +73,7 @@ class MyApp extends HookConsumerWidget {
       ),
       localizationsDelegates: S.localizationsDelegates,
       supportedLocales: S.supportedLocales,
-      locale: Locale('en'),
+      locale: const Locale('en'),
       routerConfig: appRouter.config(),
     );
   }
