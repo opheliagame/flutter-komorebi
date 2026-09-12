@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Design System.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Design System"
+              "title": "README"
             }
           },
           {
@@ -230,9 +230,9 @@
   },
   "active": "6dc4b5696e8335db",
   "lastOpenFiles": [
+    "Design System.md",
     "PRD/02 User Stories.md",
     "PRD/03 Use Cases.md",
-    "Design System.md",
     "03 Project Management.md",
     "PRD/01 PRD Project Requirements Definition.md",
     "PRD",
