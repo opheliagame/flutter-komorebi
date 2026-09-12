@@ -1,8 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/quick_action_fabs.dart';
 import 'package:flutter_komorebi/src/features/home/presentation/widgets/connected_notes_visualization.dart';
-import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @RoutePage()
@@ -14,16 +13,13 @@ class HomePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(
-          S.of(context)?.app_name ?? 'キリトリ',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: const SizedBox.shrink(),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
-            tooltip: 'Search',
+            icon: const Icon(Icons.settings),
+            tooltip: 'Settings',
             onPressed: () {
-              context.navigateTo(SearchRoute());
+              // Settings screen is not implemented yet.
             },
           ),
         ],
@@ -32,6 +28,7 @@ class HomePage extends ConsumerWidget {
         padding: EdgeInsets.all(16.0),
         child: ConnectedNotesVisualization(),
       ),
+      floatingActionButton: const QuickActionFabs(),
     );
   }
 }

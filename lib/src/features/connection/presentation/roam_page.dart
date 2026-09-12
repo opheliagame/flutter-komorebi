@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/design_system/collection/collection_tile.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/quick_action_fabs.dart';
 import 'package:flutter_komorebi/src/features/connection/presentation/roam_notifier.dart';
 import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,6 +32,7 @@ class _RoamPageState extends ConsumerState<RoamPage> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      floatingActionButton: const QuickActionFabs(),
       body: SafeArea(
         bottom: false,
         child: Stack(

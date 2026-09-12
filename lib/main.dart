@@ -25,12 +25,30 @@ class MyApp extends HookConsumerWidget {
     return MaterialApp.router(
       title: S.of(context)?.app_name,
       theme: ThemeData(
-        // This is the theme of your application.
+        // Design system rule: no shadows, no blurs, no glass styling.
         colorScheme: ColorScheme.fromSeed(
           seedColor: seedColor,
           dynamicSchemeVariant: DynamicSchemeVariant.expressive,
         ),
         useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          shadowColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          elevation: 0,
+          highlightElevation: 0,
+          splashColor: Colors.transparent,
+        ),
+        cardTheme: const CardThemeData(
+          elevation: 0,
+          surfaceTintColor: Colors.transparent,
+        ),
+        dialogTheme: const DialogThemeData(
+          elevation: 0,
+          surfaceTintColor: Colors.transparent,
+        ),
       ),
       localizationsDelegates: S.localizationsDelegates,
       supportedLocales: S.supportedLocales,

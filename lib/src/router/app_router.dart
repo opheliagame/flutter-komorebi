@@ -22,18 +22,18 @@ class AppRouter extends RootStackRouter {
               page: HomeRoute.page,
             ),
             AutoRoute(
-              path: 'search',
-              page: SearchRoute.page,
-            ),
-            AutoRoute(
-              path: 'create',
-              page: CreateRoute.page,
+              path: 'roam',
+              page: RoamRoute.page,
             ),
           ],
         ),
         AutoRoute(
           path: '/roam',
           page: RoamRoute.page,
+        ),
+        AutoRoute(
+          path: '/search',
+          page: SearchRoute.page,
         ),
         AutoRoute(
           path: '/collectionslist',

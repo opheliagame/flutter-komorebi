@@ -4,8 +4,8 @@
       "name": "Flutter (staging)",
       "type": "dart",
       "request": "launch",
-      "program": "lib/main.dart",
-      "args": ["--flavor", "staging"]
+      "program": "lib/main.dart"
+      // "args": ["--flavor", "staging"]
     },
     {
       "name": "Flutter (Release)",

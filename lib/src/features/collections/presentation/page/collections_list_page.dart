@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/quick_action_fabs.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +15,7 @@ class CollectionsListPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      floatingActionButton: const QuickActionFabs(),
       appBar: AppBar(
         title: Text('all collections'),
         // TODO(design): show image in app bar when collection does not have a name

@@ -1,8 +1,6 @@
-import 'dart:typed_data';
-
 import 'package:auto_route/auto_route.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
@@ -10,7 +8,6 @@ import 'package:flutter_komorebi/src/features/collections/presentation/collectio
 import 'package:flutter_komorebi/src/features/connection/usecase/connection_usecase.dart';
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
-import 'package:flutter_komorebi/src/features/sample/image_clipboard.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -30,16 +27,52 @@ class CreatePage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedCollections = useState<List<CollectionEntity>>([]);
-    final dropdownKey = useMemoized(() => GlobalKey<DropdownSearchState<CollectionEntity>>());
+    final isSelectionComplete = useState(false);
 
     final inputTextEditingController = useTextEditingController();
     final collectionSearchController = useTextEditingController(text: '');
     final collectionSearchFocusNode = useFocusNode();
+    final collectionSearchQuery = useState('');
     final dropdownValue = useState<EntityType?>(entityType);
     final pickedImage = useState<Uint8List?>(null);
 
+    final allCollections = ref.watch(collectionsListStreamProvider).valueOrNull ?? [];
+    final filteredCollections = useMemoized(() {
+      final query = collectionSearchQuery.value.trim().toLowerCase();
+      if (query.isEmpty) {
+        return allCollections;
+      }
+      return allCollections.where((collection) => collection.name.toLowerCase().contains(query)).toList();
+    }, [allCollections, collectionSearchQuery.value]);
+
     final isEdit = collectionId != null || noteId != null ? true : false;
     final isCompleted = useState(false);
+    final requiresCollectionSelection = entityType == EntityType.note && !isEdit;
+
+    void toggleCollectionSelection(CollectionEntity collection) {
+      final ids = selectedCollections.value.map((entry) => entry.id).toList();
+      if (ids.contains(collection.id)) {
+        selectedCollections.value = selectedCollections.value.where((entry) => entry.id != collection.id).toList();
+      } else {
+        selectedCollections.value = [...selectedCollections.value, collection];
+      }
+    }
+
+    Future<void> createCollectionFromSearch(String name) async {
+      final trimmedName = name.trim();
+      if (trimmedName.isEmpty) {
+        return;
+      }
+
+      final created = await ref
+          .read(collectionsNotifierProvider.notifier)
+          .createCollection(collectionName: trimmedName, media: null);
+
+      if (created) {
+        collectionSearchController.clear();
+        collectionSearchQuery.value = '';
+      }
+    }
 
     useEffect(() {
       if (collectionId != null) {
@@ -65,7 +98,11 @@ class CreatePage extends HookConsumerWidget {
       return () {};
     }, [noteId]);
 
-    // pop page once editing or creation task is complete
+    useEffect(() {
+      collectionSearchFocusNode.requestFocus();
+      return () {};
+    }, const []);
+
     useEffect(() {
       if (isCompleted.value == true) {
         selectedCollections.value = [];
@@ -73,6 +110,32 @@ class CreatePage extends HookConsumerWidget {
       }
       return () {};
     }, [isCompleted.value]);
+
+    final canSubmit = dropdownValue.value == EntityType.collection ||
+        !requiresCollectionSelection ||
+        selectedCollections.value.isNotEmpty;
+
+    Future<void> pasteImageFromClipboard() async {
+      const channel = MethodChannel('image_clipboard');
+      final result = await channel.invokeMethod('pasteImage');
+      if (result == null) {
+        return;
+      }
+
+      pickedImage.value = Uint8List.fromList(result);
+    }
+
+    Future<void> addMediaFromGallery() async {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      final bytes = await image?.readAsBytes();
+      if (image != null) {
+        pickedImage.value = bytes;
+      }
+    }
+
+    final showCollectionSelection = entityType == EntityType.note && !isEdit && !isSelectionComplete.value;
+    final showSelectedCollectionsHeader = entityType == EntityType.note && !isEdit && isSelectionComplete.value;
 
     return Scaffold(
       appBar: AppBar(
@@ -82,150 +145,231 @@ class CreatePage extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (entityType == EntityType.note)
+            if (showCollectionSelection) ...[
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                child: DropdownSearch<CollectionEntity>.multiSelection(
-                  key: dropdownKey,
-                  items: (filter, _) {
-                    final all = ref.read(collectionsListStreamProvider).valueOrNull ?? [];
-                    return filter.isEmpty
-                        ? all
-                        : all.where((c) => c.name.toLowerCase().contains(filter.toLowerCase())).toList();
-                  },
-                  selectedItems: selectedCollections.value,
-                  itemAsString: (c) => c.name,
-                  compareFn: (a, b) => a.id == b.id,
-                  onSelected: (items) {
-                    selectedCollections.value = items;
-                  },
-                  popupProps: MultiSelectionPopupProps.modalBottomSheet(
-                    showSearchBox: true,
-                    searchFieldProps: TextFieldProps(
-                      controller: collectionSearchController,
-                      focusNode: collectionSearchFocusNode,
-                      decoration: const InputDecoration(hintText: 'search or create a collection…'),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                child: TextField(
+                  controller: collectionSearchController,
+                  focusNode: collectionSearchFocusNode,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    hintText: 'Search collections',
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    onDisplayed: () => collectionSearchFocusNode.requestFocus(),
-                    emptyBuilder: (ctx, searchEntry) {
-                      final name = searchEntry.trim();
-                      if (name.isEmpty) {
-                        return const Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Text('start typing to create a new collection'),
+                    filled: true,
+                  ),
+                  onChanged: (value) {
+                    collectionSearchQuery.value = value;
+                  },
+                ),
+              ),
+              if (selectedCollections.value.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: selectedCollections.value
+                              .map(
+                                (collection) => InputChip(
+                                  label: Text(collection.name),
+                                  selected: true,
+                                  onSelected: (_) => toggleCollectionSelection(collection),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      TextButton(
+                        onPressed: selectedCollections.value.isEmpty ? null : () => isSelectionComplete.value = true,
+                        child: const Text('Done'),
+                      ),
+                    ],
+                  ),
+                ),
+              if (collectionSearchQuery.value.trim().isEmpty && filteredCollections.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                  child: Text('No collections yet'),
+                )
+              else if (filteredCollections.isNotEmpty || collectionSearchQuery.value.trim().isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      if (collectionSearchQuery.value.trim().isNotEmpty && filteredCollections.isEmpty)
+                        ActionChip(
+                          avatar: const Icon(Icons.add, size: 18),
+                          label: Text('Create "${collectionSearchQuery.value.trim()}"'),
+                          onPressed: () => createCollectionFromSearch(collectionSearchQuery.value),
+                        ),
+                      ...filteredCollections.map((collection) {
+                        final isSelected = selectedCollections.value.any((entry) => entry.id == collection.id);
+                        return ChoiceChip(
+                          label: Text(
+                            collection.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          selected: isSelected,
+                          onSelected: (_) => toggleCollectionSelection(collection),
+                          showCheckmark: false,
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                         );
-                      }
-                      return ListTile(
-                        leading: const Icon(Icons.add),
-                        title: Text('create "$name"'),
-                        onTap: () async {
-                          await ref
-                              .read(collectionsNotifierProvider.notifier)
-                              .createCollection(collectionName: name, media: null);
-                          collectionSearchController.clear();
-                        },
-                      );
-                    },
+                      }),
+                    ],
                   ),
-                  decoratorProps: const DropDownDecoratorProps(
-                    decoration: InputDecoration(
-                      labelText: 'collections',
-                      border: OutlineInputBorder(),
+                ),
+            ],
+            if (showSelectedCollectionsHeader) ...[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: selectedCollections.value
+                            .map(
+                              (collection) => InputChip(
+                                label: Text(collection.name),
+                                selected: true,
+                                onSelected: (_) => toggleCollectionSelection(collection),
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                              ),
+                            )
+                            .toList(),
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 8),
+                    TextButton(
+                      onPressed: () => isSelectionComplete.value = false,
+                      child: const Text('Edit'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            if (!requiresCollectionSelection ||
+                isSelectionComplete.value ||
+                selectedCollections.value.isNotEmpty && !showCollectionSelection) ...[
+              // input area
+              _InputWidget(
+                inputTextEditingController: inputTextEditingController,
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: pasteImageFromClipboard,
+                      icon: const Icon(Icons.paste),
+                      tooltip: 'Paste image',
+                    ),
+                    const SizedBox(width: 8),
+                    if (isEdit || pickedImage.value == null)
+                      IconButton(
+                        onPressed: addMediaFromGallery,
+                        icon: const Icon(Icons.image),
+                        tooltip: 'Add media',
+                      ),
+                  ],
                 ),
               ),
 
-            // input area
-            _InputWidget(
-              inputTextEditingController: inputTextEditingController,
-            ),
+              if (pickedImage.value != null) Image.memory(pickedImage.value!),
 
-            // paste from clipboard
-            ImageClipboardWidget(
-              onPasteImage: (image) {
-                pickedImage.value = image;
-              },
-            ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: FilledButton.icon(
+                  onPressed: canSubmit
+                      ? () async {
+                          final value = inputTextEditingController.value.text;
+                          if (value.isEmpty && pickedImage.value == null) return;
 
-            if (pickedImage.value != null) Image.memory(pickedImage.value!),
-            if (isEdit || pickedImage.value == null)
-              _InputImagePicker(
-                onPickImage: (image) {
-                  pickedImage.value = image;
-                },
+                          if (dropdownValue.value == EntityType.collection) {
+                            if (isEdit) {
+                              ref
+                                  .read(collectionsRepositoryProvider)
+                                  .updateCollection(
+                                    collectionId: collectionId!,
+                                    collectionName: value,
+                                    media: pickedImage.value,
+                                    description: '',
+                                  )
+                                  .then((result) {
+                                if (result) {
+                                  inputTextEditingController.clear();
+                                  isCompleted.value = true;
+                                }
+                              });
+                            } else {
+                              ref
+                                  .read(collectionsNotifierProvider.notifier)
+                                  .createCollection(
+                                    collectionName: value,
+                                    media: pickedImage.value,
+                                  )
+                                  .then((result) {
+                                if (result) {
+                                  inputTextEditingController.clear();
+                                  isCompleted.value = true;
+                                }
+                              });
+                            }
+                          } else if (dropdownValue.value == EntityType.note) {
+                            if (requiresCollectionSelection && selectedCollections.value.isEmpty) {
+                              return;
+                            }
+
+                            if (isEdit) {
+                              ref
+                                  .read(notesRepositoryProvider)
+                                  .updateNote(
+                                    noteId: noteId!,
+                                    content: value,
+                                    media: pickedImage.value,
+                                  )
+                                  .then((_) {
+                                ref.read(connectionUsecaseProvider).addNoteToCollectionList(
+                                      noteId: noteId!,
+                                      collectionIds: selectedCollections.value.map((c) => c.id).toList(),
+                                    );
+
+                                inputTextEditingController.clear();
+                                isCompleted.value = true;
+                              });
+                            } else {
+                              final result = await ref.read(connectionUsecaseProvider).createNoteAndConnect(
+                                    content: value,
+                                    media: pickedImage.value,
+                                    collectionIds: selectedCollections.value.map((c) => c.id).toList(),
+                                  );
+
+                              if (result) {
+                                inputTextEditingController.clear();
+                                isCompleted.value = true;
+                              }
+                            }
+                          }
+                        }
+                      : null,
+                  icon: const Icon(Icons.check),
+                  label: const Text('Submit'),
+                ),
               ),
-
-            TextButton(
-              onPressed: () async {
-                final value = inputTextEditingController.value.text;
-                if (value.isEmpty && pickedImage.value == null) return;
-
-                if (dropdownValue.value == EntityType.collection) {
-                  if (isEdit) {
-                    ref
-                        .read(collectionsRepositoryProvider)
-                        .updateCollection(
-                          collectionId: collectionId!,
-                          collectionName: value,
-                          media: pickedImage.value,
-                          description: '',
-                        )
-                        .then((result) {
-                      if (result) {
-                        inputTextEditingController.clear();
-                        isCompleted.value = true;
-                      }
-                    });
-                  } else {
-                    ref
-                        .read(collectionsNotifierProvider.notifier)
-                        .createCollection(
-                          collectionName: value,
-                          media: pickedImage.value,
-                        )
-                        .then((result) {
-                      if (result) {
-                        inputTextEditingController.clear();
-                        isCompleted.value = true;
-                      }
-                    });
-                  }
-                } else if (dropdownValue.value == EntityType.note) {
-                  if (isEdit) {
-                    ref
-                        .read(notesRepositoryProvider)
-                        .updateNote(
-                          noteId: noteId!,
-                          content: value,
-                          media: pickedImage.value,
-                        )
-                        .then((_) {
-                      ref.read(connectionUsecaseProvider).addNoteToCollectionList(
-                            noteId: noteId!,
-                            collectionIds: selectedCollections.value.map((c) => c.id).toList(),
-                          );
-
-                      inputTextEditingController.clear();
-                      isCompleted.value = true;
-                    });
-                  } else {
-                    final result = await ref.read(connectionUsecaseProvider).createNoteAndConnect(
-                          content: value,
-                          media: pickedImage.value,
-                          collectionIds: selectedCollections.value.map((c) => c.id).toList(),
-                        );
-
-                    if (result) {
-                      inputTextEditingController.clear();
-                      isCompleted.value = true;
-                    }
-                  }
-                }
-              },
-              child: Text('submit'),
-            ),
-
+            ],
             const SizedBox(height: 120),
           ],
         ),
@@ -266,45 +410,6 @@ class _InputWidget extends HookConsumerWidget {
             },
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _InputImagePicker extends ConsumerWidget {
-  const _InputImagePicker({
-    required this.onPickImage,
-  });
-
-  final void Function(Uint8List?) onPickImage;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    Future<void> pickSingleImage() async {
-      final ImagePicker picker = ImagePicker();
-      // Pick an image.
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-      final bytes = await image?.readAsBytes();
-
-      if (image != null) {
-        // save image
-
-        onPickImage(bytes);
-      } else {
-        // TODO(urgent): handle error handling
-      }
-    }
-
-    return GestureDetector(
-      onTap: () {
-        pickSingleImage();
-      },
-      child: Container(
-        width: double.infinity,
-        height: 120,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(border: Border.all()),
-        child: Center(child: Text('add media')),
       ),
     );
   }

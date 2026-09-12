@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/floating_sliver_app_bar.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/more_options_action_button.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/quick_action_fabs.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_row.dart';
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
@@ -22,6 +23,7 @@ class CollectionListPage extends ConsumerWidget {
     final collectionFutureValue = ref.watch(collectionSingleFutureProvider(collectionId));
 
     return Scaffold(
+      floatingActionButton: const QuickActionFabs(),
       body: SafeArea(
         bottom: false,
         child: NestedScrollView(

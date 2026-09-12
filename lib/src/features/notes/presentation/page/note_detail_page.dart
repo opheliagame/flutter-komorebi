@@ -4,6 +4,7 @@ import 'package:flutter_komorebi/src/design_system/collection/collection_tile.da
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/floating_sliver_app_bar.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/more_options_action_button.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/quick_action_fabs.dart';
 import 'package:flutter_komorebi/src/design_system/spacing.dart';
 import 'package:flutter_komorebi/src/features/history/data/history_repository.dart';
 import 'package:flutter_komorebi/src/features/history/presentation/widget/history_item_short_widget.dart';
@@ -25,6 +26,7 @@ class NoteDetailPage extends HookConsumerWidget {
     final historyListStreamValue = ref.watch(historyListStreamProvider(noteId));
 
     return Scaffold(
+      floatingActionButton: const QuickActionFabs(),
       body: SafeArea(
         bottom: false,
         child: CustomScrollView(

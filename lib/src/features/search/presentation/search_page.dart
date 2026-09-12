@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/core/domain/note_entity.dart';
+import 'package:flutter_komorebi/src/design_system/common_widgets/quick_action_fabs.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
 import 'package:flutter_komorebi/src/router/app_router.gr.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,6 +29,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     final query = ref.watch(searchQueryProvider);
 
     return Scaffold(
+      floatingActionButton: const QuickActionFabs(),
       body: SafeArea(
         child: Column(
           children: [
