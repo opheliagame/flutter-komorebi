@@ -13,12 +13,15 @@ These stories are written around the core idea that Kiritori is not a traditiona
 ## Primary user types
 
 ### The collector
+
 A user who imports ideas, quotes, articles, and images and wants to sort them into a meaningful structure.
 
 ### The thinker
+
 A user who builds conceptual links between ideas, revisiting them later to see patterns and themes emerge.
 
 ### The explorer
+
 A user who wants to roam through their existing knowledge, discover unexpected connections, and reframe their thinking.
 
 ## Core user stories
@@ -30,6 +33,7 @@ A user who wants to roam through their existing knowledge, discover unexpected c
 As a thinker, I want to create a new note while deciding how it relates to the existing forest, so that my ideas are grounded in context instead of becoming disconnected fragments.
 
 Acceptance criteria:
+
 - A user can create a note only from an existing connection, a new connection, or a suggested connection.
 - The UI makes the connection choice explicit before note content is saved.
 - A note cannot be created as an orphan without being associated with at least one collection or connection.
@@ -40,6 +44,7 @@ Acceptance criteria:
 As a user, I want to capture a new idea quickly, so that I can preserve a moment of insight without losing momentum.
 
 Acceptance criteria:
+
 - A lightweight capture flow exists for short notes, snippets, and image references.
 - The user can save a capture with minimal friction.
 - The system prompts the user to attach the note to a relevant connection or collection.
@@ -50,6 +55,7 @@ Acceptance criteria:
 As a user, I want to record text, images, and references in the same note experience, so that my thinking can remain multimodal and expressive.
 
 Acceptance criteria:
+
 - Notes can include text, images, and citations or references.
 - Media attachments are stored locally and remain associated with the note.
 - The user can review a note without losing context from attached resources.
@@ -61,6 +67,7 @@ Acceptance criteria:
 As a collector, I want to review notes that are imported but not yet assigned to a collection, so that I can sort and understand them before they become part of the forest.
 
 Acceptance criteria:
+
 - Imported notes appear in an unassigned or “waiting to be organised” area.
 - The user can inspect a note before deciding its collection or connection.
 - Bulk editing is available for assigning multiple notes to collections.
@@ -71,6 +78,7 @@ Acceptance criteria:
 As a user, I want to move notes between collections and connections easily, so that my system stays adaptable as my thinking changes.
 
 Acceptance criteria:
+
 - The user can edit a note’s collections or connections from a simple editor panel.
 - Drag-and-drop or quick action controls are available for common reorganising tasks.
 - The system updates related views immediately after a change.
@@ -81,6 +89,7 @@ Acceptance criteria:
 As a user, I want to see my notes and collections at different levels of granularity, so that I can switch between detailed review and a broader overview.
 
 Acceptance criteria:
+
 - The interface supports zooming or semantic scaling between overview and detail.
 - Notes can be grouped by collection, connection, date, media type, or tag-like metadata.
 - Dense layout modes are available for power users without sacrificing readability.
@@ -92,6 +101,7 @@ Acceptance criteria:
 As an explorer, I want to browse the structure of my notes and see connections between them, so that I can uncover patterns I would not have found by reading each note in isolation.
 
 Acceptance criteria:
+
 - The user can view a visual or list-based relationship map for notes and collections.
 - Related notes appear when exploring a connection or subject.
 - Recommended connections can be surfaced based on shared metadata or proximity.
@@ -102,6 +112,7 @@ Acceptance criteria:
 As a user, I want a lightweight roaming mode that surfaces neighbouring ideas, so that I can explore my knowledge without needing a rigid plan.
 
 Acceptance criteria:
+
 - Roaming mode presents a small set of neighbouring notes or connections.
 - The user can move between related items without losing context.
 - Suggested items are based on existing notes, collections, and connection density.
@@ -112,6 +123,7 @@ Acceptance criteria:
 As a thinker, I want to trace the path between ideas, so that I can understand how one concept leads to another over time.
 
 Acceptance criteria:
+
 - The interface shows a trail or chain from one note to the next.
 - Users can inspect why items are connected.
 - A trail can be expanded or collapsed depending on the user’s focus level.
@@ -124,6 +136,7 @@ Acceptance criteria:
 As a user, I want to create and adjust collections that reflect how I think, so that my notes live in structures that fit my mental model rather than a generic taxonomy.
 
 Acceptance criteria:
+
 - The user can create, rename, and delete collections.
 - Collections can be assigned multiple notes without forcing a strict hierarchy.
 - Notes may belong to more than one collection when appropriate.
@@ -134,6 +147,7 @@ Acceptance criteria:
 As a researcher, I want to store references and citations locally, so that reading and writing remain grounded in source material without needing external services.
 
 Acceptance criteria:
+
 - Notes can include source metadata such as title, authors, date, and notes.
 - Citations or references can be attached to relevant thoughts or collections.
 - Users can export reference data when needed.
@@ -144,6 +158,7 @@ Acceptance criteria:
 As a user, I want to create explicit doors or connections between notes and ideas, so that the system captures my reasoning as a web, not just a stack of files.
 
 Acceptance criteria:
+
 - A user can create a connection between two or more notes or collections.
 - Each connection can have a description or reason for existing.
 - Connections are visible in both the source and destination contexts.
@@ -156,6 +171,7 @@ Acceptance criteria:
 As a user, I want all behaviour to stay local and private, so that my notes and thought patterns are not exposed to a cloud service or tracking system.
 
 Acceptance criteria:
+
 - The app works without account creation or remote sync.
 - No telemetry or user-data collection is required for basic functionality.
 - Data remains stored locally on the device by default.
@@ -166,6 +182,7 @@ Acceptance criteria:
 As a user, I want to capture and browse my knowledge even without internet connectivity, so that the app feels reliable in everyday life.
 
 Acceptance criteria:
+
 - The app functions fully without an internet connection.
 - Imports, edits, and browsing continue while offline.
 - Local data remains available and consistent after reconnecting.
@@ -178,6 +195,7 @@ Acceptance criteria:
 As a user, I want to reopen older notes and understand their place in the network, so that my past thinking remains useful instead of becoming forgotten clutter.
 
 Acceptance criteria:
+
 - Notes retain their collections, connections, and metadata over time.
 - The user can see a note’s relationship to surrounding ideas.
 - A note view includes history or context cues such as date, related items, and collections.
@@ -188,6 +206,7 @@ Acceptance criteria:
 As a user, I want to identify notes that are stale, disconnected, or duplicated, so that I can keep my knowledge base useful and coherent.
 
 Acceptance criteria:
+
 - The user can review notes that are disconnected from any collection or connection.
 - Duplicate or near-duplicate notes can be flagged or reconciled.
 - Cleanup tools suggest weakly connected or orphaned notes.
@@ -200,6 +219,7 @@ Acceptance criteria:
 As a user, I want the app to feel calm, tactile, and non-intrusive, so that my thinking remains comfortable rather than overwhelmed by too much UI chrome.
 
 Acceptance criteria:
+
 - The interface supports atmospheric modes such as day, twilight, and night.
 - There is strong information density without visual clutter.
 - Animations are subtle and purposeful rather than distracting.
@@ -210,6 +230,7 @@ Acceptance criteria:
 As a user, I want the app to make its structure understandable at a glance, so that I can learn quickly and feel confident using it.
 
 Acceptance criteria:
+
 - The visual language communicates notes, collections, and connections clearly.
 - Core actions are discoverable without reading extensive help.
 - Users can understand their “forest” structure after a short session.

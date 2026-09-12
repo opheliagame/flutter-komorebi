@@ -12,3 +12,8 @@
 - shadows
 - blurs
 - gradients (unless used inside skins and icons etc)
+
+## design resources
+
+https://freedesignstuff.com/
+https://phosphoricons.com/
