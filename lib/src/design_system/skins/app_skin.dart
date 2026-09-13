@@ -152,15 +152,8 @@ class AppSkin {
 
   Color historyColor(String historyType) {
     final semanticColor = switch (historyType) {
-      'addNote' ||
-      'updateNote' ||
-      'addCollection' ||
-      'updateCollection' =>
-        semanticColors['informational'],
-      'deleteNote' ||
-      'deleteCollection' ||
-      'removeConnection' =>
-        semanticColors['destructive'],
+      'addNote' || 'updateNote' || 'addCollection' || 'updateCollection' => semanticColors['informational'],
+      'deleteNote' || 'deleteCollection' || 'removeConnection' => semanticColors['destructive'],
       'addConnection' => semanticColors['success'],
       _ => semanticColors['neutral'],
     };
@@ -340,8 +333,7 @@ Map<String, dynamic> _colorSchemeToJson(ColorScheme scheme) {
 }
 
 extension AppSkinHistoryColorExtension on HistoryExpandedEntity {
-  Color tileBackgroundColor(AppSkin skin) =>
-      skin.historyColor(historyType.name);
+  Color tileBackgroundColor(AppSkin skin) => skin.historyColor(historyType.name);
 }
 
 extension ColorExtension on Color {

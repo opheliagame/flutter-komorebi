@@ -5,9 +5,9 @@ import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart'
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/data/drift/database_backup_service.dart';
 import 'package:flutter_komorebi/src/data/drift/database_extension.dart';
-import 'package:flutter_komorebi/src/design_system/skins/app_skin.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
+import 'package:flutter_komorebi/src/design_system/skins/app_skin.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
@@ -77,8 +77,7 @@ class SamplePage extends HookConsumerWidget {
         options: noteIds,
       ),
       _SamplePageTextButton<int>(
-        route: (value) =>
-            CreateRoute(entityType: EntityType.note, noteId: value),
+        route: (value) => CreateRoute(entityType: EntityType.note, noteId: value),
         name: 'update note page',
         options: noteIds,
       ),
@@ -87,8 +86,7 @@ class SamplePage extends HookConsumerWidget {
         name: 'create collection page',
       ),
       _SamplePageTextButton<int>(
-        route: (value) =>
-            CreateRoute(entityType: EntityType.collection, collectionId: value),
+        route: (value) => CreateRoute(entityType: EntityType.collection, collectionId: value),
         name: 'update collection page',
         options: collectionIds,
       ),
@@ -107,8 +105,7 @@ class SamplePage extends HookConsumerWidget {
         name: 'collection grid scale test route',
       ),
       _SamplePageTextButton(
-        route: (value) =>
-            GridScaleTestRoute(isCollectionGrid: false, collectionId: value),
+        route: (value) => GridScaleTestRoute(isCollectionGrid: false, collectionId: value),
         name: 'notes list scale test route',
         options: collectionIds,
       ),
@@ -138,9 +135,7 @@ class SamplePage extends HookConsumerWidget {
                 controller: searchTextEditingController,
                 decoration: InputDecoration(hintText: 'filter sample pages'),
                 onChanged: (value) {
-                  final filteredbuttons = buttonData
-                      .where((e) => e.name.toLowerCase().contains(value))
-                      .toList();
+                  final filteredbuttons = buttonData.where((e) => e.name.toLowerCase().contains(value)).toList();
                   buttons.value = filteredbuttons;
                 },
               ),
@@ -231,23 +226,19 @@ class _BackupSection extends ConsumerWidget {
       alignment: WrapAlignment.center,
       children: [
         TextButton.icon(
-          onPressed: () =>
-              ref.read(databaseBackupServiceProvider).exportDatabase(context),
+          onPressed: () => ref.read(databaseBackupServiceProvider).exportDatabase(context),
           icon: const Icon(Icons.upload),
           label: const Text('export db'),
         ),
         const SizedBox(width: 8),
         TextButton.icon(
-          onPressed: () =>
-              ref.read(databaseBackupServiceProvider).importDatabase(context),
+          onPressed: () => ref.read(databaseBackupServiceProvider).importDatabase(context),
           icon: const Icon(Icons.download),
           label: const Text('import db'),
         ),
         const SizedBox(width: 8),
         TextButton.icon(
-          onPressed: () => ref
-              .read(databaseBackupServiceProvider)
-              .loadSampleDatabase(context),
+          onPressed: () => ref.read(databaseBackupServiceProvider).loadSampleDatabase(context),
           icon: const Icon(Icons.dataset),
           label: const Text('load sample db'),
         ),

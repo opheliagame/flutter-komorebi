@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/core/domain/history_entity.dart';
-import 'package:flutter_komorebi/src/design_system/skins/app_skin.dart';
 import 'package:flutter_komorebi/src/design_system/collection/collection_text_button.dart';
+import 'package:flutter_komorebi/src/design_system/skins/app_skin.dart';
 import 'package:flutter_komorebi/src/features/notes/presentation/note_list_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -41,8 +41,7 @@ class HistoryItemListTile extends ConsumerWidget {
               collectionId: historyItem.collectionEntity!.id,
               collectionName: historyItem.collectionEntity!.name,
             ),
-          if (historyItem.hasNote)
-            NoteListItem(note: historyItem.noteEntity!, onTap: () {}),
+          if (historyItem.hasNote) NoteListItem(note: historyItem.noteEntity!, onTap: () {}),
         ],
       ),
     );

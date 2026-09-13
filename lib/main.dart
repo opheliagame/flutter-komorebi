@@ -30,8 +30,7 @@ class MyApp extends HookConsumerWidget {
     final skin = ref.watch(appSkinProvider);
 
     final isApplePlatform =
-        defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.macOS;
+        defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS;
 
     if (isApplePlatform) {
       return CupertinoApp.router(
