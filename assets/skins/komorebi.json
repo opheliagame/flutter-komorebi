@@ -1,0 +1,64 @@
+{
+  "name": "Komorebi",
+  "colorScheme": {
+    "brightness": "light",
+    "primary": "#FFFF5722",
+    "onPrimary": "#FFFFFFFF",
+    "primaryContainer": "#FFFFDBCC",
+    "onPrimaryContainer": "#FF3A0B00",
+    "secondary": "#FF77574A",
+    "onSecondary": "#FFFFFFFF",
+    "secondaryContainer": "#FFFFDBCC",
+    "onSecondaryContainer": "#FF2C160D",
+    "tertiary": "#FF6A5F2A",
+    "onTertiary": "#FFFFFFFF",
+    "tertiaryContainer": "#FFF2E5A8",
+    "onTertiaryContainer": "#FF211B00",
+    "error": "#FFBA1A1A",
+    "onError": "#FFFFFFFF",
+    "errorContainer": "#FFFFDAD6",
+    "onErrorContainer": "#FF410002",
+    "surface": "#FFFFF8F6",
+    "onSurface": "#FF211A17",
+    "onSurfaceVariant": "#FF53443E",
+    "outline": "#FF85736C",
+    "outlineVariant": "#FFD8C2BA",
+    "shadow": "#FF000000",
+    "scrim": "#FF000000",
+    "inverseSurface": "#FF362F2C",
+    "onInverseSurface": "#FFFCEDE8",
+    "inversePrimary": "#FFFFB59D"
+  },
+  "semanticColors": {
+    "neutral": "#FFFFFFFF",
+    "informational": "#FFBBDEFB",
+    "destructive": "#FFFFCDD2",
+    "success": "#FFC8E6C9"
+  },
+  "availableImages": [
+    {
+      "id": "collection-floral-1",
+      "assetPath": "assets/skins/images/1.png",
+      "format": "png",
+      "description": "Botanical flower visual guide."
+    },
+    {
+      "id": "collection-floral-2",
+      "assetPath": "assets/skins/images/2.png",
+      "format": "png",
+      "description": "Botanical leaf and flower visual guide."
+    },
+    {
+      "id": "collection-floral-3",
+      "assetPath": "assets/skins/images/3.png",
+      "format": "png",
+      "description": "Botanical vine visual guide."
+    },
+    {
+      "id": "collection-floral-4",
+      "assetPath": "assets/skins/images/4.png",
+      "format": "png",
+      "description": "Botanical branch visual guide."
+    }
+  ]
+}

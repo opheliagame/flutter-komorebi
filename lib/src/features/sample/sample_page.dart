@@ -5,9 +5,9 @@ import 'package:flutter_komorebi/src/core/l10n/generated/app_localizations.dart'
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/data/drift/database_backup_service.dart';
 import 'package:flutter_komorebi/src/data/drift/database_extension.dart';
-import 'package:flutter_komorebi/src/design_system/app_color.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/animated_zoom_level_widget.dart';
 import 'package:flutter_komorebi/src/design_system/common_widgets/async_value_widget.dart';
+import 'package:flutter_komorebi/src/design_system/skins/app_skin.dart';
 import 'package:flutter_komorebi/src/features/collections/data/collections_repository.dart';
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
@@ -44,10 +44,7 @@ class SamplePage extends HookConsumerWidget {
     }, []);
 
     final buttonData = [
-      _SamplePageTextButton(
-        route: (_) => HomeRoute(),
-        name: 'Home Page',
-      ),
+      _SamplePageTextButton(route: (_) => HomeRoute(), name: 'Home Page'),
       _SamplePageTextButton(
         route: (_) => AppColorThemeRoute(),
         name: 'App Color Theme Page',
@@ -80,10 +77,7 @@ class SamplePage extends HookConsumerWidget {
         options: noteIds,
       ),
       _SamplePageTextButton<int>(
-        route: (value) => CreateRoute(
-          entityType: EntityType.note,
-          noteId: value,
-        ),
+        route: (value) => CreateRoute(entityType: EntityType.note, noteId: value),
         name: 'update note page',
         options: noteIds,
       ),
@@ -92,21 +86,12 @@ class SamplePage extends HookConsumerWidget {
         name: 'create collection page',
       ),
       _SamplePageTextButton<int>(
-        route: (value) => CreateRoute(
-          entityType: EntityType.collection,
-          collectionId: value,
-        ),
+        route: (value) => CreateRoute(entityType: EntityType.collection, collectionId: value),
         name: 'update collection page',
         options: collectionIds,
       ),
-      _SamplePageTextButton(
-        route: (_) => SearchRoute(),
-        name: 'search page',
-      ),
-      _SamplePageTextButton(
-        route: (_) => RoamRoute(),
-        name: 'roam page',
-      ),
+      _SamplePageTextButton(route: (_) => SearchRoute(), name: 'search page'),
+      _SamplePageTextButton(route: (_) => RoamRoute(), name: 'roam page'),
       _SamplePageTextButton(
         route: (_) => HistoryListRoute(),
         name: 'history list page',
@@ -120,10 +105,7 @@ class SamplePage extends HookConsumerWidget {
         name: 'collection grid scale test route',
       ),
       _SamplePageTextButton(
-        route: (value) => GridScaleTestRoute(
-          isCollectionGrid: false,
-          collectionId: value,
-        ),
+        route: (value) => GridScaleTestRoute(isCollectionGrid: false, collectionId: value),
         name: 'notes list scale test route',
         options: collectionIds,
       ),
@@ -131,10 +113,7 @@ class SamplePage extends HookConsumerWidget {
         route: (_) => ConnectionDiagramRoute(),
         name: 'connection diagram page',
       ),
-      _SamplePageTextButton(
-        route: (_) => RecentsRoute(),
-        name: 'recents page',
-      ),
+      _SamplePageTextButton(route: (_) => RecentsRoute(), name: 'recents page'),
     ];
 
     final searchTextEditingController = useTextEditingController();
@@ -142,9 +121,7 @@ class SamplePage extends HookConsumerWidget {
     final buttons = useState(buttonData);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context)?.app_name ?? ''),
-      ),
+      appBar: AppBar(title: Text(S.of(context)?.app_name ?? '')),
       body: SafeArea(
         child: ListView(
           children: [
@@ -179,13 +156,14 @@ class _SeedColorDropdown extends ConsumerWidget {
     /// All named colors exposed by the [Colors] class, paired with their label.
     final dropdownItems = Colors.primaries;
 
-    final current = ref.watch(appColorSchemeSeedProvider);
+    final skin = ref.watch(appSkinProvider);
+    final current = skin.primaryColor;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
-          const Text('seed color'),
+          const Text('primary color'),
           const SizedBox(width: 12),
           Container(
             width: 24,
@@ -198,31 +176,37 @@ class _SeedColorDropdown extends ConsumerWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: DropdownButton<MaterialColor>(
+            child: DropdownButton<Color>(
               value: current,
               items: dropdownItems
-                  .map((e) => DropdownMenuItem(
-                        value: e,
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 24,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                color: e,
-                                shape: BoxShape.circle,
-                                border: Border.all(color: Theme.of(context).colorScheme.outline),
+                  .map(
+                    (e) => DropdownMenuItem(
+                      value: e,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              color: e,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.outline,
                               ),
                             ),
-                            SizedBox(width: 8),
-                            Text(e.shade500.hex),
-                          ],
-                        ),
-                      ))
+                          ),
+                          SizedBox(width: 8),
+                          Text(e.shade500.hex),
+                        ],
+                      ),
+                    ),
+                  )
                   .toList(),
               onChanged: (color) {
                 if (color != null) {
-                  ref.read(appColorSchemeSeedProvider.notifier).state = color;
+                  ref.read(appSkinProvider.notifier).state = skin.copyWith(
+                    primaryColor: color,
+                  );
                 }
               },
             ),
@@ -266,10 +250,18 @@ class _BackupSection extends ConsumerWidget {
               context: context,
               builder: (ctx) => AlertDialog(
                 title: const Text('clear all data?'),
-                content: const Text('This will permanently delete all collections, notes, and connections.'),
+                content: const Text(
+                  'This will permanently delete all collections, notes, and connections.',
+                ),
                 actions: [
-                  TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('cancel')),
-                  TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('clear')),
+                  TextButton(
+                    onPressed: () => Navigator.pop(ctx, false),
+                    child: const Text('cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(ctx, true),
+                    child: const Text('clear'),
+                  ),
                 ],
               ),
             );
@@ -328,7 +320,9 @@ class _SamplePageTextButton<T extends Object> extends HookWidget {
                 return Autocomplete<T>(
                   optionsBuilder: (TextEditingValue textEditingValue) {
                     return options.where(
-                      (e) => e.toString().toLowerCase().contains(textEditingValue.text.toLowerCase()),
+                      (e) => e.toString().toLowerCase().contains(
+                            textEditingValue.text.toLowerCase(),
+                          ),
                     );
                   },
                   onSelected: (T option) {
