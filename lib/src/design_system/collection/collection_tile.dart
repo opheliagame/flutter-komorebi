@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
+import 'package:flutter_komorebi/src/design_system/skins/app_skin.dart';
 import 'package:flutter_komorebi/src/features/collections/presentation/collections_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -18,6 +19,8 @@ class CollectionTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isEdit = useState<bool>(false);
+    final skin = ref.watch(appSkinProvider);
+    final skinImage = collection.backgroundImage(skin);
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -31,12 +34,13 @@ class CollectionTile extends HookConsumerWidget {
           child: AspectRatio(
             aspectRatio: 1,
             child: Container(
+              clipBehavior: Clip.antiAlias,
               decoration: ShapeDecoration(
                 color: Theme.of(context).colorScheme.primary,
                 shape: CircleBorder(
                   side: BorderSide(
                     color: Theme.of(context).colorScheme.secondary,
-                    width: 2,
+                    // width: 2,
                   ),
                 ),
               ),
@@ -49,17 +53,20 @@ class CollectionTile extends HookConsumerWidget {
                               collection.media!,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
-                                return Text('error fetching image');
+                                return const Text('error fetching image');
+                              },
+                            ),
+                          )
+                        else if (skinImage != null)
+                          Positioned.fill(
+                            child: Image.asset(
+                              skinImage.assetPath,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const SizedBox.shrink();
                               },
                             ),
                           ),
-                        Positioned.fill(
-                          child: Icon(
-                            Icons.local_florist_outlined,
-                            size: 120,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
@@ -93,7 +100,7 @@ class CollectionTile extends HookConsumerWidget {
                             onPressed: () {
                               ref.read(collectionsNotifierProvider.notifier).deleteCollection(collection.id);
                             },
-                            icon: Icon(Icons.close),
+                            icon: const Icon(Icons.close),
                           ),
                         ),
                         Center(

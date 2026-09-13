@@ -55,6 +55,18 @@ void main() {
       (skin.toJson()['colorScheme'] as Map<String, dynamic>)['primary'],
       'FF123456',
     );
+    expect(skin.collectionImage(0)?.id, 'collection-floral-1');
+    expect(skin.collectionImage(1)?.id, 'collection-floral-1');
+  });
+
+  test('collectionImage cycles across available images by id', () {
+    const skin = AppSkin.defaultSkin;
+    expect(skin.availableImages.length, 4);
+    expect(skin.collectionImage(0)?.id, 'collection-floral-1');
+    expect(skin.collectionImage(1)?.id, 'collection-floral-2');
+    expect(skin.collectionImage(2)?.id, 'collection-floral-3');
+    expect(skin.collectionImage(3)?.id, 'collection-floral-4');
+    expect(skin.collectionImage(4)?.id, 'collection-floral-1');
   });
 
   test('rejects malformed color values', () {

@@ -44,4 +44,6 @@ flutter:
 
   assets:
     - assets/
+    - assets/skins/
+    - assets/skins/images/
 

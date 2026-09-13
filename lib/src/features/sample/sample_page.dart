@@ -159,6 +159,19 @@ class _SeedColorDropdown extends ConsumerWidget {
     final skin = ref.watch(appSkinProvider);
     final current = skin.primaryColor;
 
+    // Colors.primaries entries are MaterialColor, a Color subtype whose
+    // equality also checks runtimeType. AppSkin.primaryColor is a plain
+    // Color (parsed from a skin's JSON hex value), so it would never equal
+    // a MaterialColor even with the same value. Use each swatch's shade500
+    // (a plain Color) as the dropdown value so equality works, and make
+    // sure the current color is always represented even if it doesn't
+    // match any swatch.
+    final swatchColors = dropdownItems.map((e) => e.shade500).toList();
+    final matchesSwatch = swatchColors.any((color) => color.toARGB32() == current.toARGB32());
+    final dropdownValue = matchesSwatch
+        ? swatchColors.firstWhere((color) => color.toARGB32() == current.toARGB32())
+        : current;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
@@ -177,31 +190,52 @@ class _SeedColorDropdown extends ConsumerWidget {
           const SizedBox(width: 8),
           Expanded(
             child: DropdownButton<Color>(
-              value: current,
-              items: dropdownItems
-                  .map(
-                    (e) => DropdownMenuItem(
-                      value: e,
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              color: e,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Theme.of(context).colorScheme.outline,
-                              ),
+              value: dropdownValue,
+              items: [
+                if (!matchesSwatch)
+                  DropdownMenuItem(
+                    value: current,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: current,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Theme.of(context).colorScheme.outline,
                             ),
                           ),
-                          SizedBox(width: 8),
-                          Text(e.shade500.hex),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(current.hex),
+                      ],
                     ),
-                  )
-                  .toList(),
+                  ),
+                ...swatchColors.map(
+                  (e) => DropdownMenuItem(
+                    value: e,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: e,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(e.hex),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
               onChanged: (color) {
                 if (color != null) {
                   ref.read(appSkinProvider.notifier).state = skin.copyWith(

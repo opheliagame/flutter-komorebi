@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/core/domain/history_entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -158,6 +159,13 @@ class AppSkin {
       _ => semanticColors['neutral'],
     };
     return semanticColor ?? semanticColors['neutral'] ?? Colors.transparent;
+  }
+
+  SkinImageGuide? collectionImage(int collectionId) {
+    if (availableImages.isEmpty) {
+      return null;
+    }
+    return availableImages[collectionId.abs() % availableImages.length];
   }
 }
 
@@ -334,6 +342,10 @@ Map<String, dynamic> _colorSchemeToJson(ColorScheme scheme) {
 
 extension AppSkinHistoryColorExtension on HistoryExpandedEntity {
   Color tileBackgroundColor(AppSkin skin) => skin.historyColor(historyType.name);
+}
+
+extension AppSkinCollectionImageExtension on CollectionEntity {
+  SkinImageGuide? backgroundImage(AppSkin skin) => skin.collectionImage(id);
 }
 
 extension ColorExtension on Color {
