@@ -8,6 +8,7 @@ import 'package:flutter_komorebi/src/features/collections/presentation/collectio
 import 'package:flutter_komorebi/src/features/connection/usecase/connection_usecase.dart';
 import 'package:flutter_komorebi/src/features/home/domain/entity_type.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
+import 'package:flutter_komorebi/src/features/search/data/semantic_search_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -36,23 +37,93 @@ class CreatePage extends HookConsumerWidget {
     final dropdownValue = useState<EntityType?>(entityType);
     final pickedImage = useState<Uint8List?>(null);
 
-    final allCollections = ref.watch(collectionsListStreamProvider).valueOrNull ?? [];
+    final allCollections =
+        ref.watch(collectionsListStreamProvider).valueOrNull ?? [];
+    final semanticSearchResults = useState<List<int>>([]);
+
+    useEffect(() {
+      final query = collectionSearchQuery.value.trim();
+      if (query.isEmpty) {
+        semanticSearchResults.value = [];
+        return null;
+      }
+
+      var isCancelled = false;
+      final semanticSearch = ref.read(semanticSearchServiceProvider);
+      Future<void>(() async {
+        for (final collection in allCollections) {
+          await semanticSearch.indexCollection(collection);
+        }
+        final matchIds =
+            await semanticSearch.searchSimilarCollections(query: query);
+        if (!isCancelled) {
+          semanticSearchResults.value = matchIds;
+        }
+      }).catchError((error) {
+        debugPrint('Collection semantic search failed: $error');
+        if (!isCancelled) {
+          semanticSearchResults.value = [];
+        }
+      });
+
+      return () {
+        isCancelled = true;
+      };
+    }, [collectionSearchQuery.value, allCollections]);
+
     final filteredCollections = useMemoized(() {
       final query = collectionSearchQuery.value.trim().toLowerCase();
       if (query.isEmpty) {
         return allCollections;
       }
-      return allCollections.where((collection) => collection.name.toLowerCase().contains(query)).toList();
-    }, [allCollections, collectionSearchQuery.value]);
+
+      if (semanticSearchResults.value.isNotEmpty) {
+        final collectionMap = {for (final c in allCollections) c.id: c};
+        final results = <CollectionEntity>[];
+        final seen = <int>{};
+
+        for (final id in semanticSearchResults.value) {
+          final c = collectionMap[id];
+          if (c != null) {
+            results.add(c);
+            seen.add(id);
+          }
+        }
+
+        for (final c in allCollections) {
+          if (!seen.contains(c.id) &&
+              (c.name.toLowerCase().contains(query) ||
+                  (c.description != null &&
+                      c.description!.toLowerCase().contains(query)))) {
+            results.add(c);
+          }
+        }
+        return results;
+      }
+
+      return allCollections
+          .where((collection) =>
+              collection.name.toLowerCase().contains(query) ||
+              (collection.description != null &&
+                  collection.description!.toLowerCase().contains(query)))
+          .toList();
+    }, [
+      allCollections,
+      collectionSearchQuery.value,
+      semanticSearchResults.value
+    ]);
 
     final isEdit = collectionId != null || noteId != null ? true : false;
     final isCompleted = useState(false);
-    final requiresCollectionSelection = entityType == EntityType.note && !isEdit;
+    final requiresCollectionSelection =
+        entityType == EntityType.note && !isEdit;
 
     void toggleCollectionSelection(CollectionEntity collection) {
       final ids = selectedCollections.value.map((entry) => entry.id).toList();
       if (ids.contains(collection.id)) {
-        selectedCollections.value = selectedCollections.value.where((entry) => entry.id != collection.id).toList();
+        selectedCollections.value = selectedCollections.value
+            .where((entry) => entry.id != collection.id)
+            .toList();
       } else {
         selectedCollections.value = [...selectedCollections.value, collection];
       }
@@ -76,7 +147,10 @@ class CreatePage extends HookConsumerWidget {
 
     useEffect(() {
       if (collectionId != null) {
-        ref.read(collectionsRepositoryProvider).getCollection(collectionId!).then((collection) {
+        ref
+            .read(collectionsRepositoryProvider)
+            .getCollection(collectionId!)
+            .then((collection) {
           inputTextEditingController.text = collection.name;
           pickedImage.value = collection.media;
         });
@@ -91,7 +165,10 @@ class CreatePage extends HookConsumerWidget {
           pickedImage.value = note.media;
         });
 
-        ref.read(collectionsRepositoryProvider).getCollectionsOfNote(noteId!).then((result) {
+        ref
+            .read(collectionsRepositoryProvider)
+            .getCollectionsOfNote(noteId!)
+            .then((result) {
           selectedCollections.value = result;
         });
       }
@@ -99,7 +176,6 @@ class CreatePage extends HookConsumerWidget {
     }, [noteId]);
 
     useEffect(() {
-      collectionSearchFocusNode.requestFocus();
       return () {};
     }, const []);
 
@@ -134,12 +210,15 @@ class CreatePage extends HookConsumerWidget {
       }
     }
 
-    final showCollectionSelection = entityType == EntityType.note && !isEdit && !isSelectionComplete.value;
-    final showSelectedCollectionsHeader = entityType == EntityType.note && !isEdit && isSelectionComplete.value;
+    final showCollectionSelection =
+        entityType == EntityType.note && !isEdit && !isSelectionComplete.value;
+    final showSelectedCollectionsHeader =
+        entityType == EntityType.note && !isEdit && isSelectionComplete.value;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEdit ? 'update ${entityType.name}' : 'create ${entityType.name}'),
+        title: Text(
+            isEdit ? 'update ${entityType.name}' : 'create ${entityType.name}'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -151,7 +230,6 @@ class CreatePage extends HookConsumerWidget {
                 child: TextField(
                   controller: collectionSearchController,
                   focusNode: collectionSearchFocusNode,
-                  autofocus: true,
                   decoration: InputDecoration(
                     hintText: 'Search collections',
                     prefixIcon: const Icon(Icons.search),
@@ -179,8 +257,10 @@ class CreatePage extends HookConsumerWidget {
                                 (collection) => InputChip(
                                   label: Text(collection.name),
                                   selected: true,
-                                  onSelected: (_) => toggleCollectionSelection(collection),
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  onSelected: (_) =>
+                                      toggleCollectionSelection(collection),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
                                 ),
                               )
                               .toList(),
@@ -188,32 +268,40 @@ class CreatePage extends HookConsumerWidget {
                       ),
                       const SizedBox(width: 8),
                       TextButton(
-                        onPressed: selectedCollections.value.isEmpty ? null : () => isSelectionComplete.value = true,
+                        onPressed: selectedCollections.value.isEmpty
+                            ? null
+                            : () => isSelectionComplete.value = true,
                         child: const Text('Done'),
                       ),
                     ],
                   ),
                 ),
-              if (collectionSearchQuery.value.trim().isEmpty && filteredCollections.isEmpty)
+              if (collectionSearchQuery.value.trim().isEmpty &&
+                  filteredCollections.isEmpty)
                 const Padding(
                   padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
                   child: Text('No collections yet'),
                 )
-              else if (filteredCollections.isNotEmpty || collectionSearchQuery.value.trim().isNotEmpty)
+              else if (filteredCollections.isNotEmpty ||
+                  collectionSearchQuery.value.trim().isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                   child: Wrap(
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      if (collectionSearchQuery.value.trim().isNotEmpty && filteredCollections.isEmpty)
+                      if (collectionSearchQuery.value.trim().isNotEmpty &&
+                          filteredCollections.isEmpty)
                         ActionChip(
                           avatar: const Icon(Icons.add, size: 18),
-                          label: Text('Create "${collectionSearchQuery.value.trim()}"'),
-                          onPressed: () => createCollectionFromSearch(collectionSearchQuery.value),
+                          label: Text(
+                              'Create "${collectionSearchQuery.value.trim()}"'),
+                          onPressed: () => createCollectionFromSearch(
+                              collectionSearchQuery.value),
                         ),
                       ...filteredCollections.map((collection) {
-                        final isSelected = selectedCollections.value.any((entry) => entry.id == collection.id);
+                        final isSelected = selectedCollections.value
+                            .any((entry) => entry.id == collection.id);
                         return ChoiceChip(
                           label: Text(
                             collection.name,
@@ -221,7 +309,8 @@ class CreatePage extends HookConsumerWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           selected: isSelected,
-                          onSelected: (_) => toggleCollectionSelection(collection),
+                          onSelected: (_) =>
+                              toggleCollectionSelection(collection),
                           showCheckmark: false,
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                         );
@@ -244,8 +333,10 @@ class CreatePage extends HookConsumerWidget {
                               (collection) => InputChip(
                                 label: Text(collection.name),
                                 selected: true,
-                                onSelected: (_) => toggleCollectionSelection(collection),
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                onSelected: (_) =>
+                                    toggleCollectionSelection(collection),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
                               ),
                             )
                             .toList(),
@@ -262,14 +353,16 @@ class CreatePage extends HookConsumerWidget {
             ],
             if (!requiresCollectionSelection ||
                 isSelectionComplete.value ||
-                selectedCollections.value.isNotEmpty && !showCollectionSelection) ...[
+                selectedCollections.value.isNotEmpty &&
+                    !showCollectionSelection) ...[
               // input area
               _InputWidget(
                 inputTextEditingController: inputTextEditingController,
               ),
 
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children: [
                     IconButton(
@@ -291,12 +384,15 @@ class CreatePage extends HookConsumerWidget {
               if (pickedImage.value != null) Image.memory(pickedImage.value!),
 
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: FilledButton.icon(
                   onPressed: canSubmit
                       ? () async {
                           final value = inputTextEditingController.value.text;
-                          if (value.isEmpty && pickedImage.value == null) return;
+                          if (value.isEmpty && pickedImage.value == null) {
+                            return;
+                          }
 
                           if (dropdownValue.value == EntityType.collection) {
                             if (isEdit) {
@@ -329,7 +425,8 @@ class CreatePage extends HookConsumerWidget {
                               });
                             }
                           } else if (dropdownValue.value == EntityType.note) {
-                            if (requiresCollectionSelection && selectedCollections.value.isEmpty) {
+                            if (requiresCollectionSelection &&
+                                selectedCollections.value.isEmpty) {
                               return;
                             }
 
@@ -342,19 +439,27 @@ class CreatePage extends HookConsumerWidget {
                                     media: pickedImage.value,
                                   )
                                   .then((_) {
-                                ref.read(connectionUsecaseProvider).addNoteToCollectionList(
+                                ref
+                                    .read(connectionUsecaseProvider)
+                                    .addNoteToCollectionList(
                                       noteId: noteId!,
-                                      collectionIds: selectedCollections.value.map((c) => c.id).toList(),
+                                      collectionIds: selectedCollections.value
+                                          .map((c) => c.id)
+                                          .toList(),
                                     );
 
                                 inputTextEditingController.clear();
                                 isCompleted.value = true;
                               });
                             } else {
-                              final result = await ref.read(connectionUsecaseProvider).createNoteAndConnect(
+                              final result = await ref
+                                  .read(connectionUsecaseProvider)
+                                  .createNoteAndConnect(
                                     content: value,
                                     media: pickedImage.value,
-                                    collectionIds: selectedCollections.value.map((c) => c.id).toList(),
+                                    collectionIds: selectedCollections.value
+                                        .map((c) => c.id)
+                                        .toList(),
                                   );
 
                               if (result) {

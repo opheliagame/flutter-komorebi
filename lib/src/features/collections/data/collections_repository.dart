@@ -4,6 +4,7 @@ import 'package:flutter_komorebi/src/core/domain/collection_entity.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/features/collections/data/drift_collections_repository_impl.dart';
 import 'package:flutter_komorebi/src/features/connection/data/connection_repository.dart';
+import 'package:flutter_komorebi/src/features/search/data/semantic_search_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract class CollectionsRepository {
@@ -34,25 +35,32 @@ abstract class CollectionsRepository {
 
 // TODOswitch this based on env variable
 final collectionsRepositoryProvider = Provider<CollectionsRepository>((ref) {
-  return DriftCollectionsRepository(ref.read(appDatabaseProvider));
+  return DriftCollectionsRepository(
+    ref.read(appDatabaseProvider),
+    semanticSearchService: ref.read(semanticSearchServiceProvider),
+  );
 });
 
-final collectionsListFutureProvider = FutureProvider.autoDispose<List<CollectionEntity>>((ref) async {
+final collectionsListFutureProvider =
+    FutureProvider.autoDispose<List<CollectionEntity>>((ref) async {
   final repository = ref.watch(collectionsRepositoryProvider);
   return repository.getAllCollections();
 });
 
-final collectionsListStreamProvider = StreamProvider<List<CollectionEntity>>((ref) {
+final collectionsListStreamProvider =
+    StreamProvider<List<CollectionEntity>>((ref) {
   final repository = ref.watch(collectionsRepositoryProvider);
   return repository.watchAllCollections();
 });
 
-final collectionSingleFutureProvider = FutureProvider.family.autoDispose<CollectionEntity, int>((ref, id) {
+final collectionSingleFutureProvider =
+    FutureProvider.family.autoDispose<CollectionEntity, int>((ref, id) {
   final repository = ref.watch(collectionsRepositoryProvider);
   return repository.getCollection(id);
 });
 
-final collectionSingleStreamProvider = StreamProvider.family.autoDispose<CollectionEntity, int>((ref, id) {
+final collectionSingleStreamProvider =
+    StreamProvider.family.autoDispose<CollectionEntity, int>((ref, id) {
   final repository = ref.watch(collectionsRepositoryProvider);
   return repository.watchCollection(id);
 });
@@ -63,14 +71,16 @@ final allCollectionIdsProvider = StreamProvider<Iterable<int>>((ref) {
   return notes.map((e) => e.map((e1) => e1.id));
 });
 
-final relatedCollectionsListFutureProvider =
-    FutureProvider.family.autoDispose<List<CollectionEntity>, int>((ref, collectionId) {
+final relatedCollectionsListFutureProvider = FutureProvider.family
+    .autoDispose<List<CollectionEntity>, int>((ref, collectionId) {
   final repository = ref.watch(connectionRepositoryProvider);
   // use 10 as default limit for now
-  return repository.getSimilarCollectionsAsList(collectionId: collectionId, limit: 10, offset: 0);
+  return repository.getSimilarCollectionsAsList(
+      collectionId: collectionId, limit: 10, offset: 0);
 });
 
-final relatedCollectionsListStreamProvider = StreamProvider.family<List<CollectionEntity>, int>((ref, collectionId) {
+final relatedCollectionsListStreamProvider =
+    StreamProvider.family<List<CollectionEntity>, int>((ref, collectionId) {
   final repository = ref.watch(connectionRepositoryProvider);
   // use 10 as default limit for now
   return repository.watchSimilarCollectionsAsList(collectionId);

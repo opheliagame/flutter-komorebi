@@ -4,11 +4,13 @@ import 'package:flutter_komorebi/src/core/domain/note_entity.dart';
 import 'package:flutter_komorebi/src/data/drift/database.dart';
 import 'package:flutter_komorebi/src/data/drift/domain/note_table.dart';
 import 'package:flutter_komorebi/src/features/notes/data/notes_repository.dart';
+import 'package:flutter_komorebi/src/features/search/data/semantic_search_service.dart';
 
 class DriftNotesRepository implements NotesRepository {
-  DriftNotesRepository(this.database);
+  DriftNotesRepository(this.database, {this.semanticSearchService});
 
   final AppDatabase database;
+  final SemanticSearchService? semanticSearchService;
 
   @override
   Future<List<NoteEntity>> getAllNotes() async {
@@ -20,7 +22,10 @@ class DriftNotesRepository implements NotesRepository {
   @override
   Stream<List<NoteEntity>> watchAllNotes() {
     final query = database.select(database.noteTable)
-      ..orderBy([(u) => OrderingTerm(expression: database.noteTable.modifiedAt, mode: OrderingMode.desc)]);
+      ..orderBy([
+        (u) => OrderingTerm(
+            expression: database.noteTable.modifiedAt, mode: OrderingMode.desc)
+      ]);
 
     try {
       final result = query.watch();
@@ -32,14 +37,16 @@ class DriftNotesRepository implements NotesRepository {
 
   @override
   Future<NoteEntity> getNote(int noteId) async {
-    final query = database.select(database.noteTable)..where((q) => q.id.equals(noteId));
+    final query = database.select(database.noteTable)
+      ..where((q) => q.id.equals(noteId));
     return (await query.getSingle()).toDomain();
   }
 
   @override
   Stream<NoteEntity> watchNote(int noteId) {
     try {
-      final query = database.select(database.noteTable)..where((q) => q.id.equals(noteId));
+      final query = database.select(database.noteTable)
+        ..where((q) => q.id.equals(noteId));
       return (query.watchSingle()).map((e) => e.toDomain());
     } catch (e) {
       debugPrint(e.toString());
@@ -48,7 +55,8 @@ class DriftNotesRepository implements NotesRepository {
   }
 
   @override
-  Future<int> createNote({required String? content, required Uint8List? media}) async {
+  Future<int> createNote(
+      {required String? content, required Uint8List? media}) async {
     try {
       final noteId = await database.into(database.noteTable).insert(
             NoteTableCompanion.insert(
@@ -58,6 +66,22 @@ class DriftNotesRepository implements NotesRepository {
               modifiedAt: DateTime.now(),
             ),
           );
+
+      if (semanticSearchService != null &&
+          content != null &&
+          content.isNotEmpty) {
+        final note = NoteEntity(
+          id: noteId,
+          content: content,
+          media: media,
+          citationId: null,
+          createdAt: DateTime.now(),
+          modifiedAt: DateTime.now(),
+        );
+        semanticSearchService!.indexNote(note).catchError((e) {
+          debugPrint('Failed to index note: $e');
+        });
+      }
 
       return noteId;
     } catch (e) {
@@ -73,13 +97,36 @@ class DriftNotesRepository implements NotesRepository {
     required Uint8List? media,
   }) async {
     try {
-      final newNoteId = await (database.update(database.noteTable)..where((q) => q.id.equals(noteId))).write(
+      final now = DateTime.now();
+      final newNoteId = await (database.update(database.noteTable)
+            ..where((q) => q.id.equals(noteId)))
+          .write(
         NoteTableCompanion(
           content: Value.absentIfNull(content),
           media: Value.absentIfNull(media),
-          modifiedAt: Value(DateTime.now()),
+          modifiedAt: Value(now),
         ),
       );
+
+      if (semanticSearchService != null) {
+        if (content != null && content.isNotEmpty) {
+          final note = NoteEntity(
+            id: noteId,
+            content: content,
+            media: media,
+            citationId: null,
+            createdAt: now,
+            modifiedAt: now,
+          );
+          semanticSearchService!.indexNote(note).catchError((e) {
+            debugPrint('Failed to update indexed note: $e');
+          });
+        } else {
+          semanticSearchService!.removeNote(noteId).catchError((e) {
+            debugPrint('Failed to remove indexed note: $e');
+          });
+        }
+      }
 
       return newNoteId;
     } catch (e) {
@@ -90,9 +137,14 @@ class DriftNotesRepository implements NotesRepository {
 
   @override
   Future<bool> deleteNote(int noteId) async {
-    final query = (database.delete(database.noteTable)..where((q) => q.id.equals(noteId))).go();
+    final query = (database.delete(database.noteTable)
+          ..where((q) => q.id.equals(noteId)))
+        .go();
     try {
       await query;
+      semanticSearchService?.removeNote(noteId).catchError((e) {
+        debugPrint('Failed to remove indexed note: $e');
+      });
       return true;
     } catch (e) {
       return false;
@@ -106,12 +158,15 @@ class DriftNotesRepository implements NotesRepository {
         [
           innerJoin(
               database.collectionNoteRefTable,
-              database.collectionNoteRefTable.noteId.equalsExp(database.noteTable.id) &
-                  database.collectionNoteRefTable.collectionId.equals(collectionId)),
+              database.collectionNoteRefTable.noteId
+                      .equalsExp(database.noteTable.id) &
+                  database.collectionNoteRefTable.collectionId
+                      .equals(collectionId)),
         ],
       )
       ..orderBy([
-        (u) => OrderingTerm(expression: database.noteTable.modifiedAt, mode: OrderingMode.desc),
+        (u) => OrderingTerm(
+            expression: database.noteTable.modifiedAt, mode: OrderingMode.desc),
       ]);
 
     final notes = (await query.get()).map((e) => e.toDomain()).toList();
@@ -122,12 +177,16 @@ class DriftNotesRepository implements NotesRepository {
   Stream<List<NoteEntity>> watchNotesInCollection(int collectionId) {
     final query = database.select(database.collectionNoteRefTable).join(
       [
-        innerJoin(database.noteTable, database.noteTable.id.equalsExp(database.collectionNoteRefTable.noteId)),
+        innerJoin(
+            database.noteTable,
+            database.noteTable.id
+                .equalsExp(database.collectionNoteRefTable.noteId)),
       ],
     )
       ..where(database.collectionNoteRefTable.collectionId.equals(collectionId))
       ..orderBy([
-        OrderingTerm(expression: database.noteTable.modifiedAt, mode: OrderingMode.desc),
+        OrderingTerm(
+            expression: database.noteTable.modifiedAt, mode: OrderingMode.desc),
       ]);
 
     final notes = query.watch().map((rows) {
@@ -139,15 +198,19 @@ class DriftNotesRepository implements NotesRepository {
   }
 
   @override
-  Future<List<NoteEntity>> getNotesInCollectionList(List<int> collectionIds) async {
+  Future<List<NoteEntity>> getNotesInCollectionList(
+      List<int> collectionIds) async {
     final query = database.select(database.noteTable)
       ..join(
         [
           innerJoin(
-              database.collectionNoteRefTable, database.collectionNoteRefTable.noteId.equalsExp(database.noteTable.id)),
+              database.collectionNoteRefTable,
+              database.collectionNoteRefTable.noteId
+                  .equalsExp(database.noteTable.id)),
         ],
       )
-      ..where((q) => database.collectionNoteRefTable.collectionId.isIn(collectionIds));
+      ..where((q) =>
+          database.collectionNoteRefTable.collectionId.isIn(collectionIds));
 
     final notes = (await query.get()).map((e) => e.toDomain()).toList();
     return notes;
@@ -159,12 +222,16 @@ class DriftNotesRepository implements NotesRepository {
       ..join(
         [
           innerJoin(
-              database.collectionNoteRefTable, database.collectionNoteRefTable.noteId.equalsExp(database.noteTable.id)),
+              database.collectionNoteRefTable,
+              database.collectionNoteRefTable.noteId
+                  .equalsExp(database.noteTable.id)),
         ],
       )
-      ..where((q) => database.collectionNoteRefTable.collectionId.isIn(collectionIds));
+      ..where((q) =>
+          database.collectionNoteRefTable.collectionId.isIn(collectionIds));
 
-    final notes = query.watch().map((e) => e.map((e1) => e1.toDomain()).toList());
+    final notes =
+        query.watch().map((e) => e.map((e1) => e1.toDomain()).toList());
     return notes;
   }
 }
