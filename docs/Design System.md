@@ -58,3 +58,13 @@ or `jpeg`), and a description.
 
 https://freedesignstuff.com/
 https://phosphoricons.com/
+
+for skins
+
+https://publicdomainreview.org/explore/
+https://pdimagearchive.org/images/e6cc917e-e04c-4229-a879-0e72963934f2/
+https://openverse.org/ doesn't work much but want to try again
+
+this one is specially good
+Familiar Indian Flowers
+https://archive.org/details/india.history.resource.93692/page/n11/mode/2up
