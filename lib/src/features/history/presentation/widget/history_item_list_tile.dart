@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_komorebi/src/core/domain/history_entity.dart';
-import 'package:flutter_komorebi/src/design_system/app_color.dart';
+import 'package:flutter_komorebi/src/design_system/skins/app_skin.dart';
 import 'package:flutter_komorebi/src/design_system/collection/collection_text_button.dart';
 import 'package:flutter_komorebi/src/features/notes/presentation/note_list_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +12,7 @@ class HistoryItemListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final skin = ref.watch(appSkinProvider);
     // TODO(design): add on click event to navigate to specific pages
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -25,7 +26,7 @@ class HistoryItemListTile extends ConsumerWidget {
             children: [
               Text('history type'),
               Container(
-                color: historyItem.tileBackgroundColor,
+                color: historyItem.tileBackgroundColor(skin),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(historyItem.historyType.name),
@@ -40,7 +41,8 @@ class HistoryItemListTile extends ConsumerWidget {
               collectionId: historyItem.collectionEntity!.id,
               collectionName: historyItem.collectionEntity!.name,
             ),
-          if (historyItem.hasNote) NoteListItem(note: historyItem.noteEntity!, onTap: () {}),
+          if (historyItem.hasNote)
+            NoteListItem(note: historyItem.noteEntity!, onTap: () {}),
         ],
       ),
     );

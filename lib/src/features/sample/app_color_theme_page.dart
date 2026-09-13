@@ -1,6 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_komorebi/src/design_system/app_color.dart';
+import 'package:flutter_komorebi/src/design_system/skins/app_skin.dart';
 
 @RoutePage()
 class AppColorThemePage extends StatelessWidget {
@@ -14,27 +14,59 @@ class AppColorThemePage extends StatelessWidget {
       ('primary', scheme.primary, scheme.onPrimary),
       ('onPrimary', scheme.onPrimary, scheme.primary),
       ('primaryContainer', scheme.primaryContainer, scheme.onPrimaryContainer),
-      ('onPrimaryContainer', scheme.onPrimaryContainer, scheme.primaryContainer),
+      (
+        'onPrimaryContainer',
+        scheme.onPrimaryContainer,
+        scheme.primaryContainer,
+      ),
       ('primaryFixed', scheme.primaryFixed, scheme.onPrimaryFixed),
       ('primaryFixedDim', scheme.primaryFixedDim, scheme.onPrimaryFixed),
       ('onPrimaryFixed', scheme.onPrimaryFixed, scheme.primaryFixed),
-      ('onPrimaryFixedVariant', scheme.onPrimaryFixedVariant, scheme.primaryFixed),
+      (
+        'onPrimaryFixedVariant',
+        scheme.onPrimaryFixedVariant,
+        scheme.primaryFixed,
+      ),
       ('secondary', scheme.secondary, scheme.onSecondary),
       ('onSecondary', scheme.onSecondary, scheme.secondary),
-      ('secondaryContainer', scheme.secondaryContainer, scheme.onSecondaryContainer),
-      ('onSecondaryContainer', scheme.onSecondaryContainer, scheme.secondaryContainer),
+      (
+        'secondaryContainer',
+        scheme.secondaryContainer,
+        scheme.onSecondaryContainer,
+      ),
+      (
+        'onSecondaryContainer',
+        scheme.onSecondaryContainer,
+        scheme.secondaryContainer,
+      ),
       ('secondaryFixed', scheme.secondaryFixed, scheme.onSecondaryFixed),
       ('secondaryFixedDim', scheme.secondaryFixedDim, scheme.onSecondaryFixed),
       ('onSecondaryFixed', scheme.onSecondaryFixed, scheme.secondaryFixed),
-      ('onSecondaryFixedVariant', scheme.onSecondaryFixedVariant, scheme.secondaryFixed),
+      (
+        'onSecondaryFixedVariant',
+        scheme.onSecondaryFixedVariant,
+        scheme.secondaryFixed,
+      ),
       ('tertiary', scheme.tertiary, scheme.onTertiary),
       ('onTertiary', scheme.onTertiary, scheme.tertiary),
-      ('tertiaryContainer', scheme.tertiaryContainer, scheme.onTertiaryContainer),
-      ('onTertiaryContainer', scheme.onTertiaryContainer, scheme.tertiaryContainer),
+      (
+        'tertiaryContainer',
+        scheme.tertiaryContainer,
+        scheme.onTertiaryContainer,
+      ),
+      (
+        'onTertiaryContainer',
+        scheme.onTertiaryContainer,
+        scheme.tertiaryContainer,
+      ),
       ('tertiaryFixed', scheme.tertiaryFixed, scheme.onTertiaryFixed),
       ('tertiaryFixedDim', scheme.tertiaryFixedDim, scheme.onTertiaryFixed),
       ('onTertiaryFixed', scheme.onTertiaryFixed, scheme.tertiaryFixed),
-      ('onTertiaryFixedVariant', scheme.onTertiaryFixedVariant, scheme.tertiaryFixed),
+      (
+        'onTertiaryFixedVariant',
+        scheme.onTertiaryFixedVariant,
+        scheme.tertiaryFixed,
+      ),
       ('error', scheme.error, scheme.onError),
       ('onError', scheme.onError, scheme.error),
       ('errorContainer', scheme.errorContainer, scheme.onErrorContainer),
@@ -43,11 +75,19 @@ class AppColorThemePage extends StatelessWidget {
       ('onSurface', scheme.onSurface, scheme.surface),
       ('surfaceDim', scheme.surfaceDim, scheme.onSurface),
       ('surfaceBright', scheme.surfaceBright, scheme.onSurface),
-      ('surfaceContainerLowest', scheme.surfaceContainerLowest, scheme.onSurface),
+      (
+        'surfaceContainerLowest',
+        scheme.surfaceContainerLowest,
+        scheme.onSurface,
+      ),
       ('surfaceContainerLow', scheme.surfaceContainerLow, scheme.onSurface),
       ('surfaceContainer', scheme.surfaceContainer, scheme.onSurface),
       ('surfaceContainerHigh', scheme.surfaceContainerHigh, scheme.onSurface),
-      ('surfaceContainerHighest', scheme.surfaceContainerHighest, scheme.onSurface),
+      (
+        'surfaceContainerHighest',
+        scheme.surfaceContainerHighest,
+        scheme.onSurface,
+      ),
       ('onSurfaceVariant', scheme.onSurfaceVariant, scheme.surface),
       ('outline', scheme.outline, scheme.surface),
       ('outlineVariant', scheme.outlineVariant, scheme.surface),
